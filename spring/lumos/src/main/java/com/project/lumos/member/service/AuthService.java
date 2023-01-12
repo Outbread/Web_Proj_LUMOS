@@ -52,8 +52,7 @@ public class AuthService {
 			throw new LoginFailedException(memberDTO.getMemberId() + "를 찾을 수 없습니다.");
 		}
 		
-		/* 2. 비밀번호 매칭(BCrypt 암호화 라이브러리 bean을 의존성 주입받아 처리하는 부분부터 security 설정 부분을 추가해 보자.) */
-		/* matches(평문, 다이제스트) */
+		/* 2. 비밀번호 매칭 */
 		if(!passwordEncoder.matches(memberDTO.getMemberPassword(), member.getMemberPassword())) {
 			log.info("[AuthService] Password Match Fail!");
 			throw new LoginFailedException("잘못된 비밀번호 입니다.");
@@ -84,9 +83,8 @@ public class AuthService {
 		Member registMember = modelMapper.map(memberDTO, Member.class);
 		
 		/* 1. TBL_MEMBER 테이블에 insert */
-		//password암호화(급선무) 후 insert
 		registMember.setMemberPassword(passwordEncoder.encode(registMember.getMemberPassword()));
-		Member result1 = memberRepository.save(registMember); //반환형이 int값이 아님
+		Member result1 = memberRepository.save(registMember);
 		
 		/* 2. TBL_MEMBER_ROLE 테이블에 회원별 권한 insert(현재 엔티티에는 회원가입 후 pk값이 없음) */
 		/* 2-1. 일반 회원 권한 AuthorityCode값 2 추가 */

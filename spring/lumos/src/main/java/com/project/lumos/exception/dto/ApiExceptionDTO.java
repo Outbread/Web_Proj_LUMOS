@@ -8,7 +8,7 @@ public class ApiExceptionDTO {
 	
 	public ApiExceptionDTO() {
 	}
-	public ApiExceptionDTO(HttpStatus status, String message) {		// 첫번째 매개변수 int 아니니까 조심하자.
+	public ApiExceptionDTO(HttpStatus status, String message) {	
 		this.status = status.value();
 		this.message = message;
 	}

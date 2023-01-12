@@ -72,7 +72,7 @@ public class TokenProvider {
 		
 		long now = System.currentTimeMillis();
 		
-		Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);	// util.Date로 import 
+		Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
 		String accessToken = Jwts.builder()
 								 .setClaims(claims)
 								 
@@ -96,13 +96,13 @@ public class TokenProvider {
 				   .getSubject();				// Claim중에 등록 클레임에 해당하는 sub값 추출(회원 아이디)
 	}
 	
-	/* 3. AccessToken으로 인증 객체 추출(이 클래스의 5번과 2번에 해당하는 메소드를 사용) */
+	/* 3. AccessToken으로 인증 객체 추출 */
 	public Authentication getAuthentication(String token) {
 		
 		log.info("[TokenProvider] getAuthentication Start=================================");
 		
 		/* 토큰에서 claim들 추출(토큰 복호화) */
-		Claims claims = parseClaims(token);		// 아래 5번에서 만든 메소드
+		Claims claims = parseClaims(token);	
 		
 		if (claims.get(AUTHORITIES_KEY) == null) {
 			throw new RuntimeException("권한 정보가 없는 토큰입니다.");
