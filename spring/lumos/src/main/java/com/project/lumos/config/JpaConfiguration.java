@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@EntityScan(basePackages = {"com.project.lumos"})			
-@EnableJpaRepositories(basePackages = "com.project.lumos")	
+@EntityScan(basePackages = {"com.project.lumos"})			 
+@EnableJpaRepositories(basePackages = "com.project.lumos")
 public class JpaConfiguration {
-	
+
 }
