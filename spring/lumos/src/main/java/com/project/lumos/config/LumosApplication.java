@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
  * spring data jpa
  * */
 @SpringBootApplication
-@ComponentScan("com.project.lumos")
+@ComponentScan(basePackages = {"com.project.lumos"})
 public class LumosApplication {
 
 	public static void main(String[] args) {
