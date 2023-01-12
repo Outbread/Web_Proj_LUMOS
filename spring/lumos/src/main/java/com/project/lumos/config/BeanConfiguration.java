@@ -9,7 +9,7 @@ public class BeanConfiguration {
 	
 	/* 엔티티와 DTO 변환을 위한 modelMapper 빈 설정 */
 	@Bean
-	public ModelMapper modelMapper() {
+    public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
 }

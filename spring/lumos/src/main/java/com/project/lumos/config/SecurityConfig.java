@@ -32,7 +32,6 @@ public class SecurityConfig {
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
 	/* 2. 시큐리티 설정을 무시 할 정적 리소스 등록 */
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
@@ -74,7 +73,6 @@ public class SecurityConfig {
 		CorsConfiguration configuration = new CorsConfiguration();
 		
 		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-
 		configuration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "DELETE"));
 		configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Content-type"
 													, "Access-Control-Allow-Headers", "Authorization"
