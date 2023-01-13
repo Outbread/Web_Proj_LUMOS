@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.project.lumos.exception.DuplicatedMemberEmailException;
 import com.project.lumos.exception.DuplicatedMemberIdException;
 import com.project.lumos.exception.LoginFailedException;
 import com.project.lumos.jwt.TokenProvider;
@@ -78,6 +79,12 @@ public class AuthService {
 			log.info("[AuthService] Id가 중복됩니다.");
 			throw new DuplicatedMemberIdException("중복된 아이디입니다.");
 		}
+		/* email 중복 유효성 검사 */
+		if(memberRepository.findByMemberEmail(memberDTO.getMemberEmail()) != null) {
+			log.info("[AuthService] Email 중복");
+			throw new DuplicatedMemberEmailException("중복된 이메일입니다.");
+		}
+		
 		
 		/* 우선 repository를 통해 쿼리를 날리기 전에 DTO에 담긴 값을 Entity로 옮기자.*/
 		Member registMember = modelMapper.map(memberDTO, Member.class);

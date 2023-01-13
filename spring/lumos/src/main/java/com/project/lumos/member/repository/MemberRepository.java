@@ -9,7 +9,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer>{
 //========================================회원가입=============================================//
 	Member findByMemberId(String string);
 
-//	Member findByMemberId(String memberId);
+	Member findByMemberEmail(String memberEmail);
 
 	@Query("SELECT MAX(a.memberCode) FROM Member a")
 	int maxMemberCode();
