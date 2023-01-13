@@ -12,6 +12,8 @@ import com.project.lumos.common.ResponseDTO;
 import com.project.lumos.member.dto.MemberDTO;
 import com.project.lumos.member.service.AuthService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -25,6 +27,7 @@ public class AuthController {
 	}
 	
 	//=================================로그인=========================================//
+	@Operation(summary ="로그인 요청", description = "로그인 및 인증이 진행됩니다.", tags = {"AuthController"})
 	@PostMapping("/login")
 	public ResponseEntity<ResponseDTO> login(@RequestBody MemberDTO memberDTO){
 		return ResponseEntity
@@ -33,6 +36,7 @@ public class AuthController {
 	}
 	
 	//=================================회원가입=========================================//
+	@Operation(summary ="회원가입 요청", description = "회원 가입이 진행됩니다.", tags = {"AuthController"})
 	@PostMapping("/signup")
 	public ResponseEntity<ResponseDTO> signup(@RequestBody MemberDTO memberDTO){
 		return ResponseEntity
