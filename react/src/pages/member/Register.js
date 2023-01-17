@@ -99,9 +99,12 @@ function Register() {
                 <div class="field gender">
                     <b>성별</b>
                     <div>
-                        <label><input type="radio" name="memberGen" onChange={ onChangeHandler }/>남자</label>
-                        <label><input type="radio" name="memberGen" onChange={ onChangeHandler }/>여자</label>
-                        <label><input type="radio" name="memberGen" onChange={ onChangeHandler }/>선택안함</label>
+                        <label><input type="radio" name="memberGen" onChange={ onChangeHandler } 
+                                      checked={  form.memberGen == "남자" ? true : false }  value={"남자"}/>남자</label>
+                        <label><input type="radio" name="memberGen" onChange={ onChangeHandler }
+                                      checked={ form.memberGen == "여자" ? true : false }  value={"여자"}/>여자</label>
+                        <label><input type="radio" name="memberGen" onChange={ onChangeHandler }
+                                      checked={ form.memberGen == "선택안함" ? true : false }  value={"선택안함"}/>선택안함</label>
                     </div>
                 </div>
                 <div class="field tel-number">
