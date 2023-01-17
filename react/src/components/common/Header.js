@@ -43,7 +43,7 @@ export default function Header() {
             <>
                 <div>
                     <li><NavLink to="/sample">로그아웃</NavLink></li>
-                    <li><NavLink to="/sample">마이페이지</NavLink></li>
+                    <li><NavLink to="/mypage">마이페이지</NavLink></li>
                     <li><NavLink to="/sample">장바구니</NavLink></li>
                 </div>
             </>
