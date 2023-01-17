@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import HeaderCSS from '../../modules/Header.module.css';
+import HeaderCSS from './Header.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { decodeJwt } from '../../utils/tokenUtils';
