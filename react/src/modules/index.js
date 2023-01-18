@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import memberReducer from './MemberModule'; //로그인, 회원가입
+import memberReducer from './MemberModule'; //전진이
 
 const rootReducer = combineReducers({
-    memberReducer //로그인, 회원가입
+    memberReducer //전진이
 });
 
 export default rootReducer;
