@@ -39,6 +39,7 @@ public class AuthController {
 	@Operation(summary ="회원가입 요청", description = "회원 가입이 진행됩니다.", tags = {"AuthController"})
 	@PostMapping("/signup")
 	public ResponseEntity<ResponseDTO> signup(@RequestBody MemberDTO memberDTO){
+		System.out.println("넘어온 회원가입 데이터: " + memberDTO);
 		return ResponseEntity
 				.ok()
 				.body(new ResponseDTO(HttpStatus.CREATED, "˗ˋˏ 회원가입 성공 ˎˊ˗", authService.signup(memberDTO)));

@@ -13,5 +13,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer>{
 
 	@Query("SELECT MAX(a.memberCode) FROM Member a")
 	int maxMemberCode();
-
+	 
+	@Query(value = "SELECT MEMBER_CODE FROM TBL_MEMBER WHERE MEMBER_ID = :memberId", nativeQuery = true)
+	public int findMemberCodeByMemberId(String memberId);
 }

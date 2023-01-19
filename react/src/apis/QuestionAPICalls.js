@@ -6,20 +6,21 @@ import {
 export const callQuestionRegistAPI = ({ form }) => {
     console.log('[QuestionAPICalls] callQuestionRegistAPI Call');
 
-    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8080/api/v1/question`;
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question`;
 
     return async (dispatch, getState) => {
 
         const result = await fetch(requestURL, {
             method: "POST",
             headers: {
+               
                 "Accept": "*/*",
                 "Authorization": "Bearer " + window.localStorage.getItem("accessToken"),
                 "Access-Control-Allow-Origin": "*"   
             },
             body: form
         })
-        .then(response => response.json());
+        .then();
 
         console.log('[QuestionAPICalls] callQuestionRegistAPI RESULT : ', result);
 
@@ -28,16 +29,15 @@ export const callQuestionRegistAPI = ({ form }) => {
     };       
 }
 
-export const callQuestionListAPI = ({currentPage}) => {
-    
+  export const callQuestionListAPI = ({memberId , currentPage}) => {
     let requestURL;
 
     if(currentPage !== undefined || currentPage !== null){
-        requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8080/api/v1/question/{memberCode}?offset=${currentPage}`;
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question/${memberId}?offset=${currentPage}`;
     }else {
-        requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8080/api/v1/question/{memberCode}`;
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question/${memberId}`;
     }
-    
+    console.log(currentPage);
     console.log('[QuestionAPICalls] requestURL : ', requestURL);
 
     return async (dispatch, getState) => {
@@ -60,14 +60,14 @@ export const callQuestionListAPI = ({currentPage}) => {
     };
 }
 
-export const callQuestionListAdminAPI = ({currentPage}) => {
+export const callQuestionListAdminAPI = ({memberId, currentPage}) => {
     
     let requestURL;
 
     if(currentPage !== undefined || currentPage !== null){
-        requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8080/api/v1/question/list?offset=${currentPage}`;
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question/${memberId}/?offset=${currentPage}`;
     }else {
-        requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8080/api/v1/question/list`;
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question/${memberId}`;
     }
     
     console.log('[QuestionAPICalls] requestURL : ', requestURL);

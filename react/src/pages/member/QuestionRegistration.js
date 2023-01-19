@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { decodeJwt } from '../../utils/tokenUtils';
 
 import {
     callQuestionRegistAPI
@@ -15,12 +16,13 @@ function QuestionRegistration() {
     const [imageUrl, setImageUrl] = useState();
     const imageInput = useRef();
     const navigate = useNavigate();
+    const token = decodeJwt(window.localStorage.getItem("accessToken"));   
 
     const [form, setForm] = useState({
         questionTitle : '',
         questionCategory : '',
-        questionContent: ''
-        // memberCode : '',
+        questionContent: '',
+        memberCode: '2'
         // questionStatus: '',
         // questionImgCode : '',
         // originalName : '',
@@ -43,6 +45,17 @@ function QuestionRegistration() {
     },
     [image]);
 
+
+    useEffect(
+        () => {    
+            if(token !== null) {
+                dispatch(callQuestionRegistAPI({	
+                    memberId: token.sub
+                }));            
+            }
+        }
+        ,[]
+    );
 
     const onChangeImageUpload = (e) => {
 
@@ -71,9 +84,9 @@ function QuestionRegistration() {
         formData.append("questionTitle", form.questionTitle);
         formData.append("questionCategory", form.questionCategory);
         formData.append("questionContent", form.questionContent);
-        formData.append("memberCode", form.categoryCode);
-        formData.append("memberCode", form.memberCode);
-
+        formData.append("memberCode", 2);
+        
+        console.log(form.memberCode);
         if(image){
             formData.append("questionImage", image);
         }
@@ -127,16 +140,6 @@ function QuestionRegistration() {
                 <div>
                     <table>
                         <tbody>
-                        <tr>
-                                <td><label>멤버코드</label></td>
-                                <td>
-                                    <input 
-                                        name='memberCode'
-                                        placeholder='문의 제목'
-                                        onChange={ onChangeHandler }
-                                    />
-                                </td>
-                            </tr>
                             <tr>
                                 <td><label>문의 제목</label></td>
                                 <td>
