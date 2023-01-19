@@ -11,6 +11,7 @@ function MyPageLayout() {
 
     useEffect(() => {
         navigate("/mypage/profileUpdate", { replace: false });
+
     }, 
     []);
 

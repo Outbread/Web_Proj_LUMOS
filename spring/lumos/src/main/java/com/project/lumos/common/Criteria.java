@@ -1,6 +1,5 @@
 package com.project.lumos.common;
 
-/* [구도연] */
 public class Criteria {
 	
     private int pageNum;

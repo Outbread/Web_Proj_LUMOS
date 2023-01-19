@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.project.lumos.member.entity.Member;
-import com.project.lumos.product.entity.ProductImage;
 
 public interface MemberRepository extends JpaRepository<Member, Integer>{
 	//=====================[전진이]====================//
@@ -14,6 +13,11 @@ public interface MemberRepository extends JpaRepository<Member, Integer>{
 //	Member findByMemberEmail(String memberEmail);
 	@Query("SELECT MAX(a.memberCode) FROM Member a")
 	int maxMemberCode();
+
+	/* 토큰에 담긴 memberId로 memberCode 조회(이건일) */ 
+	@Query(value = "SELECT MEMBER_CODE FROM TBL_MEMBER WHERE MEMBER_ID = :memberId", nativeQuery = true)
+	public int findMemberCodeByMemberId(String memberId);
+
 	
 	//중복체크
 //	List<Member> findByduplicatedId(String memberId);
@@ -21,5 +25,5 @@ public interface MemberRepository extends JpaRepository<Member, Integer>{
 	
 	/* [구도연] */
 	Member findMemberByMemberId(String memberId);
-
 }
+

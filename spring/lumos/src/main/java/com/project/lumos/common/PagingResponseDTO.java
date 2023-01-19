@@ -1,8 +1,8 @@
 package com.project.lumos.common;
 
-/* [구도연] */
 public class PagingResponseDTO {
 	
+
     private Object data;
     private PageDTO pageInfo;
 
@@ -26,5 +26,5 @@ public class PagingResponseDTO {
 	public String toString() {
 		return "PagingResponseDTO [data=" + data + ", pageInfo=" + pageInfo + "]";
 	}
-	
 }
+

@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import MyPageNavbarCSS from './MyPageNavbar.module.css';
+
 import { Navigate } from 'react-router-dom';
 import { decodeJwt } from '../../utils/tokenUtils';
 
@@ -15,13 +16,15 @@ function MyPageNavbar() {
         <div className={ MyPageNavbarCSS.MyPageNavbarDiv }>
             <ul className={ MyPageNavbarCSS.MyPageNavbarUl }>
                 <li><NavLink to="/mypage/profileUpdate"
-                             className={ MyPageNavbarCSS.link }>회원 정보</NavLink></li>
-                <li><NavLink to="/mypage"
-                             className={ MyPageNavbarCSS.link }>주문 내역</NavLink></li>
+                             className={ MyPageNavbarCSS.link }>회원정보</NavLink></li>
+                <li><NavLink to="/mypage/payment"
+                             className={ MyPageNavbarCSS.link }>주문내역</NavLink></li>
                 <li><NavLink to="/mypage"
                              className={ MyPageNavbarCSS.link }>내 리뷰</NavLink></li>
-                <li><NavLink to="/mypage"
-                             className={ MyPageNavbarCSS.link }>문의 내역</NavLink></li>
+                <li><NavLink to="/mypage/questionregistration"
+                             className={ MyPageNavbarCSS.link }>문의하기</NavLink></li>
+                <li><NavLink to="/mypage/question"
+                             className={ MyPageNavbarCSS.link }>문의내역</NavLink></li>
             </ul>
         </div>
     );

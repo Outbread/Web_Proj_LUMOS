@@ -71,7 +71,6 @@ export default function Header() {
     }
 
     function MemberMode() {   //로그인 후
-
         return (
             <div className={HeaderCSS.linkbox}>
                 <button onClick={ onClickLogoutHandler } className={HeaderCSS.headerbutton}>로그아웃</button>
