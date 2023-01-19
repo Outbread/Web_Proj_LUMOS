@@ -4,6 +4,7 @@ import HeaderCSS from './Header.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { decodeJwt } from '../../utils/tokenUtils';
+import logo from '../../image/lumosLogo.png'
 
 // 로그인
 import {
@@ -44,7 +45,7 @@ export default function Header() {
             return ;
         }
         //마이페이지로 이동
-        navigate(`/profileUpdate/${memberId}`, { replace: true });
+        navigate(`/mypage`, { replace: true });
     }
 
     // 로그아웃
@@ -61,10 +62,10 @@ export default function Header() {
     function AnonymousMode() { //로그인 전
 
         return (
-            <div>
-                <NavLink to="/login">로그인</NavLink>
-                <NavLink to="/register">회원가입</NavLink>
-                <NavLink to="/sample">장바구니</NavLink>
+            <div className={HeaderCSS.linkbox}>
+                <NavLink to="/login" className={HeaderCSS.headerNavLink}>로그인</NavLink>
+                <NavLink to="/register" className={HeaderCSS.headerNavLink}>회원가입</NavLink>
+                <NavLink to="/sample" className={HeaderCSS.headerNavLink}>장바구니</NavLink>
             </div>
         );
     }
@@ -72,10 +73,10 @@ export default function Header() {
     function MemberMode() {   //로그인 후
 
         return (
-            <div>
-                <button onClick={ onClickLogoutHandler }>로그아웃</button>
-                <button onClick={ onClickMypageHandler }>마이페이지</button>
-                <NavLink to="/sample">장바구니</NavLink>
+            <div className={HeaderCSS.linkbox}>
+                <button onClick={ onClickLogoutHandler } className={HeaderCSS.headerbutton}>로그아웃</button>
+                <button onClick={ onClickMypageHandler } className={HeaderCSS.headerbutton}>마이페이지</button>
+                <NavLink to="/sample" className={HeaderCSS.headerNavLink}>장바구니</NavLink>
             </div>
         );
     }
@@ -98,8 +99,7 @@ export default function Header() {
         <>
             { loginModal ? <LoginModal setLoginModal={ setLoginModal }/> : null}
             <div className={HeaderCSS.Boxing}>
-                {console.log("mode", mode)}
-                <div className={HeaderCSS.Logo}>LUMOS</div>
+                <div><img src= {logo} className={HeaderCSS.Logo}/></div>
                 <div className={HeaderCSS.Mode}>
                     <input type="button" onClick={onClickModeHandler} value="관리자 모드"/>
                 </div>

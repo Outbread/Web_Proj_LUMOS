@@ -14,8 +14,14 @@ function MyPageNavbar() {
     return (
         <div className={ MyPageNavbarCSS.MyPageNavbarDiv }>
             <ul className={ MyPageNavbarCSS.MyPageNavbarUl }>
-                <li><NavLink to="/mypage/payment">결제 정보</NavLink></li>
-                <li><NavLink to="/mypage/profile">회원 정보</NavLink></li>
+                <li><NavLink to="/mypage/profileUpdate"
+                             className={ MyPageNavbarCSS.link }>회원 정보</NavLink></li>
+                <li><NavLink to="/mypage"
+                             className={ MyPageNavbarCSS.link }>주문 내역</NavLink></li>
+                <li><NavLink to="/mypage"
+                             className={ MyPageNavbarCSS.link }>내 리뷰</NavLink></li>
+                <li><NavLink to="/mypage"
+                             className={ MyPageNavbarCSS.link }>문의 내역</NavLink></li>
             </ul>
         </div>
     );

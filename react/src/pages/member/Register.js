@@ -1,4 +1,4 @@
-import RegisterCSS from './Register.module.css';
+import ProfileUpdateCSS from './ProfileUpdate.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
@@ -41,11 +41,12 @@ function Register() {
         memberEmail: '',
         memberAdsNum: '',
         memberAds: '',
-        memberAdsDetail: '',
-        usableId : false
+        memberAdsDetail: ''
     });
 
+    //구조분해할당
     const { memberId, memberPassword, memberName, memberBirth, memberPhone, memberEmail, pwConfirm } = form;
+
     // 아이디 형식 정규표현식 (숫자와 알파벳만)
     const idRegexp = /[a-z]{5,15}|[a-z0-9]{5,15}/g;
     //비밀번호 형식 정규표현식 (최소 8 자, 최소 하나의 문자, 하나의 숫자 및 하나의 특수 문자)
@@ -181,13 +182,14 @@ function Register() {
     }
 
     return (
-        <div className={ RegisterCSS.backgroundDiv}>
-            <div className={ RegisterCSS.registerDiv }>
-                <h1>회원가입</h1>
-                <div class="field">
-                    <b>아이디</b>
+        <div className={ ProfileUpdateCSS.RGwrapper}>
+            <div className={ ProfileUpdateCSS.RGcontent}>
+                <h1 className={ ProfileUpdateCSS.PUheader }>| 회원가입</h1>
+                <div className={ ProfileUpdateCSS.field }>
+                    <b className={ ProfileUpdateCSS.PUlabel }>아이디</b>
                     <div>
                         <input 
+                            className={ ProfileUpdateCSS.RGinput }
                             type="text"
                             name="memberId"
                             value={memberId}
@@ -197,16 +199,19 @@ function Register() {
                             ref={(el) => (inputRef.current[0] = el)} 
                             onChange={ onChangeHandler }
                         />
-                        { validId ? <div style={ {color : '#73CEBE', fontSize: '13px' }  }> -ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize : '13px'} }>유효하지 않은 아이디입니다.</div>}
+                        { validId ? <div style={ {color : '#73CEBE', fontSize: '16px', marginBottom: '20px'}  }> -ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize: '16px', marginBottom: '20px'}}>유효하지 않은 아이디입니다.</div>}
                     </div>
                     <div>
-                        <button onClick={duplicationCheck}>중복확인</button>
+                        <button 
+                            className={ ProfileUpdateCSS.RGduplicateBTN }
+                            onClick={duplicationCheck}>중복확인</button>
                     </div>
                 </div>
-                <div class="field">
-                    <b>비밀번호</b>
+                <div className={ ProfileUpdateCSS.field }>
+                    <b className={ ProfileUpdateCSS.PUlabel }>비밀번호</b>
                     <div>
                         <input 
+                            className={ ProfileUpdateCSS.RGinput }
                             type="password"
                             name="memberPassword"
                             value={memberPassword}
@@ -217,10 +222,9 @@ function Register() {
                         />
                         
                     </div>
-                </div>
-                <div class="field">
                     <div>
                         <input 
+                            className={ ProfileUpdateCSS.RGinput }
                             type="password"
                             name="pwConfirm"
                             value={pwConfirm}
@@ -229,50 +233,55 @@ function Register() {
                             ref={(el) => (inputRef.current[6] = el)}
                             onChange={ onChangeHandler }
                         />
-                        { (validPassword === true) ? null : validPassword ? <div style={ {color : '#73CEBE', fontSize: '13px' }  }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize : '13px'} }>유효하지 않은 비밀번호 입니다.</div>}
-                        { (validpwConfirm === true) ? null : validpwConfirm ? <div style={ {color : '#73CEBE', fontSize: '13px' }  }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize : '13px'} }>비밀번호가 다릅니다.</div>}
+                        { (validPassword === true) ? null : validPassword ? <div style={ {color : '#73CEBE', fontSize: '16px', marginBottom: '5px'}  }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize: '16px', marginBottom: '5px'} }>유효하지 않은 비밀번호 입니다.</div>}
+                        { (validpwConfirm === true) ? null : validpwConfirm ? <div style={ {color : '#73CEBE', fontSize: '16px', marginBottom: '20px'}  }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize: '16px', marginBottom: '20px'} }>비밀번호가 다릅니다.</div>}
                     </div>
                 </div>
-                <div class="field">
-                    <b>이름</b>
+                <div className={ ProfileUpdateCSS.field }>
+                    <b className={ ProfileUpdateCSS.PUlabel }>이름</b>
                     <div>
                         <input 
+                            className={ ProfileUpdateCSS.RGinput }
                             type="text"
                             name="memberName"
                             autoComplete='off'
                             ref={(el) => (inputRef.current[2] = el)}
                             onChange={ onChangeHandler }
-                        />{ validName ? <div style={ {color : '#73CEBE', fontSize: '13px'  } }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize : '13px' , fontSize : '13px'} }>이름을 한글로 입력 해 주세요.</div>}
+                        />{ validName ? <div style={ {color : '#73CEBE', fontSize: '16px', marginBottom: '20px'} }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize: '16px', marginBottom: '20px'} }>이름을 한글로 입력 해 주세요.</div>}
                     </div>
                 </div>
-                <div class="field birth">
-                    <b>생년월일</b>
+                <div className={ ProfileUpdateCSS.field }>
+                    <b className={ ProfileUpdateCSS.PUlabel }>생년월일</b>
                     <div>
-                        <input type="text" 
-                               placeholder="ex : 19990101" 
-                               name="memberBirth"
-                               maxLength="8" 
-                               autoComplete='off'
-                               ref={(el) => (inputRef.current[3] = el)} 
-                               onChange={ onChangeHandler}
-                        />{ validBirth ? <div style={ {color : '#73CEBE', fontSize: '13px' }  }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize : '13px'} }>생년월일을 숫자 8자리로 입력해주세요.</div>}
+                        <input
+                            className={ ProfileUpdateCSS.RGinput } 
+                            type="text" 
+                            placeholder="ex : 19990101" 
+                            name="memberBirth"
+                            maxLength="8" 
+                            autoComplete='off'
+                            ref={(el) => (inputRef.current[3] = el)} 
+                            onChange={ onChangeHandler}
+                        />{ validBirth ? <div style={ {color : '#73CEBE', fontSize: '16px', marginBottom: '20px'} }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize: '16px', marginBottom: '20px'} }>생년월일을 숫자 8자리로 입력해주세요.</div>}
                     </div>
                 </div>
-                <div class="field gender">
-                    <b>성별</b>
-                    <div>
-                        <label><input type="radio" name="memberGen" onChange={ onChangeHandler } 
-                                      checked={  form.memberGen == "남자" ? true : false }  value={"남자"}/>남자</label>
-                        <label><input type="radio" name="memberGen" onChange={ onChangeHandler }
-                                      checked={ form.memberGen == "여자" ? true : false }  value={"여자"}/>여자</label>
-                        <label><input type="radio" name="memberGen" onChange={ onChangeHandler }
-                                      checked={ form.memberGen == "선택안함" ? true : false }  value={"선택안함"}/>선택안함</label>
+                <div className={ ProfileUpdateCSS.field }>
+                    <b className={ ProfileUpdateCSS.PUlabel }>성별</b>
+                    <div className={ ProfileUpdateCSS.RGinput }>
+                        <div className={ ProfileUpdateCSS.RGradioWrap }>
+                            <label className={ ProfileUpdateCSS.RGradioLabel }><input type="radio" name="memberGen" onChange={ onChangeHandler } 
+                                        checked={  form.memberGen == "남자" ? true : false }  value={"남자"}/>남자 </label>
+                            <label className={ ProfileUpdateCSS.RGradioLabel }><input type="radio" name="memberGen" onChange={ onChangeHandler }
+                                        checked={ form.memberGen == "여자" ? true : false }  value={"여자"}/>여자 </label>
+                            <label className={ ProfileUpdateCSS.RGradioLabel }><input type="radio" name="memberGen" onChange={ onChangeHandler }
+                                        checked={ form.memberGen == "선택안함" ? true : false }  value={"선택안함"}/>선택안함</label>
+                        </div>
                     </div>
                 </div>
-                <div class="field tel-number">
-                    <b>휴대전화</b>
+                <div className={ ProfileUpdateCSS.field }>
+                    <b className={ ProfileUpdateCSS.PUlabel }>휴대전화</b>
                     <div>
-                        <input 
+                        <input className={ ProfileUpdateCSS.RGinput }
                             type="text" 
                             name="memberPhone"
                             placeholder="ex : 010-1234-1234"
@@ -280,13 +289,13 @@ function Register() {
                             autoComplete='off'
                             onChange={ onChangeHandler }
                             ref={(el) => (inputRef.current[4] = el)} 
-                        />{ validPhone ? <div style={ {color : '#73CEBE', fontSize: '13px' }  }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize : '13px'} }>유효하지 않은 전화번호 입니다.</div>}
+                        />{ validPhone ? <div style={ {color : '#73CEBE', fontSize: '16px', marginBottom: '20px'} }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize: '16px', marginBottom: '20px'} }>유효하지 않은 전화번호 입니다.</div>}
                     </div>
                 </div>
-                <div class="field">
-                    <b>이메일</b>
+                <div className={ ProfileUpdateCSS.field }>
+                    <b className={ ProfileUpdateCSS.PUlabel }>이메일</b>
                     <div>
-                        <input 
+                        <input className={ ProfileUpdateCSS.RGinput } 
                            type="text"
                            name="memberEmail"
                            placeholder="ex : email@lumos.com"
@@ -294,56 +303,63 @@ function Register() {
                            ref={(el) => (inputRef.current[5] = el)}
                            onChange={ onChangeHandler}
                         />
-                        { validEmail ? <div style={ {color : '#73CEBE', fontSize: '13px' }  }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize : '13px'} }>유효하지 않은 e-mail입니다.</div>}
+                        { validEmail ? <div style={ {color : '#73CEBE', fontSize: '16px', marginBottom: '20px'} }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize: '16px', marginBottom: '20px'} }>유효하지 않은 e-mail입니다.</div>}
                     </div>
                 </div>
-                <div class="field">
-                    <b>우편번호</b>
-                    <div>
-                        <input 
-                            type="text" 
-                            name="memberAdsNum"
-                            placeholder="우편번호입력" 
-                            autoComplete='off'
-                            onChange={ onChangeHandler }
-                        />
+                <div className={ ProfileUpdateCSS.adsWrapWrap }>
+                    <div className={ ProfileUpdateCSS.adsWrap }>
+                        <b className={ ProfileUpdateCSS.PUlabel }>우편번호</b>
+                        <div>
+                            <input className={ ProfileUpdateCSS.RGAdsNuminput } 
+                                type="text" 
+                                name="memberAdsNum"
+                                placeholder="우편번호" 
+                                autoComplete='off'
+                                onChange={ onChangeHandler }
+                            />
+                        </div>
+                    </div>
+                    <div className={ ProfileUpdateCSS.adsWrap }>
+                        <b className={ ProfileUpdateCSS.PUlabel }>주소</b>
+                        <div>
+                            <input className={ ProfileUpdateCSS.RGAdsinput } 
+                                type="text" 
+                                name="memberAds"
+                                placeholder="주소입력" 
+                                autoComplete='off'
+                                onChange={ onChangeHandler }
+                            />
+                        </div>
                     </div>
                 </div>
-                <div class="field">
-                    <b>주소</b>
+                <div className={ ProfileUpdateCSS.field }>
+                    <b className={ ProfileUpdateCSS.PUlabel }>상세주소</b>
                     <div>
-                        <input 
-                            type="text" 
-                            name="memberAds"
-                            placeholder="주소입력" 
-                            autoComplete='off'
-                            onChange={ onChangeHandler }
-                        />
-                    </div>
-                </div>
-                <div class="field">
-                    <b>상세 주소</b>
-                    <div>
-                        <input 
+                        <input className={ ProfileUpdateCSS.RGinput } 
                             type="text" 
                             name="memberAdsDetail"
-                            placeholder="상세 주소 입력" 
+                            placeholder="상세주소 입력" 
                             autoComplete='off'
                             onChange={ onChangeHandler }
                         />
                     </div>
                 </div>
-                <button
-                    onClick = { onClickRegisterHandler }
-                >   
-                    회원가입
-                </button>
-                <button
-                    style={ { border: 'none', margin: 0, fontSize: '10px', height: '10px' } }
-                    onClick = { onClickBackHandler }
-                >
-                    돌아가기
-                </button>
+                <div>
+                    <button
+                        className={ ProfileUpdateCSS.RGbutton } 
+                        onClick = { onClickRegisterHandler }
+                    >   
+                        회원가입
+                    </button>
+                </div>
+                <div>
+                    <button
+                        className={ ProfileUpdateCSS.RGBackButton } 
+                        onClick = { onClickBackHandler }
+                    >
+                        돌아가기
+                    </button>
+                </div>
             </div>
         </div>
     );

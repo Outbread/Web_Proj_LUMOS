@@ -63,16 +63,18 @@ function Login() {
 
     return (
         <div className={ LoginCSS.backgroundDiv}>
+            <div className={ LoginCSS.loginlabel}>로그인</div>
             <div className={ LoginCSS.loginDiv }>
-                <h1>로그인</h1>
-                <input 
+                <div className={ LoginCSS.loginIDinputlabel}>아이디</div>
+                <input className={ LoginCSS.loginInput}
                     type="text" 
                     name='memberId'
                     placeholder="아이디를 입력하세요" 
                     autoComplete='on'
                     onChange={ onChangeHandler }
                 />
-                <input 
+                <div className={ LoginCSS.loginPWinputlabel}>비밀번호</div>
+                <input className={ LoginCSS.loginInput}
                     type="password"
                     name='memberPassword' 
                     placeholder="비밀번호를 입력하세요" 
@@ -80,17 +82,19 @@ function Login() {
                     onChange={ onChangeHandler }
                 />
                 <button
+                    className={ LoginCSS.loginBTN }
                     onClick={ onClickLoginHandler }
                 >
                     로그인
                 </button>
-                <button
-                    style={ { border: 'none', margin: 0, fontSize: '10px', height: '10px' } }
-                    onClick={ onClickRegisterHandler }
-                >
-                    회원가입
-                </button>
+                
             </div>
+            <button
+                className={ LoginCSS.loginRegiBTN }
+                onClick={ onClickRegisterHandler }
+            >
+                회원가입
+            </button>
         </div>
     );
 }

@@ -13,15 +13,19 @@ function App() {
       <Routes>
         <Route path="/" element={ <Layout/> }>
             <Route index element={ <Main/> }/>   
-              {/* <Route path="profileUpdate/:memberCode" element={ <ProfileUpdate /> } /> */}
+            <Route path="mypage" element={ <MyPageLayout/> } >
+                <Route index element={ <ProfileUpdate /> } />
+                <Route path="profileUpdate" element={ <ProfileUpdate /> } />
+            </Route>
+            <Route path="/login" element={ <Login/> } />
+            <Route path="/register" element={ <Register/> } />  
         </Route>
         <Route path="/sample" element={ <Sample/> } />
-        <Route path="profileUpdate/:memberId" element={ <ProfileUpdate/> } >
-            <Route index element={ <ProfileUpdate /> } />
+        {/* <Route path="profileUpdate/:memberId" element={ <ProfileUpdate/> } >
+            <Route index element={ <ProfileUpdate /> } /> */}
             {/* <Route path="ProfileUpdate" element={ <ProfileUpdate /> } /> */}
-        </Route>
-        <Route path="/login" element={ <Login/> } />
-        <Route path="/register" element={ <Register/> } />
+        {/* </Route> */}
+        
       </Routes>
       
     </BrowserRouter>
