@@ -7,8 +7,10 @@ public class PageDTO {
     private boolean next, prev;		// 이전, 다음 버튼 존재 유무
     private int total;			    // 행 전체 개수
 
+
     /* 현재페이지 번호(pageNum), 행 표시 수(amount), 검색 키워드(keyword), 검색 종류(type) 등*/
     private Criteria cri;			// 검색 정보
+
 
     /* 생성자(클래스 호출 시 각 변수 값 초기화) */
     public PageDTO(Criteria cri, int total) {
@@ -91,4 +93,7 @@ public class PageDTO {
 		return "PageDTO [pageStart=" + pageStart + ", pageEnd=" + pageEnd + ", next=" + next + ", prev=" + prev
 				+ ", total=" + total + ", cri=" + cri + "]";
 	}
+
 }
+
+

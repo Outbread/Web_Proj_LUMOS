@@ -30,6 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService{
       this.modelMapper = modelMapper;
    }
 
+   //=============================회원가입[전진이]================================//
    @Transactional
    @Override
    public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {

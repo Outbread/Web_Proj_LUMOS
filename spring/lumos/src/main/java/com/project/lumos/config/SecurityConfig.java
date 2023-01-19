@@ -53,7 +53,12 @@ public class SecurityConfig {
 		    	.antMatchers("/auth/**").permitAll()
 		    	.antMatchers("/api/v1/products/**").permitAll() 
 		    	.antMatchers("/api/v1/revies/**").permitAll()
-//		    	.antMatchers("/api/**").hasAnyRole("USER") 
+		    	/* [구도연] */
+		    	.antMatchers("/api/v1/order/**").permitAll()
+		    	.antMatchers("/api/v1/product/**").permitAll()
+		    	.antMatchers("/api/v1/cart/**").permitAll()
+		    	.antMatchers("/api/v1/profileUpdate/**").permitAll() 
+//		    	.antMatchers("/api/v1/profileUpdate").hasAnyRole("USER") 
 //		    	.antMatchers("/api/**").hasAnyRole("ADMIN")
 		    	.antMatchers("/api/**").hasAnyRole("USER","ADMIN")
 		    .and()

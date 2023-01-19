@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import HeaderCSS from '../../modules/Header.module.css';
+import HeaderCSS from './Header.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { decodeJwt } from '../../utils/tokenUtils';
@@ -33,9 +33,9 @@ export default function Header() {
     const isLogin = window.localStorage.getItem('accessToken');    
     const [loginModal, setLoginModal] = useState(false); 
 
-    // 토큰 만료시
-    const onClickMypageHandler = () => {    
-        
+    //마이페이지로 이동
+    const onClickMypageHandler = (memberId) => {    
+        // 토큰 만료시 재로그인
         const token = decodeJwt(window.localStorage.getItem("accessToken"));
         console.log('[Header] onClickMypageHandler token : ', token);
         
@@ -43,8 +43,8 @@ export default function Header() {
             setLoginModal(true);
             return ;
         }
-
-        navigate("/", { replace: true });
+        //마이페이지로 이동
+        navigate(`/profileUpdate/${memberId}`, { replace: true });
     }
 
     // 로그아웃
@@ -75,6 +75,7 @@ export default function Header() {
             <div>
                 <button onClick={ onClickLogoutHandler }>로그아웃</button>
                 <NavLink to="/mypage">마이페이지</NavLink>
+                <button onClick={ onClickMypageHandler }>마이페이지</button>
                 <NavLink to="/sample">장바구니</NavLink>
             </div>
         );

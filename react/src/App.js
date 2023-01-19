@@ -8,7 +8,7 @@ import QuestionRegistration from './pages/member/QuestionRegistration';     // �
 import QuestionList from './pages/member/QuestionList';                     // 회원별 문의사항
 import Login from './pages/member/Login';                                   // 로그인
 import Register from './pages/member/Register';                             // 회원가입
-
+import ProfileUpdate from './pages/member/ProfileUpdate';
 
 function App() {
   return (
@@ -23,7 +23,10 @@ function App() {
           </Route>
         </Route>
         <Route path="/sample" element={ <Sample/> } />
-
+        <Route path="profileUpdate/:memberId" element={ <ProfileUpdate/> } >
+            <Route index element={ <ProfileUpdate /> } />
+            {/* <Route path="ProfileUpdate" element={ <ProfileUpdate /> } /> */}
+        </Route>
         <Route path="/login" element={ <Login/> } />
         <Route path="/register" element={ <Register/> } />
       </Routes>

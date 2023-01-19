@@ -1,4 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
+import MyPageLayoutCSS from "./MyPageLayout.module.css";
 import MyPageNavbar from "../components/common/MyPageNavbar";
 import { Navigate } from 'react-router-dom';
 import { useEffect } from "react";
@@ -9,16 +10,17 @@ function MyPageLayout() {
 
 
     useEffect(() => {
-        navigate("/mypage", { replace: false });
+        navigate("/mypage/profile", { replace: false });
+
     }, 
     []);
 
 
     return (
         <>
-            <div>
+            <div className={MyPageLayoutCSS.myPageLayoutDiv }>
                 <MyPageNavbar />
-                <main >
+                <main className={ MyPageLayoutCSS.main }>
                     <Outlet/>
                 </main>
             </div>
