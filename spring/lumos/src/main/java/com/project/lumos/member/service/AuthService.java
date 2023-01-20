@@ -40,7 +40,7 @@ public class AuthService {
 		this.memberRoleRepository = memberRoleRepository;
 	}
 	
-	//====================================로그인======================================//
+	//====================================로그인[전진이]======================================//
 	public Object login(MemberDTO memberDTO) { //사용자가 입력한 아이디 비번
 		log.info("[AuthService] Login Start ======================================");
 		log.info("[AuthService] {}", memberDTO); //사용자가 입력한 아이디 비번 확인
@@ -66,7 +66,7 @@ public class AuthService {
 		return tokenDTO;
 	}
 
-	//====================================회원가입======================================//
+	//====================================회원가입[전진이]======================================//
 	
 	@Transactional //DML 작업은 Transactional 어노테이션 추가
 	public MemberDTO signup(MemberDTO memberDTO) { //이것이 AuthController에서
@@ -76,8 +76,14 @@ public class AuthService {
 		/* id 중복 유효성 검사...hmm */
 		if(memberRepository.findByMemberId(memberDTO.getMemberId()) != null) {
 			log.info("[AuthService] Id가 중복됩니다.");
-			throw new DuplicatedMemberIdException("중복된 아이디입니다.");
+			throw new DuplicatedMemberIdException("중복된 아이디입니다authService.");
 		}
+		/* email 중복 유효성 검사 */
+//		if(memberRepository.findByMemberEmail(memberDTO.getMemberEmail()) != null) {
+//			log.info("[AuthService] Email 중복");
+//			throw new DuplicatedMemberEmailException("중복된 이메일입니다.");
+//		}
+		
 		
 		/* 우선 repository를 통해 쿼리를 날리기 전에 DTO에 담긴 값을 Entity로 옮기자.*/
 		Member registMember = modelMapper.map(memberDTO, Member.class);
@@ -100,4 +106,40 @@ public class AuthService {
 		return memberDTO;
 	}
 
+
+	
+	//=========================회원가입시 아이디 중복 체크[전진이]==============================//
+//	public MemberDTO selectMyInfo(String memberId) {
+//		log.info("[MemberService] getMyInfo Start =======================");
+//		
+//		Member member = memberRepository.findMemberByMemberId(memberId);
+//		log.info("[MemberService] {}", memberId);
+//		log.info("[MemberService] {}", member);
+//		log.info("[MemberService] getMyInfo End =========================");
+//		
+//		return modelMapper.map(member, MemberDTO.class);
+//	}
+	
+	public Object selectMyInfo(String memberId) {
+		Member member = memberRepository.findMemberByMemberId(memberId);
+		/* id 중복 유효성 검사...hmm */
+		if(memberRepository.findByMemberId(memberId) != null) {
+			log.info("[AuthService] Id가 중복됩니다.");
+			throw new DuplicatedMemberIdException("중복된 아이디입니다authService.");
+		}
+    
+
+		return modelMapper.map(member, MemberDTO.class);
+	}
+//	
+//	public Object selectMyInfo(String memberId) {
+//		
+//        List<Member> memberList = memberRepository.findByduplicatedId(memberId);
+//        
+//        
+//        return memberList.stream().map(pro -> modelMapper.map(pro, MemberDTO.class)).collect(Collectors.toList());
+//	}	
+
 }
+
+

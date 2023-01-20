@@ -33,4 +33,12 @@ public class ApiExceptionAdvice {
 				.body(new ApiExceptionDTO(HttpStatus.BAD_REQUEST, e.getMessage()));
 				
 	}
+	
+	/* 이메일 중복 시 발생하는 예외 사항 처리 */
+	@ExceptionHandler(DuplicatedMemberEmailException.class)
+	public ResponseEntity<ApiExceptionDTO> exceptionHandler(DuplicatedMemberEmailException e) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(new ApiExceptionDTO(HttpStatus.BAD_REQUEST, e.getMessage()));
+				
+	}
 }

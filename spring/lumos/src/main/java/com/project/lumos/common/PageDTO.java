@@ -91,4 +91,6 @@ public class PageDTO {
 		return "PageDTO [pageStart=" + pageStart + ", pageEnd=" + pageEnd + ", next=" + next + ", prev=" + prev
 				+ ", total=" + total + ", cri=" + cri + "]";
 	}
+
 }
+

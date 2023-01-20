@@ -51,8 +51,18 @@ public class SecurityConfig {
 		    	.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()	
 		    	.antMatchers("/auth/**").permitAll()
 		    	.antMatchers("/api/v1/products/**").permitAll() 
+<<<<<<< HEAD
 		    	.antMatchers("/api/v1/reviews/**").permitAll()
 //		    	.antMatchers("/api/**").hasAnyRole("USER") 
+=======
+		    	.antMatchers("/api/v1/revies/**").permitAll()
+		    	/* [구도연] */
+		    	.antMatchers("/api/v1/order/**").permitAll()
+		    	.antMatchers("/api/v1/product/**").permitAll()
+		    	.antMatchers("/api/v1/cart/**").permitAll()
+		    	.antMatchers("/api/v1/profileUpdate/**").permitAll() 
+//		    	.antMatchers("/api/v1/profileUpdate").hasAnyRole("USER") 
+>>>>>>> origin/master
 //		    	.antMatchers("/api/**").hasAnyRole("ADMIN")
 		    	.antMatchers("/api/**").hasAnyRole("USER","ADMIN")
 		    .and()
