@@ -26,7 +26,3 @@ public class PagingResponseDTO {
 		return "PagingResponseDTO [data=" + data + ", pageInfo=" + pageInfo + "]";
 	}
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
