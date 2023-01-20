@@ -1,9 +1,6 @@
 package com.project.lumos.common;
 
 import org.springframework.http.HttpStatus;
-
-/* 응답 body에 담겨 json문자열이 되는 객체 */
-/* 화면단 React로 가면 Store에 해당 리듀서가 관리하는 state값이 된다*/
 public class ResponseDTO {
 
 	private int status;		//상태코드값
@@ -11,29 +8,34 @@ public class ResponseDTO {
 	private Object data;	//응답 데이터
 	
 	public ResponseDTO() {
-		super();
 	}
+	
 	public ResponseDTO(HttpStatus status, String message, Object data) {
-		super();
 		this.status = status.value(); // HttpStatus enum 타입에서 value라는 int형 상태 코드 값만 추출
 		this.message = message;
 		this.data = data;
 	}
+	
 	public int getStatus() {
 		return status;
 	}
+	
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	
 	public String getMessage() {
 		return message;
 	}
+	
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	
 	public Object getData() {
 		return data;
 	}
+	
 	public void setData(Object data) {
 		this.data = data;
 	}

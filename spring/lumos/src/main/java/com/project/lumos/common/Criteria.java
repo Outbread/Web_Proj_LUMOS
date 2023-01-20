@@ -1,7 +1,7 @@
 package com.project.lumos.common;
 
+
 public class Criteria {
-	
     private int pageNum;
     private int amount;
 

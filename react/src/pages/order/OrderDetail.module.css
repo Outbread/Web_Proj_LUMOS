@@ -1,0 +1,90 @@
+.boxing table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.boxing table thead {
+    border-bottom: 2px solid black;
+}
+
+.boxing table th {
+    /* line-height: 35px; */
+    line-height: 50px;
+    text-align: left;
+    /* padding-left: 10px; */
+}
+
+.boxing table td {
+    /* line-height: 35px; */
+    line-height: 50px;
+    /* padding-left: 10px; */
+}
+
+.boxing {
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.headline1 {
+    font-weight: bold;
+    background-color: rgba(115, 206, 190, 0.5);
+    width: 250px;
+    text-align: center;
+    /* padding-left: 0; */
+    border-bottom: 2px solid black;
+}
+
+.headline2 {
+    width: 300px;
+    text-align: center;
+    /* padding-left: 0; */
+    border-bottom: 2px solid black;
+}
+
+.content {
+    display: flex;
+    margin-top: 0px;
+}
+
+.top {
+    width: 1200px;
+}
+
+.left {
+    width: 800px;
+    margin-right: auto;
+}
+
+.leftTh th {
+    width: 200px;
+}
+
+.right {
+    width: 350px;
+    text-align: right;
+}
+
+.right td {
+    /* padding-right: 10px; */
+}
+
+.orderProduct td {
+    /* padding-left: 0; */
+    text-align: center;
+}
+
+select {
+    width: 200px;
+}
+
+input {
+    width: 192px;
+}
+
+input :disabled{
+    background-color: #646464;
+}

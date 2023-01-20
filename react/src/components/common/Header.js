@@ -17,7 +17,7 @@ export default function Header() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isAdmin, setIsAdmin] = useState('');
-    
+
     /*==============================로그인=======================================*/
     const loginMember = useSelector(state => state.memberReducer); 
     const isLogin = window.localStorage.getItem('accessToken');    

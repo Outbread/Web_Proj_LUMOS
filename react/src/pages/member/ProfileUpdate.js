@@ -187,7 +187,7 @@ function ProfileUpdate() {
                     <div>
                         <div className={ProfileUpdateCSS.PUlabel}> 휴대전화 </div>
                         <input className={ProfileUpdateCSS.PUinput }
-                            type="text" 
+                            name="memberPhone"
                             placeholder="휴대전화" 
                             onChange={ onChangeHandler }
                             readOnly={modifyMode ? false : true}
