@@ -1,7 +1,5 @@
 package com.project.lumos.member.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -25,5 +23,5 @@ public interface MemberRepository extends JpaRepository<Member, Integer>{
 	
 	/* [구도연] */
 	Member findMemberByMemberId(String memberId);
+	
 }
-

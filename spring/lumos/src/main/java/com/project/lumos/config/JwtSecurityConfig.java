@@ -9,7 +9,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.project.lumos.jwt.JwtFilter;
 import com.project.lumos.jwt.TokenProvider;
 
-public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>{
+public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+	
 	private final TokenProvider tokenProvider;
 	
 	@Autowired
@@ -22,4 +23,5 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
 		JwtFilter customFilter = new JwtFilter(tokenProvider);							
 		http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class); 
 	}
+	
 }

@@ -9,6 +9,8 @@ import QuestionList from './pages/member/QuestionList';                     // �
 import Login from './pages/member/Login';                                   // 로그인
 import Register from './pages/member/Register';                             // 회원가입
 import ProfileUpdate from './pages/member/ProfileUpdate';
+import OrderManagement from './pages/order/OrderManagement';                // 주문관리
+import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
                 <Route path="questionregistration" element={ <QuestionRegistration /> } />
                 <Route path="question" element={<QuestionList />} />
             </Route>
+            <Route path="order-management" element={<OrderManagement/>}/>
+            <Route path="order-management/:orderCode" element={<OrderDetail/>}/>
             <Route path="/login" element={ <Login/> } />
             <Route path="/register" element={ <Register/> } />  
         </Route>

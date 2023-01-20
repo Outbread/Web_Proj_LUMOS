@@ -31,5 +31,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 //	↑
 //	Null return value from advice does not match primitive return type for: 
 //	public abstract int com.project.lumos.order.repository.OrderRepository.findByOrderCode(java.lang.String)
+	
+	Order findByOrderCode(String orderCode);
 
 }
