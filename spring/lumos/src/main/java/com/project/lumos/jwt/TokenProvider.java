@@ -40,7 +40,7 @@ public class TokenProvider {
 	private static final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 	private static final String AUTHORITIES_KEY = "auth";
 	private static final String BEARER_TYPE = "Bearer";
-	private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 40;	// 40분(ms 단위)
+	private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 120;	// 120분(ms 단위)
 	
 	private final UserDetailsService userDetailsService;
 	
