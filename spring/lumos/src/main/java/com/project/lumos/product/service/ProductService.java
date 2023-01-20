@@ -1,6 +1,5 @@
 package com.project.lumos.product.service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,11 +19,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.lumos.common.Criteria;
-import com.project.lumos.product.dto.ProductAndCategoryDTO;
+import com.project.lumos.product.dto.ImageAndProductDTO;
+import com.project.lumos.product.dto.OptionDTO;
 import com.project.lumos.product.dto.ProductDTO;
+import com.project.lumos.product.dto.ProductImageDTO;
+import com.project.lumos.product.dto.ProductInsertDTO;
+import com.project.lumos.product.entity.ImageAndProduct;
+import com.project.lumos.product.entity.Option;
 import com.project.lumos.product.entity.Product;
-import com.project.lumos.product.entity.ProductAndCategory;
-import com.project.lumos.product.repository.ProductAndCategoryRepository;
+import com.project.lumos.product.entity.ProductAndImage;
+import com.project.lumos.product.entity.ProductImage;
+import com.project.lumos.product.repository.ImageAndProductAndOptionRepository;
+import com.project.lumos.product.repository.ImageAndProductRepository;
+import com.project.lumos.product.repository.OptionRepository;
+import com.project.lumos.product.repository.ProductAndImageRepository;
+import com.project.lumos.product.repository.ProductImageRepository;
+import com.project.lumos.product.repository.ProductInsertRepository;
 import com.project.lumos.product.repository.ProductRepository;
 import com.project.lumos.util.FileUploadUtils;
 
@@ -34,27 +44,36 @@ public class ProductService {
 	
 	private static final Logger log = LoggerFactory.getLogger(ProductService.class);
 	private final ProductRepository productRepository;
-	private final ProductAndCategoryRepository productAndCategoryRepository;
+	private final ProductAndImageRepository productAndImageRepository;
+	private final ImageAndProductRepository imageAndProductRepository;
+	private final ImageAndProductAndOptionRepository imageAndProductAndOptionRepository;
+	private final ProductImageRepository productImageRepository;
+	private final ProductInsertRepository productInsertRepository;
+	private final OptionRepository optionRepository;
 	private final ModelMapper modelMapper;
 
-	/* 이미지 저장 할 위치 및 응답 할 이미지 주소(WebConfig 설정파일 추가하기) */
     @Value("${image.image-dir}")
     private String IMAGE_DIR;
+    
     @Value("${image.image-url}")
     private String IMAGE_URL;
 	
 	@Autowired
-    public ProductService(ProductRepository productRepository, ProductAndCategoryRepository productAndCategoryRepository, ModelMapper modelMapper) {
+    public ProductService(ProductInsertRepository productInsertRepository, ProductRepository productRepository,OptionRepository optionRepository, ImageAndProductRepository imageAndProductRepository,ProductAndImageRepository productAndImageRepository, ImageAndProductAndOptionRepository imageAndProductAndOptionRepository,ProductImageRepository productImageRepository,  ModelMapper modelMapper) {
 		this.productRepository = productRepository;
 		this.modelMapper = modelMapper;
-		this.productAndCategoryRepository = productAndCategoryRepository;
+		this.productAndImageRepository = productAndImageRepository;
+		this.imageAndProductRepository = imageAndProductRepository;
+		this.imageAndProductAndOptionRepository = imageAndProductAndOptionRepository;
+		this.productImageRepository = productImageRepository;
+		this.optionRepository = optionRepository;
+		this.productInsertRepository = productInsertRepository;
 	}
 
 	public int selectProductTotal() {
         log.info("[ProductService] selectProductTotal Start ===================================");
         
-        /* 페이징 처리 결과를 Page 타입으로 반환받음 */
-        List<Product> productList = productRepository.findByProductOrderable("Y");
+        List<ImageAndProduct> productList = imageAndProductRepository.findByMainImg("Y");
         
         log.info("[ProductService] selectProductTotal End ===================================");
         
@@ -66,211 +85,109 @@ public class ProductService {
 		
 		int index = cri.getPageNum() - 1;
         int count = cri.getAmount(); 
-        Pageable paging = PageRequest.of(index, count, Sort.by("productCode").descending());
-	        
-        Page<Product> result = productRepository.findByProductOrderable("Y", paging);
-        List<Product> productList = (List<Product>)result.getContent();
+        Pageable paging = PageRequest.of(index, count, Sort.by("pdCode").descending());
 
+        Page<ImageAndProduct> result = imageAndProductRepository.findByMainImg("Y", paging);
+        List<ImageAndProduct> productList = (List<ImageAndProduct>)result.getContent();
+        
+        log.info("productList" + productList);
+        
         for(int i = 0 ; i < productList.size() ; i++) {
-            productList.get(i).setProductImageUrl(IMAGE_URL + productList.get(i).getProductImageUrl());
+            productList.get(i).setPdImgPath(IMAGE_URL + productList.get(i).getPdImgPath());
         }
         
         log.info("[ProductService] selectProductListWithPaging End ===================================");
         
-        return productList.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+        return productList.stream().map(product -> modelMapper.map(product, ImageAndProductDTO.class)).collect(Collectors.toList());
 	}
 
-	public Object selectProduct(int productCode) {
+	public Object selectProduct(int pdCode) {
 		log.info("[ProductService] selectProduct Start ===================================");
-		 
-		Product product = productRepository.findById(productCode).get();
-	    product.setProductImageUrl(IMAGE_URL + product.getProductImageUrl());
-	     
-	    log.info("[ProductService] selectProduct End ===================================");
-	     
-	    return modelMapper.map(product, Product.class);
-	}
-
-	public Object selectSearchProductList(String search) {
-		log.info("[ProductService] selectSearchProductList Start ===================================");
-        log.info("[ProductService] searchValue : " + search);
-        
-        List<Product> productListWithSearchValue = productRepository.findByProductNameContaining(search);
-        
-        log.info("[ProductService] productListWithSearchValue : " + productListWithSearchValue);
-
-        for(int i = 0 ; i < productListWithSearchValue.size() ; i++) {
-            productListWithSearchValue.get(i).setProductImageUrl(IMAGE_URL + productListWithSearchValue.get(i).getProductImageUrl());
-        }
-        
-        log.info("[ProductService] selectSearchProductList End ===================================");
-
-        return productListWithSearchValue.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
-	}
-
-	public Object selectProductListAboutMeal() {
-		log.info("[ProductService] selectProductListAboutMeal Start ===================================");
-
-        List<Product> productListAboutMeal = productRepository.findByCategoryCode(1);
-
-        for(int i = 0 ; i < productListAboutMeal.size() ; i++) {
-            productListAboutMeal.get(i).setProductImageUrl(IMAGE_URL + productListAboutMeal.get(i).getProductImageUrl());
-        }
-
-        log.info("[ProductService] selectProductListAboutMeal End ==============================");
-
-        return productListAboutMeal.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
-	}
-
-	public Object selectProductListAboutDessert() {
-		log.info("[ProductService] selectProductListAboutDessert Start ===================================");
-
-        List<Product> productListAboutDessert = productRepository.findByCategoryCode(2);
-
-        for(int i = 0 ; i < productListAboutDessert.size() ; i++) {
-            productListAboutDessert.get(i).setProductImageUrl(IMAGE_URL + productListAboutDessert.get(i).getProductImageUrl());
-        }
-
-        log.info("[ProductService] selectProductListAboutDessert End ==============================");
-
-        return productListAboutDessert.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
-	}
-
-	public Object selectProductListAboutBeverage() {
-		log.info("[ProductService] selectProductListAboutBeverage Start ===================================");
-
-        List<Product> productListAboutBeverage = productRepository.findByCategoryCode(3);
-
-        for(int i = 0 ; i < productListAboutBeverage.size() ; i++) {
-            productListAboutBeverage.get(i).setProductImageUrl(IMAGE_URL + productListAboutBeverage.get(i).getProductImageUrl());
-        }
-
-        log.info("[ProductService] selectProductListAboutBeverage End ==============================");
-
-        return productListAboutBeverage.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
-	}
-
-	public int selectProductTotalForAdmin() {
-		log.info("[ProductService] selectProductTotalForAdmin Start ===================================");
 		
-        int result = productRepository.findAll().size();
-
-        log.info("[ProductService] selectProductTotalForAdmin End ===================================");
-        
-        return result;
-	}
-
-	public Object selectProductListWithPagingForAdmin(Criteria cri) {
-		log.info("[ProductService] selectProductListWithPagingForAdmin Start ===================================");
+//		ImageAndProduct product = (ImageAndProduct) imageAndProductRepository.findByPdCode(pdCode);
+//		ImageAndProduct product = imageAndProductRepository.findByPdCodeAndMainImg(pdCode, "Y");
 		
-		int index = cri.getPageNum() - 1;
-        int count = cri.getAmount(); 
-        Pageable paging = PageRequest.of(index, count, Sort.by("productCode").descending());
-	        
-        Page<ProductAndCategory> result = productAndCategoryRepository.findAll(paging);
-        List<ProductAndCategory> productList = (List<ProductAndCategory>)result.getContent();
-
-        for(int i = 0 ; i < productList.size() ; i++) {
-            productList.get(i).setProductImageUrl(IMAGE_URL + productList.get(i).getProductImageUrl());
-        }
-        
-        log.info("[ProductService] selectProductListWithPagingForAdmin End ===================================");
-        
-		return productList.stream().map(product -> modelMapper.map(product, ProductAndCategoryDTO.class)).collect(Collectors.toList());
-	}
-
-	public Object selectProductForAdmin(int productCode) {
-		log.info("[ProductService] selectProductForAdmin Start ===================================");
+//		List<ProductAndImage> product = (List<ProductAndImage>) productAndImageRepository.findById(pdCode).get();
+		ProductAndImage productList = productAndImageRepository.findById(pdCode).get();
+//		List<ImageAndProductAndOption> product = imageAndProductAndOptionRepository.findByPdCode(pdCode);
 		
-		Product product = productRepository.findById(productCode).get();
-        product.setProductImageUrl(IMAGE_URL + product.getProductImageUrl());
-        
-        log.info("[ProductService] selectProductForAdmin End ===================================");
-        
-        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
-               
-        return productDTO;
+		List<ProductImage> imageList = productImageRepository.findByPdCode(pdCode);
+		
+//		for(int i = 0; i < product.size(); i++) {
+//				product.get(i).setPdImgPath(IMAGE_URL + product.get(i).getPdImgPath());			
+//		}
+		
+		for(ProductImage image : imageList) {
+			image.setPdImgPath(IMAGE_URL + image.getPdImgPath());
+			modelMapper.map(imageList, ProductImageDTO.class);
+		}
+		
+		log.info("selectProduct " + productList);
+		log.info("[ProductService] selectProduct End ===================================");
+		
+		return modelMapper.map(productList, ProductAndImage.class);
 	}
 	
 	@Transactional
-	public Object insertProduct(ProductDTO productDTO, MultipartFile productImage) {
+	public Object insertProduct(ProductInsertDTO productInsertDTO, MultipartFile productImage) {
         log.info("[ProductService] insertProduct Start ===================================");
-        log.info("[ProductService] productDTO : " + productDTO);
+        log.info("[ProductService] INSERT : " + productInsertDTO);
         
         String imageName = UUID.randomUUID().toString().replace("-", "");
         String replaceFileName = null;
         int result = 0;
-
+        
+        ProductDTO pdDTO = new ProductDTO();
+        OptionDTO optDTO = new OptionDTO();
+        ProductImageDTO imageDTO = new ProductImageDTO();
+        
+        pdDTO.setPdName(productInsertDTO.getPdName());
+        pdDTO.setPdPrice(productInsertDTO.getPdPrice());
+        pdDTO.setPdDesc(productInsertDTO.getPdDesc());
+        pdDTO.setCatMain(productInsertDTO.getCatMain());
+        pdDTO.setCatSub(productInsertDTO.getCatSub());
+        
+        log.info("[ProductService] pdDTO : " + pdDTO);        	
+        
+        Product insertProduct = modelMapper.map(pdDTO, Product.class);        	
+        log.info("insertProduct : " + insertProduct);        	
+        productRepository.saveAndFlush(insertProduct);        	
+        
+        int i = insertProduct.getPdCode();
+        
         try {
+        	replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, productImage);
         	
-        	/* util 패키지에 FileUploadUtils 추가 */
-            replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, productImage);
-
-            productDTO.setProductImageUrl(replaceFileName);
-
+        	optDTO.setOptionNm(productInsertDTO.getOptionNm());
+        	optDTO.setOptionStock(productInsertDTO.getOptionStock());
+        	optDTO.setPdCode(i);
+        	
+        	log.info("[ProductService] optDTO : " + optDTO);
+        	
+        	Option op = modelMapper.map(optDTO, Option.class);
+    		optionRepository.save(op);
+    		
+    		imageDTO.setPdImgPath(replaceFileName);
+    		imageDTO.setMainImg(productInsertDTO.getMainImg());
+    		imageDTO.setPdCode(i);
+    		log.info("[ProductService] imageDTO : " + imageDTO);
+    		
+    		ProductImage im = modelMapper.map(imageDTO, ProductImage.class);
+    		productImageRepository.save(im);
+        	
+        	log.info("pdcode   : " + i);
+        	
             log.info("[ProductService] insert Image Name : ", replaceFileName);
-
-            Product insertProduct = modelMapper.map(productDTO, Product.class);
-            
-            productRepository.save(insertProduct);
             
             result = 1;
+
         } catch (Exception e) {
             FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
             throw new RuntimeException(e);
         }
         
-        return (result > 0) ? "상품 입력 성공" : "상품 입력 실패";
-	}
-
-	@Transactional
-	public Object updateProduct(ProductDTO productDTO, MultipartFile productImage) {
-		log.info("[ProductService] updateProduct Start ===================================");
-        log.info("[ProductService] productDTO : " + productDTO);
         
-        String replaceFileName = null;
-        int result = 0;
-
-        try {
-        	
-        	/* update 할 엔티티 조회 */
-        	Product product = productRepository.findById(productDTO.getProductCode()).get();
-        	String oriImage = product.getProductImageUrl();
-            log.info("[updateProduct] oriImage : " + oriImage);
-            
-            /* update를 위한 엔티티 값 수정 */
-            product.setCategoryCode(productDTO.getCategoryCode());
-            product.setProductName(productDTO.getProductName());
-            product.setProductPrice(productDTO.getProductPrice());
-            product.setProductOrderable(productDTO.getProductOrderable());
-            product.setCategoryCode(productDTO.getCategoryCode());
-            product.setProductStock(productDTO.getProductStock());
-            product.setProductDescription(productDTO.getProductDescription());
-            
-            if(productImage != null){
-                String imageName = UUID.randomUUID().toString().replace("-", "");
-                replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, productImage);
-                log.info("[updateProduct] InsertFileName : " + replaceFileName);
-                
-                product.setProductImageUrl(replaceFileName);	// 새로운 파일 이름으로 update
-                log.info("[updateProduct] deleteImage : " + oriImage);
-                
-                boolean isDelete = FileUploadUtils.deleteFile(IMAGE_DIR, oriImage);
-                log.info("[update] isDelete : " + isDelete);
-            } else {
-            	
-                /* 이미지 변경 없을 시 */
-            	product.setProductImageUrl(oriImage);
-            }
-
-            result = 1;
-        } catch (IOException e) {
-            log.info("[updateProduct] Exception!!");
-            FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
-            throw new RuntimeException(e);
-        }
-        log.info("[ProductService] updateProduct End ===================================");
-        return (result > 0) ? "상품 업데이트 성공" : "상품 업데이트 실패";
+        return (result > 0) ? "상품 입력 성공" : "상품 입력 실패";
 	}
 
 }

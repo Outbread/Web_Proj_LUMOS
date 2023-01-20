@@ -8,21 +8,20 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-
 @Entity
 @Table(name = "TBL_PRODUCT")
 @SequenceGenerator(
-	name = "PRODUCT_SEQ_GENERATOR",
-	sequenceName = "SEQ_PD_CODE",
-	initialValue = 118, allocationSize = 1
+		name = "PRODUCT_SEQ_GENERATOR",
+		sequenceName = "SEQ_PD_CODE",
+		initialValue = 118, allocationSize = 1
 )
-public class Product {
-	
+public class ProductInsert {
+
 	@Id
 	@Column(name = "PD_CODE")
 	@GeneratedValue(
-		strategy = GenerationType.SEQUENCE,
-		generator = "PRODUCT_SEQ_GENERATOR"
+			strategy = GenerationType.SEQUENCE,
+			generator = "PRODUCT_SEQ_GENERATOR"
 	)
 	private int pdCode;
 	
@@ -41,10 +40,10 @@ public class Product {
 	@Column(name = "CAT_SUB")
 	private String catSub;
 
-	public Product() {
+	public ProductInsert() {
 	}
 
-	public Product(int pdCode, String pdName, int pdPrice, String pdDesc, String catMain, String catSub) {
+	public ProductInsert(int pdCode, String pdName, int pdPrice, String pdDesc, String catMain, String catSub) {
 		this.pdCode = pdCode;
 		this.pdName = pdName;
 		this.pdPrice = pdPrice;
@@ -103,7 +102,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [pdCode=" + pdCode + ", pdName=" + pdName + ", pdPrice=" + pdPrice + ", pdDesc=" + pdDesc
+		return "ProductInsert [pdCode=" + pdCode + ", pdName=" + pdName + ", pdPrice=" + pdPrice + ", pdDesc=" + pdDesc
 				+ ", catMain=" + catMain + ", catSub=" + catSub + "]";
 	}
 	

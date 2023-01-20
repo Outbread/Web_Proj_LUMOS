@@ -1,29 +1,20 @@
 package com.project.lumos.product.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 
 @Entity
 @Table(name = "TBL_PRODUCT")
-@SequenceGenerator(
-	name = "PRODUCT_SEQ_GENERATOR",
-	sequenceName = "SEQ_PD_CODE",
-	initialValue = 118, allocationSize = 1
-)
-public class Product {
-	
+public class ProductAndImage {
+
 	@Id
 	@Column(name = "PD_CODE")
-	@GeneratedValue(
-		strategy = GenerationType.SEQUENCE,
-		generator = "PRODUCT_SEQ_GENERATOR"
-	)
 	private int pdCode;
 	
 	@Column(name = "PD_NAME")
@@ -40,17 +31,30 @@ public class Product {
 	
 	@Column(name = "CAT_SUB")
 	private String catSub;
+	
+	@OneToMany
+	@JoinColumn(name = "PD_CODE", insertable=false, updatable = false)
+	private List<ProductImage> productImage;
 
-	public Product() {
+	@OneToMany
+	@JoinColumn(name = "PD_CODE", insertable=false, updatable = false)
+	private List<Option> productOption;
+
+	public ProductAndImage() {
+		super();
 	}
 
-	public Product(int pdCode, String pdName, int pdPrice, String pdDesc, String catMain, String catSub) {
+	public ProductAndImage(int pdCode, String pdName, int pdPrice, String pdDesc, String catMain, String catSub,
+			List<ProductImage> productImage, List<Option> productOption) {
+		super();
 		this.pdCode = pdCode;
 		this.pdName = pdName;
 		this.pdPrice = pdPrice;
 		this.pdDesc = pdDesc;
 		this.catMain = catMain;
 		this.catSub = catSub;
+		this.productImage = productImage;
+		this.productOption = productOption;
 	}
 
 	public int getPdCode() {
@@ -101,10 +105,27 @@ public class Product {
 		this.catSub = catSub;
 	}
 
+	public List<ProductImage> getProductImage() {
+		return productImage;
+	}
+
+	public void setProductImage(List<ProductImage> productImage) {
+		this.productImage = productImage;
+	}
+
+	public List<Option> getProductOption() {
+		return productOption;
+	}
+
+	public void setProductOption(List<Option> productOption) {
+		this.productOption = productOption;
+	}
+
 	@Override
 	public String toString() {
-		return "Product [pdCode=" + pdCode + ", pdName=" + pdName + ", pdPrice=" + pdPrice + ", pdDesc=" + pdDesc
-				+ ", catMain=" + catMain + ", catSub=" + catSub + "]";
+		return "ProductAndImage [pdCode=" + pdCode + ", pdName=" + pdName + ", pdPrice=" + pdPrice + ", pdDesc="
+				+ pdDesc + ", catMain=" + catMain + ", catSub=" + catSub + ", productImage=" + productImage
+				+ ", productOption=" + productOption + "]";
 	}
 	
 	

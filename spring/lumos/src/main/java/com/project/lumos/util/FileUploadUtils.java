@@ -18,6 +18,10 @@ public class FileUploadUtils {
 	public static String saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
 
         Path uploadPath = Paths.get(uploadDir);
+        
+        log.info("파일 업로드 : uploadDir" + uploadDir);
+        log.info("파일 업로드 : fileName" + fileName);
+        log.info("파일 업로드 : multipartFile" + multipartFile);
 
         if(!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);

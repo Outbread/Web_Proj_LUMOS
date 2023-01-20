@@ -1,98 +1,64 @@
 package com.project.lumos.product.dto;
 
 public class ProductDTO {
-	private int productCode;
-    private String productName;
-    private String productPrice;
-    private String productDescription;
-    private String productOrderable;
-    private int categoryCode;
-    private String productImageUrl;
-    private Long productStock;
-    
+	
+	private int pdCode;
+	private String pdName;
+	private int pdPrice;
+	private String pdDesc;
+	private String catMain;
+	private String catSub;
 	public ProductDTO() {
 	}
-	public ProductDTO(int productCode, String productName, String productPrice, String productDescription,
-			String productOrderable, int categoryCode, String productImageUrl, Long productStock) {
-		this.productCode = productCode;
-		this.productName = productName;
-		this.productPrice = productPrice;
-		this.productDescription = productDescription;
-		this.productOrderable = productOrderable;
-		this.categoryCode = categoryCode;
-		this.productImageUrl = productImageUrl;
-		this.productStock = productStock;
+	public ProductDTO(int pdCode, String pdName, int pdPrice, String pdDesc, String catMain, String catSub) {
+		this.pdCode = pdCode;
+		this.pdName = pdName;
+		this.pdPrice = pdPrice;
+		this.pdDesc = pdDesc;
+		this.catMain = catMain;
+		this.catSub = catSub;
 	}
-
-	public int getProductCode() {
-		return productCode;
+	public int getPdCode() {
+		return pdCode;
 	}
-
-	public void setProductCode(int productCode) {
-		this.productCode = productCode;
+	public void setPdCode(int pdCode) {
+		this.pdCode = pdCode;
 	}
-
-	public String getProductName() {
-		return productName;
+	public String getPdName() {
+		return pdName;
 	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setPdName(String pdName) {
+		this.pdName = pdName;
 	}
-
-	public String getProductPrice() {
-		return productPrice;
+	public int getPdPrice() {
+		return pdPrice;
 	}
-
-	public void setProductPrice(String productPrice) {
-		this.productPrice = productPrice;
+	public void setPdPrice(int pdPrice) {
+		this.pdPrice = pdPrice;
 	}
-
-	public String getProductDescription() {
-		return productDescription;
+	public String getPdDesc() {
+		return pdDesc;
 	}
-
-	public void setProductDescription(String productDescription) {
-		this.productDescription = productDescription;
+	public void setPdDesc(String pdDesc) {
+		this.pdDesc = pdDesc;
 	}
-
-	public String getProductOrderable() {
-		return productOrderable;
+	public String getCatMain() {
+		return catMain;
 	}
-
-	public void setProductOrderable(String productOrderable) {
-		this.productOrderable = productOrderable;
+	public void setCatMain(String catMain) {
+		this.catMain = catMain;
 	}
-
-	public int getCategoryCode() {
-		return categoryCode;
+	public String getCatSub() {
+		return catSub;
 	}
-
-	public void setCategoryCode(int categoryCode) {
-		this.categoryCode = categoryCode;
+	public void setCatSub(String catSub) {
+		this.catSub = catSub;
 	}
-
-	public String getProductImageUrl() {
-		return productImageUrl;
-	}
-
-	public void setProductImageUrl(String productImageUrl) {
-		this.productImageUrl = productImageUrl;
-	}
-
-	public Long getProductStock() {
-		return productStock;
-	}
-
-	public void setProductStock(Long productStock) {
-		this.productStock = productStock;
-	}
-
 	@Override
 	public String toString() {
-		return "ProductDTO [productCode=" + productCode + ", productName=" + productName + ", productPrice="
-				+ productPrice + ", productDescription=" + productDescription + ", productOrderable=" + productOrderable
-				+ ", categoryCode=" + categoryCode + ", productImageUrl=" + productImageUrl + ", productStock="
-				+ productStock + "]";
+		return "ProductDTO [pdCode=" + pdCode + ", pdName=" + pdName + ", pdPrice=" + pdPrice + ", pdDesc=" + pdDesc
+				+ ", catMain=" + catMain + ", catSub=" + catSub + "]";
 	}
+	
+	
 }
