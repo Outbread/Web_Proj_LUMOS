@@ -17,13 +17,6 @@ export default function DateTest({order}) {
         setUpdateKind({
             ['updateKind']: e.target.name
         });
-        // if(e.target.name === "발주확인") setUpdateKind({updateKind: e.target.name});
-        // if(e.target.name === "송장번호입력/수정") setUpdateKind({[updateKind]: e.target.name});
-        // if(e.target.name === "배송지수정") setUpdateKind({[updateKind]: e.target.name});
-        // if(e.target.name === "배송완료처리") setUpdateKind({[updateKind]: e.target.name});
-        // if(e.target.name === "주문취소처리") setUpdateKind({[updateKind]: e.target.name});
-        // if(e.target.name === "반품접수") setUpdateKind({[updateKind]: e.target.name});
-        // if(e.target.name === "반품완료처리") setUpdateKind({[updateKind]: e.target.name});
     };
     console.log("updateKindasdasdsad", updateKind);
     console.log("updateKindasdasdsad", updateKind.updateKind);

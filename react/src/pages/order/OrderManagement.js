@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import {callOrderListAPI} from '../../apis/OrderAPICalls';
 
 import SearchHead from '../../components/order/SearchHead';
+import SearchResult from '../../components/order/SearchResult';
 import {dateFomatter} from '../../modules/Fommater';
 
 import OrderManagementCSS from './OrderManagement.module.css';
@@ -44,81 +45,18 @@ export default function OrderManagement() {
         navigate(`/order-management/${orderCode}`, { replace: false });
     }
 
+    const onSelectHandler = (e) => {
+        console.log(e.target.checked);
+        const childCheck = document.getElementById("childCheck");
+        const checkBoxes = document.querySelectorAll("#childCheck");
+        console.log(checkBoxes);
+        checkBoxes.forEach(child => child.checked = e.target.checked)
+    }
+
     return (
         <>
             <div>
-                {<SearchHead/>}    
-            </div>
-            {/* 조회 및 검색 결과가 있는 경우 컴포넌트 반환 */}
-            <div className={OrderManagementCSS.list}>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>주문일</th>
-                            <th>주문번호</th>
-                            <th>구매자명</th>
-                            <th>구매자ID</th>
-                            <th>수취인명</th>
-                            <th>결제금액</th>
-                            <th>배송상태</th>
-                            <th>클레임상태</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        Array.isArray(orderList)
-                        && orderList.map((order) => (
-                            <tr
-                                key={order.orderNum}
-                                onClick={() => onClickHandler(order.orderCode)}
-                            >
-                                <td>{dateFomatter(order.orderDate)}</td>
-                                <td>{order.orderCode}</td>
-                                <td>{order.memberCode.memberName}</td>
-                                <td>{order.memberCode.memberId}</td>
-                                <td>{order.cgNm}</td>
-                                <td>{order.totalPc}</td>
-                                <td>{order.stOrder}</td>
-                                <td>{order.stClaim}</td>
-                            </tr>
-                            )
-                        )
-                    }
-                    </tbody>
-                </table>
-            </div>
-            <div className={OrderManagementCSS.paging}>
-                {/* 왼쪽 버튼 */}
-                {Array.isArray(orderList) &&
-                    <button
-                        onClick={() => setCurrentPage(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className={OrderManagementCSS.pageBtn}
-                    >
-                        ◀
-                    </button>
-                }
-                {/* 페이지 버튼 */}
-                {pageNumber.map((num) => (
-                    <li key={num} onClick={() => setCurrentPage(num)}>
-                        <button
-                            style={currentPage === num ? {color: '#73CEBE'} : null}
-                            className={OrderManagementCSS.pageNum}
-                        >
-                            {num}
-                        </button>
-                    </li>
-                ))}
-                {/* 오른쪽 버튼 */}
-                {Array.isArray(orderList) &&
-                    <button
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={currentPage === pageInfo.pageEnd || pageInfo.total == 0}
-                    className={OrderManagementCSS.pageBtn}
-                    >
-                        ▶
-                    </button>
-                }
+                <SearchResult/>
             </div>
         </>
     )
