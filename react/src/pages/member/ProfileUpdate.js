@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 import { decodeJwt } from '../../utils/tokenUtils';
-import axios from 'axios';
+
 import {
     callGetMemberAPI,
     callMemberUpdateAPI
@@ -20,7 +20,25 @@ function ProfileUpdate() {
     const navigate = useNavigate();
     const token = decodeJwt(window.localStorage.getItem("accessToken"));   
 
-    const [form, setForm] = useState({});
+    const [form, setForm] = useState({
+        memberId: '',
+        memberName: '', 
+        memberPhone: '',
+        memberEmail: '',
+        memberAdsNum: '',
+        memberAds: '',
+        memberAdsDetail: ''
+    });
+
+    const { memberPhone, memberEmail} = form;
+
+    // 핸드폰 번호 형식 정규표현식
+    const phoneRegexp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+    // email 형식 정규표현식 
+    const emailRegexp = /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i; 
+
+    const validPhone = memberPhone.match(phoneRegexp);
+    const validEmail = memberEmail.match(emailRegexp);
 
     const onClickBackHandler = () => {
         
@@ -88,11 +106,31 @@ function ProfileUpdate() {
         formData.append("memberAds",form.memberAds);
         formData.append("memberAdsDetail",form.memberAdsDetail);
 
-        dispatch(callMemberUpdateAPI({	// 상품 정보 업데이트
+        if(form.memberId === '' || form.memberName === '' 
+            || form.memberPhone === '' || form.memberEmail === ''
+            || form.memberAdsNum === '' || form.memberAds === ''
+            || form.memberAdsDetail === '' ){
+                alert('정보를 모두 입력해주세요.');
+                return ;
+        } else if (!validPhone) {
+            alert("전화번호를 다시 확인 해 주세요.");
+            setForm({
+            ...form,
+            
+            });
+        } else if (!validEmail) {
+            alert("email을 다시 확인 해 주세요.");
+            setForm({
+            ...form,
+            
+            });
+        } else {
+            dispatch(callMemberUpdateAPI({	// 상품 정보 업데이트
             form: formData
-        }));         
-
-        alert('프로필을 수정했습니다.');
+            })); 
+            alert('프로필을 수정했습니다.');
+            navigate('/', { replace: true});
+        }
         navigate('/', { replace: true});
     }
 
@@ -138,12 +176,12 @@ function ProfileUpdate() {
                     </div>
                     <div>
                         <div className={ProfileUpdateCSS.PUlabel}> 이름 </div>
-                        <input className={ ProfileUpdateCSS.PUinput}
+                        <input className={ (!modifyMode == true ? ProfileUpdateCSS.PUinput : ProfileUpdateCSS.PUmodify)}
                             name="memberName" 
                             placeholder="이름" 
                             onChange={ onChangeHandler }
-                            readOnly={ modifyMode ? false : true}
-                            value={ (!modifyMode ? memberDetail.memberName : form.memberName) || ''}
+                            readOnly={true}
+                            value={ memberDetail.memberName || ''}
                         />
                     </div>
                     <div>
