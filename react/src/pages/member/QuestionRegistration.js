@@ -22,8 +22,9 @@ function QuestionRegistration() {
         questionTitle : '',
         questionCategory : '',
         questionContent: '',
-        memberCode: '2'
-        // questionStatus: '',
+        memberCode: '',
+        questionStatus: '미해결',
+        memberId: token.sub
         // questionImgCode : '',
         // originalName : '',
         // newName: ''
@@ -46,16 +47,16 @@ function QuestionRegistration() {
     [image]);
 
 
-    useEffect(
-        () => {    
-            if(token !== null) {
-                dispatch(callQuestionRegistAPI({	
-                    memberId: token.sub
-                }));            
-            }
-        }
-        ,[]
-    );
+    // useEffect(
+    //     () => {    
+    //         if(token !== null) {
+    //             dispatch(callQuestionRegistAPI({	
+    //                 memberId: token.sub
+    //             }));            
+    //         }
+    //     }
+    //     ,[]
+    // );
 
     const onChangeImageUpload = (e) => {
 
@@ -84,9 +85,9 @@ function QuestionRegistration() {
         formData.append("questionTitle", form.questionTitle);
         formData.append("questionCategory", form.questionCategory);
         formData.append("questionContent", form.questionContent);
-        formData.append("memberCode", 2);
-        
-        console.log(form.memberCode);
+        formData.append("memberId", form.memberId);
+        formData.append("questionStatus", '미해결');
+        console.log(form.memberId);
         if(image){
             formData.append("questionImage", image);
         }
@@ -163,11 +164,12 @@ function QuestionRegistration() {
                             <tr>
                                 <td><label>문의 종류</label></td>
                                 <td>
-                                    {/* categoryCode = 1:배송, 2:교환, 3:상품, 4: 환불 */}
-                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="1"/> 배송</label> &nbsp;
-                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="2"/> 교환</label> &nbsp;
-                                    <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="3" /> 상품</label> &nbsp;
-                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="4"/> 환불</label>
+                                    {/* categoryCode = 1:배송, 2:교환, 3:상품, 4: 환불 5: 기타 */}
+                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="배송"/>배송</label> &nbsp;
+                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="교환"/>교환</label> &nbsp;
+                                    <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="상품" />상품</label> &nbsp;
+                                    <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="환불" />환불</label>
+                                    <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="기타" />기타</label>
                                 </td>
                             </tr> 
                         </tbody>                        

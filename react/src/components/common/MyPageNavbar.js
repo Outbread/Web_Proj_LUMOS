@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import MyPageNavbarCSS from './MyPageNavbar.module.css';
-
 import { Navigate } from 'react-router-dom';
 import { decodeJwt } from '../../utils/tokenUtils';
 

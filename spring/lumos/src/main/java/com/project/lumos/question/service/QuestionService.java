@@ -25,7 +25,9 @@ import com.project.lumos.question.dto.QuestionAndImgDTO;
 import com.project.lumos.question.dto.QuestionDTO;
 import com.project.lumos.question.dto.QuestionImgDTO;
 import com.project.lumos.question.entity.Question;
+import com.project.lumos.question.entity.QuestionAndImg;
 import com.project.lumos.question.entity.QuestionImg;
+import com.project.lumos.question.repository.QuestionAndImgRepository;
 import com.project.lumos.question.repository.QuestionImgRepository;
 import com.project.lumos.question.repository.QuestionRepository;
 import com.project.lumos.util.FileUploadUtils;
@@ -38,6 +40,7 @@ public class QuestionService {
 	private final ModelMapper modelMapper;
 	private final QuestionImgRepository questionImgRepository;
 	private final MemberRepository memberRepository;
+	private final QuestionAndImgRepository questionAndImgRepository;
 	
 	/* 이미지 저장 할 위치 및 응답 할 이미지 주소(WebConfig 설정파일 추가하기) */
     @Value("${image.image-dir}")
@@ -46,17 +49,18 @@ public class QuestionService {
     private String IMAGE_URL;
 	
 	@Autowired
-	public QuestionService(QuestionRepository questionRepository, ModelMapper modelMapper, QuestionImgRepository questionImgRepository, MemberRepository memberRepository) {
+	public QuestionService(QuestionAndImgRepository questionAndImgRepository, QuestionRepository questionRepository, ModelMapper modelMapper, QuestionImgRepository questionImgRepository, MemberRepository memberRepository) {
 		this.questionRepository = questionRepository;
 		this.modelMapper = modelMapper;
 		this.questionImgRepository = questionImgRepository;
 		this.memberRepository = memberRepository;
+		this.questionAndImgRepository = questionAndImgRepository;
 	}
 	
 	
 	/* 회원 문의 등록 */
 	@Transactional
-	public Object insertQuestion(QuestionDTO questionDTO, MultipartFile questionImage, QuestionImgDTO questionImgDTO) {
+	public Object insertQuestion(int memberCode, QuestionDTO questionDTO, MultipartFile questionImage, QuestionImgDTO questionImgDTO) {
 		log.info("[QuestionService] insertQuestion Start ==============================");
         log.info("QuestionService questionDTO" + questionImgDTO);
         String imageName = UUID.randomUUID().toString().replace("-", "");
@@ -68,6 +72,7 @@ public class QuestionService {
 		SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
 		String questionDate = sdf.format(now);
 		questionDTO.setQuestionCreateDate(questionDate);
+		questionDTO.setMemberCode(memberCode);
 		
         try {
 			 replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, questionImage);
@@ -147,7 +152,7 @@ public class QuestionService {
 		
 		int index = cri.getPageNum() - 1;
         int count = cri.getAmount(); 
-        Pageable paging = PageRequest.of(index, count, Sort.by("questionCode"));		// 문의내역은 주로 최신글이 위에 올라옴으로 오름차순
+        Pageable paging = PageRequest.of(index, count, Sort.by("questionCode"));		// 문의내역은 최신글이 위에 올라오도록 오름차순
         
         Page<Question> result = questionRepository.findAll(paging);
         List<Question> questionList = (List<Question>)result.getContent();
@@ -162,10 +167,20 @@ public class QuestionService {
 		log.info("[QuestionService] getQuestionDetail Start ==============================");
 		
 		Question question = questionRepository.findById(questionCode).get();
+		Question questionCode1 = questionRepository.findByQuestionCode(questionCode);
+		log.info("[QuestionService] getQuestionDetail: " + question);
+
+		String questionImg = questionImgRepository.findByQuestionCode(questionCode).getNewName();
+		log.info("[QuestionService] questionImg: " + questionImg);
+//		QuestionImgDTO questionImgDTO = questionImgDTO.setNewName(questionImg);
+		
+		QuestionAndImg questionAndImg = questionAndImgRepository.findByQuestionCode(questionCode1);
+		questionAndImg.setNewName(IMAGE_URL + questionImg);
+		log.info("[QuestionService] questionAndImg" + questionAndImg);
 		
         log.info("[QuestionService] getQuestionDetail End ==============================");
-        
-        return modelMapper.map(question, QuestionDTO.class);
+//        return modelMapper.map(question, QuestionDTO.class, questionImg);
+        return modelMapper.map(questionAndImg, QuestionAndImgDTO.class);
 	}
 
 	/* 회원 문의 수정 */
@@ -179,7 +194,7 @@ public class QuestionService {
 			Question question = questionRepository.findById(questionDTO.getQuestionCode()).get();
 			question.setQuestionTitle(questionDTO.getQuestionTitle());
 			question.setQuestionContent(questionDTO.getQuestionContent());
-			
+			log.info("[QuestionService] updateQuestion" + questionDTO);
 			result = 1;
 		} catch (Exception e) {
 			log.info("[question update] Exception!!");
@@ -212,5 +227,4 @@ public class QuestionService {
 		int memberCode = memberRepository.findMemberCodeByMemberId(memberId);
 		return memberCode;
 	}
-	/* memberId로 memberCode조회 */
 }

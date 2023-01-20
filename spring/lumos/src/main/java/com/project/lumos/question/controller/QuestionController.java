@@ -48,10 +48,15 @@ public class QuestionController {
 	/* 성공 */
 	@Operation(summary = "문의 등록 요청", description = "1대1 문의 등록이 진행됩니다.", tags = {"QuestionController"})
 	@PostMapping(value="/question")
-	public ResponseEntity<ResponseDTO> insertQuestion(@ModelAttribute MultipartFile questionImage, QuestionDTO questionDTO, QuestionImgDTO questionImgDTO){
+	public ResponseEntity<ResponseDTO> insertQuestion(@ModelAttribute MultipartFile questionImage, String memberId, QuestionDTO questionDTO, QuestionImgDTO questionImgDTO){
 //		log.info("[QuestionController] questionAndImgDTO :" + questionAndImgDTO);
 		log.info("[QuestionController] questionDTO :" + questionDTO);
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공", questionService.insertQuestion(questionDTO, questionImage, questionImgDTO)));
+		log.info("[QuestionController] memberId :" + memberId);
+		int memberCode = questionService.findMemberCode(memberId);
+
+	    log.info("[QuestionController] memberCode : " + memberCode);
+	        
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공", questionService.insertQuestion(memberCode, questionDTO, questionImage, questionImgDTO)));
 	}
 	
 	/* 성공 */
@@ -96,9 +101,9 @@ public class QuestionController {
 	
 	/* 성공 */
 	@Operation(summary = "문의 수정 요청", description = "문의 작성자의 문의 수정이 진행됩니다.", tags = { "QuestionController" })
-    @PutMapping("/question/update")
+    @PutMapping("/question/detail/{questionCode}")
     public ResponseEntity<ResponseDTO> updateQuestion(@RequestBody QuestionDTO questionDTO) {
-
+		log.info("[QuestionController] updateQuestion: " + questionDTO);
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "문의 수정 성공",  questionService.updateQuestion(questionDTO)));
     }
 	
@@ -111,6 +116,12 @@ public class QuestionController {
     }
 	
 	/* 문의 상세 조회 */
-
+	@Operation(summary = "문의 상세 페이지 조회 요청", description = "해당 문의의 상세 페이지 조회가 진행됩니다.", tags = { "QuestionController" })
+    @GetMapping("/question/detail/{questionCode}")
+    public ResponseEntity<ResponseDTO> selectQuestionDetail(@PathVariable String questionCode) {
+		log.info("[QuestionController] questionCode: " + questionCode);
+		
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  questionService.selectQuestionDetail(Integer.valueOf(questionCode))));
+    }
 
 }
