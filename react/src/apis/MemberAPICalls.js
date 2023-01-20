@@ -6,7 +6,7 @@ import {
 } from '../modules/MemberModule';
 import axios from 'axios';
 
-/** =========================마이페이지 프로필[전진이]================================= */
+/** =========================마이페이지 프로필 조회 [전진이]================================= */
 export const callGetMemberAPI = ({memberId}) => {
     const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/profileUpdate/${memberId}`;
 
@@ -31,6 +31,7 @@ export const callGetMemberAPI = ({memberId}) => {
     };
 }
 
+/** =========================마이페이지 프로필 수정 [전진이]================================= */
 export const callMemberUpdateAPI = ({form}) => {
     console.log('[MemberAPICalls] callMemberUpdateAPI Call');
 
@@ -133,9 +134,9 @@ export const callRegisterAPI = ({form}) => {
 //response가 존재하면, return_value = response, response가 존재하지 않으면, return value = true
 export const idCheckAPI = async(memberId) => {
     let return_value;
-    await axios.get(`http://localhost:8080/auth/check`, {
-        memberId: memberId
-    })
+    await axios.get('http://localhost:8080/auth/check?memberId=' + memberId
+       
+    )
     .then((response) => {
         console.log(response.data);
         return_value = response.data;

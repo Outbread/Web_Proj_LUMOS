@@ -40,15 +40,11 @@ public class Product {
 	
 	@Column(name = "CAT_SUB")
 	private String catSub;
-	
-	
 
 	public Product() {
-		super();
 	}
 
 	public Product(int pdCode, String pdName, int pdPrice, String pdDesc, String catMain, String catSub) {
-		super();
 		this.pdCode = pdCode;
 		this.pdName = pdName;
 		this.pdPrice = pdPrice;

@@ -31,16 +31,6 @@ public class MemberService {
 		this.modelMapper = modelMapper;
 	}
 	//============================마이페이지 프로필 조회[전진이]==========================//
-//	public Object selectProfile(int memberCode) {
-//		log.info("[MemberService] getMyInfo Start =======================");
-//		
-//		Member member = memberRepository.findById(memberCode).get();
-//		
-//		MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
-//		
-//		return memberDTO;
-//	}
-	
 	public MemberDTO selectMyInfo(String memberId) {
 		log.info("[MemberService] getMyInfo Start =======================");
 		
@@ -65,10 +55,12 @@ public class MemberService {
 			/* update를 위한 엔티티 값 수정 */
 			member.setMemberCode(memberDTO.getMemberCode());
 			member.setMemberId(memberDTO.getMemberId());
-			member.setMemberPassword(memberDTO.getMemberPassword());
 			member.setMemberName(memberDTO.getMemberName());
+			member.setMemberPhone(memberDTO.getMemberPhone());
 			member.setMemberEmail(memberDTO.getMemberEmail());
-			member.setMemberBirth(memberDTO.getMemberBirth());
+			member.setMemberAdsNum(memberDTO.getMemberAdsNum());
+			member.setMemberAds(memberDTO.getMemberAds());
+			member.setMemberAdsDetail(memberDTO.getMemberAdsDetail());
 			
 			result = 1;
         } catch (Exception e) {

@@ -125,11 +125,13 @@ public class AuthService {
 		/* id 중복 유효성 검사...hmm */
 		if(memberRepository.findByMemberId(memberId) != null) {
 			log.info("[AuthService] Id가 중복됩니다.");
-			throw new DuplicatedMemberIdException("중복된 아이디입니다authService.");
+						
+			return true;
 		}
+		
+		return false;
     
 
-		return modelMapper.map(member, MemberDTO.class);
 	}
 //	
 //	public Object selectMyInfo(String memberId) {

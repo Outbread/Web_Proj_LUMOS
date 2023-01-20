@@ -10,8 +10,8 @@ function MyPageLayout() {
 
 
     useEffect(() => {
-        navigate("/mypage", { replace: false });
 
+        navigate("/mypage/profileUpdate", { replace: false });
     }, 
     []);
 

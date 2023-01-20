@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.info.Info;
 		info = @Info(title = "쇼핑몰 서비스 API 명세서",
 					description = "React부터 Spring Data Jpa까지 진행하는 서비스 API 명세서",
 					version = "v1"))
-
 @Configuration
 public class SwaggerConfig {
 	
@@ -24,4 +23,5 @@ public class SwaggerConfig {
 							 .pathsToMatch(paths)
 							 .build();
 	}
+	
 }

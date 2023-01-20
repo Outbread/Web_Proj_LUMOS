@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.project.lumos.product.entity.ProductImage;
 
-public interface ProductImageRepository extends JpaRepository<ProductImage, Integer> {
+public interface ProductImageRepository extends JpaRepository<ProductImage , Integer>{
 
-	List<ProductImage> findByPdCodeLike(int pdCode);
+	List<ProductImage> findByPdCode(int pdCode);
 
 }

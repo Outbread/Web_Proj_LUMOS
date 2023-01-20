@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -19,14 +18,18 @@ public class FileUploadUtils {
 	public static String saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
 
         Path uploadPath = Paths.get(uploadDir);
+        
+        log.info("파일 업로드 : uploadDir" + uploadDir);
+        log.info("파일 업로드 : fileName" + fileName);
+        log.info("파일 업로드 : multipartFile" + multipartFile);
 
         if(!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
-        String replaceFileName = fileName + "." + FilenameUtils.getExtension((multipartFile).getResource().getFilename());
+        String replaceFileName = fileName + "." + FilenameUtils.getExtension(multipartFile.getResource().getFilename());
 
-        try(InputStream inputStream = (multipartFile).getInputStream()) {
+        try(InputStream inputStream = multipartFile.getInputStream()) {
             Path filePath = uploadPath.resolve(replaceFileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         }catch (IOException ex){

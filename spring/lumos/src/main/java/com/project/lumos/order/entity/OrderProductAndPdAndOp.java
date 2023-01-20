@@ -2,16 +2,11 @@ package com.project.lumos.order.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.project.lumos.member.entity.MemberRolePk;
 import com.project.lumos.product.entity.Option;
 import com.project.lumos.product.entity.Product;
 
@@ -39,6 +34,15 @@ public class OrderProductAndPdAndOp {
 	@Column(name = "OP_CODE")
 	private int opCode;
 	
+	@Column(name = "PD_NAME")
+	private String pdName;
+	
+	@Column(name = "OP_NAME")
+	private String opName;
+	
+	@Column(name = "PD_PC")
+	private int pdPc;
+	
 	/* 장바구니에 담을 상품정보 by 상품코드 */
 	/* 장바구니 N : 옵션 1 */
 	@ManyToOne
@@ -54,14 +58,17 @@ public class OrderProductAndPdAndOp {
 	public OrderProductAndPdAndOp() {
 	}
 
-	public OrderProductAndPdAndOp(int orderPdNum, int orderAmount, int orderNum, String mainImgPath, int pdCode, int opCode,
-			Product pdInfo, Option opInfo) {
+	public OrderProductAndPdAndOp(int orderPdNum, int orderAmount, int orderNum, String mainImgPath, int pdCode,
+			int opCode, String pdName, String opName, int pdPc, Product pdInfo, Option opInfo) {
 		this.orderPdNum = orderPdNum;
 		this.orderAmount = orderAmount;
 		this.orderNum = orderNum;
 		this.mainImgPath = mainImgPath;
 		this.pdCode = pdCode;
 		this.opCode = opCode;
+		this.pdName = pdName;
+		this.opName = opName;
+		this.pdPc = pdPc;
 		this.pdInfo = pdInfo;
 		this.opInfo = opInfo;
 	}
@@ -114,6 +121,30 @@ public class OrderProductAndPdAndOp {
 		this.opCode = opCode;
 	}
 
+	public String getPdName() {
+		return pdName;
+	}
+
+	public void setPdName(String pdName) {
+		this.pdName = pdName;
+	}
+
+	public String getOpName() {
+		return opName;
+	}
+
+	public void setOpName(String opName) {
+		this.opName = opName;
+	}
+
+	public int getPdPc() {
+		return pdPc;
+	}
+
+	public void setPdPc(int pdPc) {
+		this.pdPc = pdPc;
+	}
+
 	public Product getPdInfo() {
 		return pdInfo;
 	}
@@ -132,9 +163,9 @@ public class OrderProductAndPdAndOp {
 
 	@Override
 	public String toString() {
-		return "OrderProduct [orderPdNum=" + orderPdNum + ", orderAmount=" + orderAmount + ", orderNum=" + orderNum
-				+ ", mainImgPath=" + mainImgPath + ", pdCode=" + pdCode + ", opCode=" + opCode + ", pdInfo=" + pdInfo
-				+ ", opInfo=" + opInfo + "]";
+		return "OrderProductAndPdAndOp [orderPdNum=" + orderPdNum + ", orderAmount=" + orderAmount + ", orderNum="
+				+ orderNum + ", mainImgPath=" + mainImgPath + ", pdCode=" + pdCode + ", opCode=" + opCode + ", pdName="
+				+ pdName + ", opName=" + opName + ", pdPc=" + pdPc + ", pdInfo=" + pdInfo + ", opInfo=" + opInfo + "]";
 	}
 
 }

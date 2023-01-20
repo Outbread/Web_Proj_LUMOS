@@ -2,7 +2,6 @@ package com.project.lumos.common;
 
 public class PagingResponseDTO {
 	
-
     private Object data;
     private PageDTO pageInfo;
 
@@ -27,4 +26,3 @@ public class PagingResponseDTO {
 		return "PagingResponseDTO [data=" + data + ", pageInfo=" + pageInfo + "]";
 	}
 }
-

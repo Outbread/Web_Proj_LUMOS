@@ -32,7 +32,6 @@ public class SecurityConfig {
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
 	/* 2. 시큐리티 설정을 무시 할 정적 리소스 등록 */
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
@@ -54,8 +53,10 @@ public class SecurityConfig {
 		    	.antMatchers("/api/v1/products/**").permitAll() 
 		    	.antMatchers("/api/v1/revies/**").permitAll()
 		    	/* [구도연] */
+		    	.antMatchers("/api/v1/company/**").permitAll()
+		    	.antMatchers("/api/v1/shop/**").permitAll()
 		    	.antMatchers("/api/v1/order/**").permitAll()
-		    	.antMatchers("/api/v1/product/**").permitAll()
+		    	.antMatchers("/api/v1/order-management/**").permitAll()
 		    	.antMatchers("/api/v1/cart/**").permitAll()
 		    	.antMatchers("/api/v1/profileUpdate/**").permitAll() 
 //		    	.antMatchers("/api/v1/profileUpdate").hasAnyRole("USER") 

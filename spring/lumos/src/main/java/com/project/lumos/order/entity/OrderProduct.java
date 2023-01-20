@@ -39,17 +39,30 @@ public class OrderProduct {
 	
 	@Column(name = "OP_CODE")
 	private int opCode;
+	
+	@Column(name = "PD_NAME")
+	private String pdName;
+	
+	@Column(name = "OP_NAME")
+	private String opName;
+	
+	@Column(name = "PD_PC")
+	private int pdPc;
 
 	public OrderProduct() {
 	}
 
-	public OrderProduct(int orderPdNum, int orderAmount, int orderNum, String mainImgPath, int pdCode, int opCode) {
+	public OrderProduct(int orderPdNum, int orderAmount, int orderNum, String mainImgPath, int pdCode, int opCode,
+			String pdName, String opName, int pdPc) {
 		this.orderPdNum = orderPdNum;
 		this.orderAmount = orderAmount;
 		this.orderNum = orderNum;
 		this.mainImgPath = mainImgPath;
 		this.pdCode = pdCode;
 		this.opCode = opCode;
+		this.pdName = pdName;
+		this.opName = opName;
+		this.pdPc = pdPc;
 	}
 
 	public int getOrderPdNum() {
@@ -100,10 +113,35 @@ public class OrderProduct {
 		this.opCode = opCode;
 	}
 
+	public String getPdName() {
+		return pdName;
+	}
+
+	public void setPdName(String pdName) {
+		this.pdName = pdName;
+	}
+
+	public String getOpName() {
+		return opName;
+	}
+
+	public void setOpName(String opName) {
+		this.opName = opName;
+	}
+
+	public int getPdPc() {
+		return pdPc;
+	}
+
+	public void setPdPc(int pdPc) {
+		this.pdPc = pdPc;
+	}
+
 	@Override
 	public String toString() {
 		return "OrderProduct [orderPdNum=" + orderPdNum + ", orderAmount=" + orderAmount + ", orderNum=" + orderNum
-				+ ", mainImgPath=" + mainImgPath + ", pdCode=" + pdCode + ", opCode=" + opCode + "]";
+				+ ", mainImgPath=" + mainImgPath + ", pdCode=" + pdCode + ", opCode=" + opCode + ", pdName=" + pdName
+				+ ", opName=" + opName + ", pdPc=" + pdPc + "]";
 	}
-	
+
 }

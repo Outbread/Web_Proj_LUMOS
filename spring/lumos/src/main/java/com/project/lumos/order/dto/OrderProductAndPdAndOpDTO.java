@@ -12,6 +12,9 @@ public class OrderProductAndPdAndOpDTO {
 	private String mainImgPath;
 	private int pdCode;
 	private int opCode;
+	private String pdName;
+	private String opName;
+	private int pdPc;
 	
 	/* 장바구니에 담을 상품정보 by 상품코드 */
 	/* 장바구니 N : 상품 1 */
@@ -23,14 +26,17 @@ public class OrderProductAndPdAndOpDTO {
 	public OrderProductAndPdAndOpDTO() {
 	}
 
-	public OrderProductAndPdAndOpDTO(int orderPdNum, int orderAmount, int orderNum, String mainImgPath,
-			int pdCode, int opCode, Product pdInfo, Option opInfo) {
+	public OrderProductAndPdAndOpDTO(int orderPdNum, int orderAmount, int orderNum, String mainImgPath, int pdCode,
+			int opCode, String pdName, String opName, int pdPc, Product pdInfo, Option opInfo) {
 		this.orderPdNum = orderPdNum;
 		this.orderAmount = orderAmount;
 		this.orderNum = orderNum;
 		this.mainImgPath = mainImgPath;
 		this.pdCode = pdCode;
 		this.opCode = opCode;
+		this.pdName = pdName;
+		this.opName = opName;
+		this.pdPc = pdPc;
 		this.pdInfo = pdInfo;
 		this.opInfo = opInfo;
 	}
@@ -83,6 +89,30 @@ public class OrderProductAndPdAndOpDTO {
 		this.opCode = opCode;
 	}
 
+	public String getPdName() {
+		return pdName;
+	}
+
+	public void setPdName(String pdName) {
+		this.pdName = pdName;
+	}
+
+	public String getOpName() {
+		return opName;
+	}
+
+	public void setOpName(String opName) {
+		this.opName = opName;
+	}
+
+	public int getPdPc() {
+		return pdPc;
+	}
+
+	public void setPdPc(int pdPc) {
+		this.pdPc = pdPc;
+	}
+
 	public Product getPdInfo() {
 		return pdInfo;
 	}
@@ -101,9 +131,9 @@ public class OrderProductAndPdAndOpDTO {
 
 	@Override
 	public String toString() {
-		return "OrderProductAndPdInfoAndOpInfoDTO [orderPdNum=" + orderPdNum + ", orderAmount=" + orderAmount
-				+ ", orderNum=" + orderNum + ", mainImgPath=" + mainImgPath + ", pdCode=" + pdCode + ", opCode="
-				+ opCode + ", pdInfo=" + pdInfo + ", opInfo=" + opInfo + "]";
+		return "OrderProductAndPdAndOpDTO [orderPdNum=" + orderPdNum + ", orderAmount=" + orderAmount + ", orderNum="
+				+ orderNum + ", mainImgPath=" + mainImgPath + ", pdCode=" + pdCode + ", opCode=" + opCode + ", pdName="
+				+ pdName + ", opName=" + opName + ", pdPc=" + pdPc + ", pdInfo=" + pdInfo + ", opInfo=" + opInfo + "]";
 	}
 
 }
