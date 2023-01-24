@@ -11,6 +11,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.lang.Nullable;
 
 @Entity
 @Table(name = "TBL_ORDER")
@@ -103,6 +104,7 @@ public class Order {
 	private Date deliveryStart;
 	
 	@CreationTimestamp
+	@Nullable
 	@Column(name = "DELIVERY_END")
 	private Date deliveryEnd;
 	

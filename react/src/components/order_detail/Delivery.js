@@ -1,24 +1,27 @@
+import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {useState} from 'react';
 
 import {callDeliveryCpUpdateAPI} from '../../apis/OrderAPICalls';
+import {callHistoryUpdateAPI} from '../../apis/OrderAPICalls';
 import {deliveryNumCheck} from '../../modules/Validatior';
 
 import BtnCSS from './Btn.module.css';
 
 export default function Delivery({order}) {
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [form, setForm] = useState({
         deliveryCp : order.deliveryCp,
-        deliveryNum : order.deliveryNum,
-        deliveryEnd : order.deliveryEnd
+        deliveryNum : order.deliveryNum
     })
     
     const [modifyMode, setModifyMode] = useState(false);
 
     /* 배송 정보 수정 모드 */
     const onModifyModeHandler = () => {
+        alert("수정내역을 반영하시려면 저장버튼을 눌러주세요.")
         setModifyMode(true);
     }
 
@@ -34,47 +37,59 @@ export default function Delivery({order}) {
     }
 
     /* 배송 정보 수정 내역 업데이트 */
-    const onClickHandler = () => {
-        if(!!deliveryNumCheck(form.deliveryNum)) {
+    const onSubmitHandler = () => {
+        const formData = new FormData();
+        formData.append("deliveryCp", form.deliveryCp);
+        formData.append("deliveryNum", form.deliveryNum);
+
+        if(!!deliveryNumCheck(form.deliveryNum) && form.deliveryCp != null && order.orderConf != null) {
             dispatch(callDeliveryCpUpdateAPI({
                 orderCode: order.orderCode,
-                form: form
+                form: formData
             }));
-            alert("배송 정보가 변경되었습니다.");
+            if(order.deliveryStart != null) {
+                alert("배송 정보가 변경되었습니다.");
+            } else {
+                const formData = new FormData();
+                formData.append("updateKind", "배송출발처리");
+                dispatch(callHistoryUpdateAPI({
+                    orderCode: order.orderCode,
+                    form: formData
+                }));
+                alert("배송출발 처리되었습니다.");
+            }
             window.location.reload();
+        } else if(!!deliveryNumCheck(form.deliveryNum) && form.deliveryCp == null && order.orderConf != null) {
+            alert("택배사를 선택해 주세요.")
+        } else if(order.orderConf == null) {
+            alert("발주 확인처리를 먼저 진행해주세요.");
+            navigate(`/order-management/`, { replace: false });
         } else {
             alert("송장 번호 형식이 잘못되었습니다.");
         }
     }
-
-    /* 배송 완료 처리 */
-    // Thu Jan 19 2023 03:48:51 GMT+0900 (한국 표준시)
-    // console.log(typeof(new Date().toISOString().substring(0, 19)));
-    // console.log(new Date().toISOString().substring(0, 19));
-
-    // const deliveryEndHandler = () => {
-    //     console.log("aaaaaa", order.deliveryEnd == null);
-    //     console.log(new Date());
-    //     if(order.deliveryEnd ==  null) {
-    //         setForm({
-    //             ...form,
-    //             ['deliveryEnd']: new Date()
-    //         })
-
-    //         const formData = new FormData();
     
-    //         formData.append("deliveryCp", form.deliveryCp);
-    //         formData.append("deliveryNum", form.deliveryNum);
-    //         formData.append("deliveryEnd", form.deliveryEnd);
+    const deliveryEndHandler = () => {
+        const formData = new FormData();
+        formData.append("updateKind", "배송완료처리");
+        dispatch(callHistoryUpdateAPI({
+            orderCode: order.orderCode,
+            form: formData
+        }));
+        alert("처리가 완료되었습니다.");
+        window.location.reload();
+    }
 
-    //         dispatch(callDeliveryCpUpdateAPI({
-    //             orderCode: order.orderCode,
-    //             form: formData
-    //         }));
-    //     } else {
-    //         alert("이미 배송완료 처리를 진행하였습니다.");
-    //     }
-    // }
+    const deliveryStartHandler = () => {
+        const formData = new FormData();
+        formData.append("updateKind", "배송출발처리");
+        dispatch(callHistoryUpdateAPI({
+            orderCode: order.orderCode,
+            form: formData
+        }));
+        alert("처리가 완료되었습니다.");
+        window.location.reload();
+    }
 
     return (
         <>
@@ -85,9 +100,16 @@ export default function Delivery({order}) {
                         <td>
                             {
                                 (order.deliveryMt != "일반택배") 
-                                ? <button className={BtnCSS.submitBtn}>배송완료</button>
+                                ? (order.deliveryStart
+                                    ? (
+                                        order.deliveryEnd
+                                        ? null
+                                        : <button className={BtnCSS.submitBtn} onClick={deliveryEndHandler}>배송완료</button>
+                                    )
+                                    : <button className={BtnCSS.submitBtn} onClick={deliveryStartHandler}>배송출발</button>
+                                )
                                 : (modifyMode 
-                                    ? <button className={BtnCSS.submitBtn} onClick={onClickHandler}>저장</button> 
+                                    ? <button className={BtnCSS.submitBtn} onClick={onSubmitHandler}>저장</button> 
                                     : <button className={BtnCSS.submitBtn} onClick={onModifyModeHandler}>수정</button>
                                 )
                             }
@@ -105,8 +127,27 @@ export default function Delivery({order}) {
                             {(() => {
                                 if(order.deliveryMt === "일반택배") {
                                     return <select name="deliveryCp" onChange={onChangeHandler} disabled={modifyMode? false : true}>
-                                                <option value={order.deliveryCp}>{order.deliveryCp}</option>
-                                                {order.deliveryCp === "CJ대한통운" ? <option value="우체국택배">우체국택배</option> : <option value="CJ대한통운">CJ대한통운</option>}
+                                                {
+                                                    order.deliveryCp
+                                                    ? (
+                                                        order.deliveryCp == "CJ대한통운" ?
+                                                        <>
+                                                        <option value={order.deliveryCp}>{order.deliveryCp}</option>
+                                                        <option value="우체국택배">우체국택배</option>
+                                                        </>
+                                                        : 
+                                                        <>
+                                                        <option value={order.deliveryCp}>{order.deliveryCp}</option>
+                                                        <option value="CJ대한통운">CJ대한통운</option>
+                                                        </>
+                                                    )
+                                                    : 
+                                                    <>
+                                                    <option value="default">택배사를 선택해주세요</option>
+                                                    <option value="CJ대한통운">CJ대한통운</option>
+                                                    <option value="우체국택배">우체국택배</option>
+                                                    </>
+                                                }
                                            </select>
                                 } else {
                                     return "-"

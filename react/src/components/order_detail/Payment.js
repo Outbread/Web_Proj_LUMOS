@@ -17,15 +17,15 @@ export default function Payment({order}) {
                     </tr>
                     <tr>
                         <th>상품 주문 가격</th>
-                        <td>{order.orderPc.toLocaleString('ko-KR')}</td>
+                        <td>{order.orderPc.toLocaleString('ko-KR')} 원</td>
                     </tr>
                     <tr>
                         <th>배송비</th>
-                        <td>{order.deliveryPc.toLocaleString('ko-KR')}</td>
+                        <td>{order.deliveryPc.toLocaleString('ko-KR')} 원</td>
                     </tr>
                     <tr>
                         <th>합계</th>
-                        <td>{order.totalPc.toLocaleString('ko-KR')}</td>
+                        <td>{order.totalPc.toLocaleString('ko-KR')} 원</td>
                     </tr>
                 </tbody>
             </table>

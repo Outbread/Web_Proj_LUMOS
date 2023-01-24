@@ -9,7 +9,7 @@ import {
     PUT_DATE
 } from '../modules/OrderModule';
 
-/* ◎ [관리자] 주문 내역 조회 */
+/* [관리자] 주문 내역 조회 */
 export const callOrderListAPI = ({currentPage}) => {
 
     console.log("[callOrderListAPI] START ◀ ");
@@ -18,7 +18,7 @@ export const callOrderListAPI = ({currentPage}) => {
 
     if(currentPage !== undefined || currentPage !== null) {
         requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management?offset=${currentPage}`;
-    }else {
+    } else {
         requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management`;
     }
 
@@ -44,12 +44,15 @@ export const callOrderListAPI = ({currentPage}) => {
     };
 };
 
-/* ○◎ [관리자] 주문 내역 검색 결과 조회 */
-export const callOrderSearchAPI = ({search}) => {
+/* [관리자] 주문 내역 검색 결과 조회 */
+export const callOrderSearchAPI = ({searchDate, searchTitle, searchValue}) => {
 
     console.log("[callOrderSearchAPI] START ◀ ");
+    console.log("searchDate", searchDate);
+    console.log("searchTitle", searchTitle);
+    console.log("searchValue", searchValue);
 
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order/list/search?s=${search}`;
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/search?s1=${searchDate}&s2=${searchTitle}&s3=${searchValue}`;
 
     return async(dispatch, getState) => {
 
@@ -71,7 +74,7 @@ export const callOrderSearchAPI = ({search}) => {
     
 };
 
-/* ○◎ [관리자] 주문 내역 상세 조회 */
+/* [관리자] 주문 내역 상세 조회 */
 export const callOrderDetailAPI = ({orderCode}) => {
 
     console.log("[callOrderDetailAPI] START ◀ ");
@@ -98,14 +101,14 @@ export const callOrderDetailAPI = ({orderCode}) => {
     };
 };
 
-/* ○◎ [관리자] 주문 내역 택배사 및 송장번호 입력 */
+/* [관리자] 주문 내역 택배사 및 송장번호 입력 */
 export const callDeliveryCpUpdateAPI = ({orderCode, form}) => {
 
     console.log("[callDeliveryCpUpdateAPI] START ◀ ");
     console.log("orderCode", orderCode);
     console.log("form", form);
 
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/${orderCode}`;
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/${orderCode}/delivery-update`;
 
     return async(dispatch, getState) => {
 
@@ -125,13 +128,12 @@ export const callDeliveryCpUpdateAPI = ({orderCode, form}) => {
     };
 };
 
-// 추가 간다간다 뿅간다
-// 일단 시간 추가되는지만 보자...
+/* [관리자] 발주확인, 배송완료처리, 주문취소처리, 반품접수, 반품완료처리 */
 export const callHistoryUpdateAPI = ({orderCode, form}) => {
 
-    console.log(form);
-    console.log("asdasdas",form.updateKind);
     console.log("[callHistoryUpdateAPI] START ◀ ");
+    console.log("API orderCode", orderCode);
+    console.log("API form.updateKind", form);
 
     const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/${orderCode}/history-update`;
 

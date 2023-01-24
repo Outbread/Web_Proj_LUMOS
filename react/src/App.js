@@ -12,14 +12,27 @@ import Register from './pages/member/Register';                             // �
 import ProfileUpdate from './pages/member/ProfileUpdate';
 import OrderDashBoard from './pages/order/OrderDashBoard';                  // 주문대시보드
 import OrderManagement from './pages/order/OrderManagement';                // 주문목록
+import OrderSearch from './pages/order/OrderDetail';                        // 주문내역검색
 import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세
+import Cart from './pages/cart/Cart';                                       // 장바구니
+
+import ProductDetail from './pages/products/ProductDetail';
+
+import {useState, createContext} from 'react';
+
+export const OrderContext = createContext(null);
 
 function App() {
+
+  const [ckeckCode, setCheckCode] = useState(new Set());
+
   return (
+    <OrderContext.Provider value={{ckeckCode, setCheckCode}}>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={ <Layout/> }>
             <Route index element={ <Main/> }/>   
+            <Route path="product/:productCode" element={<ProductDetail />} />
             <Route path="mypage" element={ <MyPageLayout/> } >
                 <Route index element={ <ProfileUpdate /> } />
                 <Route path="profileUpdate" element={ <ProfileUpdate /> } />
@@ -29,7 +42,9 @@ function App() {
             </Route>
             <Route path="order-dashboard" element={<OrderDashBoard/>}/>
             <Route path="order-management" element={<OrderManagement/>}/>
+            <Route path="order-management/search" element={<OrderSearch/>}/>
             <Route path="order-management/:orderCode" element={<OrderDetail/>}/>
+            <Route path="cart/:memberId" element={<Cart/>}/>
             <Route path="/login" element={ <Login/> } />
             <Route path="/register" element={ <Register/> } />  
         </Route>
@@ -42,6 +57,7 @@ function App() {
       </Routes>
       
     </BrowserRouter>
+    </OrderContext.Provider>
   );
 }
 

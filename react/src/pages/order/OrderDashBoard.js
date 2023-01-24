@@ -1,21 +1,56 @@
-import {useSelector, useDispatch} from 'react-redux';
-import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-
-import {callOrderListAPI} from '../../apis/OrderAPICalls';
-
-import {dateFomatter} from '../../modules/Fommater';
+import {useEffect, useState, useContext} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
 import OrderDashBoardCSS from './OrderDashBoard.module.css';
 import SearchResult from '../../components/order/SearchResult';
+import {callOrderListAPI} from '../../apis/OrderAPICalls';
+
+import {OrderContext} from '../../App';
 
 export default function OrderDashBoard() {
 
     const navigate = useNavigate();
+    
+    const context = useContext(OrderContext);
+    const {ckeckCode, setCheckCode} = context;
+    
+    
+    // const dispatch = useDispatch();
+    // const orderData  = useSelector(state => state.orderReducer);  
+    // const orderList = orderData.data;
+    // console.log("orderList", orderList);
+    // console.log(Array.isArray(orderList));
+    // console.log("dasdsadas", status1.length);
+    // console.log("status1", status1.length);
+    /* 배송상태와 관련한 기능은 3차 목표로 추후에 구현 */
+    // const dispatch = useDispatch();
+    // const orderData  = useSelector(state => state.orderReducer);  
+    // console.log(orderData);
+    // useEffect(
+    //     () => {
+    //         dispatch(callOrderListAPI({	
+    //         }));            
+    //     }
+    //     ,[]
+    // );
 
     const onClickHandler = () => {
         navigate(`/order-management/`, { replace: false });
     }
+
+    // 오류 방지를 위한 props-drilling
+    const [updateKind, setUpdateKind] = useState({
+        updateKind: '1'
+    });
+
+    // 전체 선택이 가능함을 보여주는 임의 기능
+    const onPrintHandler = () => {
+        const confirmResult = window.confirm(`총 ${ckeckCode.size}건의 주문을 출력하시겠습니까?`)
+        if(confirmResult) alert("준비 중인 기능입니다.");
+        window.location.reload();
+    }
+
     return (
         <>
             <div className={OrderDashBoardCSS.boxing}>
@@ -80,12 +115,15 @@ export default function OrderDashBoard() {
                         <thead>
                             <tr>
                                 <th>최근 주문 내역</th>
-                                <td><button onClick={onClickHandler}>전체 주문 조회</button></td>
+                                <td>
+                                    <button onClick={onPrintHandler}>주문 내역 출력</button>
+                                    <button onClick={onClickHandler}>전체 주문 조회</button>
+                                </td>
                             </tr>
                         </thead>
                     </table>
                 </div>
-                <SearchResult/>
+                <SearchResult updateKind={updateKind}/>
             </div>
         </>
     )

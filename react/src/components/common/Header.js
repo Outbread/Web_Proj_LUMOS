@@ -74,6 +74,14 @@ export default function Header() {
         window.location.reload();
     }
 
+    // 장바구니 이동
+    const token = decodeJwt(window.localStorage.getItem("accessToken"));  
+    const onCartHandler = () => {
+        // 주소창이 같아 앞으로가기가 무한으로 생성되는 버그 수정을 위해 replace: false로 작성
+        navigate(`/cart/${token.sub}`, {replace: false});
+        window.location.reload();
+    }
+
     function AnonymousMode() { //로그인 전
 
         return (
@@ -87,9 +95,9 @@ export default function Header() {
     function MemberMode() {   // 회원 로그인
         return (
             <div className={HeaderCSS.linkbox}>
-                <button onClick={ onClickLogoutHandler } className={HeaderCSS.headerbutton}>로그아웃</button>
-                <button onClick={ onClickMypageHandler } className={HeaderCSS.headerbutton}>마이페이지</button>
-                <NavLink to="/sample" className={HeaderCSS.headerNavLink}>장바구니</NavLink>
+                <button onClick={onClickLogoutHandler} className={HeaderCSS.headerbutton}>로그아웃</button>
+                <button onClick={onClickMypageHandler} className={HeaderCSS.headerbutton}>마이페이지</button>
+                <button onClick={onCartHandler} className={HeaderCSS.headerNavLink}>장바구니</button>
             </div>
         );
     }
