@@ -122,21 +122,24 @@ export default function OrderProduct({order : {orderProductList : product, ...et
                                     <td rowSpan={2}>
                                         {
                                             (modifyMode.modifyMode && modifyMode.tagId == p.opCode)
-                                            ? <input 
+                                            ? 
+                                            <input 
                                                 type={'number'} 
                                                 defaultValue={p.orderAmount} 
                                                 style={{width: "80px"}}
                                                 onChange={valueChangeHandler}
                                                 id={p.opCode}
-                                              />
-                                            : <>{p.orderAmount}</>
+                                            />
+                                            : 
+                                            <>{p.orderAmount}</>
                                         }
                                         {
                                             // 주문내역이거나 주문 버튼을 누른 상태(true)
                                             (pathname != "cart" || isOrdered)
-                                            ? null 
-                                            : <>
-                                                <br/>
+                                            ? 
+                                            null 
+                                            : 
+                                            <><br/>
                                                 {
                                                     (modifyMode.modifyMode && modifyMode.tagId == p.opCode)
                                                     ? <button onClick={amountSubmitHandler}>저장</button>
@@ -145,7 +148,7 @@ export default function OrderProduct({order : {orderProductList : product, ...et
                                                         <button onClick={() => deleteHandler(p)}>삭제</button>
                                                       </>
                                                 }
-                                              </>
+                                            </>
                                         }
                                     </td>
                                     <td rowSpan={2}>{p.pdPc.toLocaleString('ko-KR')} 원</td>

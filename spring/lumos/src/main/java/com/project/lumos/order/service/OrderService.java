@@ -126,32 +126,32 @@ public class OrderService {
 		java.sql.Timestamp sqlTimeStamp = java.sql.Timestamp.valueOf(searchDate + " 00:00:00");
 		
 		if(searchTitle.equals("non") && searchValue.equals("non")) {
-			searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqual(sqlTimeStamp);
+			searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndStOrderLike(sqlTimeStamp, "Y");
 		} else {
 			switch(searchTitle) {
 			case "주문번호" :
-				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndOrderCodeContaining(sqlTimeStamp, searchValue);
+				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndOrderCodeContainingAndStOrderLike(sqlTimeStamp, searchValue, "Y");
 				break;
 			case "구매자명" :
 				List<Member> memberList1 = memberRepository.findByMemberNameContaining(searchValue);
 				for(Member member : memberList1) {
-					searchList = orderAndOrderProductAndMemberRepository.findByOrderDateGreaterThanEqualAndMemberCodeLike(sqlTimeStamp, member);
+					searchList = orderAndOrderProductAndMemberRepository.findByOrderDateGreaterThanEqualAndMemberCodeLikeAndStOrderLike(sqlTimeStamp, member, "Y");
 				}
 				break;
 			case "구매자ID" :
 				List<Member> memberList2 = memberRepository.findByMemberIdContaining(searchValue);
 				for(Member member : memberList2) {
-					searchList = orderAndOrderProductAndMemberRepository.findByOrderDateGreaterThanEqualAndMemberCodeLike(sqlTimeStamp, member);
+					searchList = orderAndOrderProductAndMemberRepository.findByOrderDateGreaterThanEqualAndMemberCodeLikeAndStOrderLike(sqlTimeStamp, member, "Y");
 				}
 				break;
 			case "수취인명" :
-				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndCgNmContaining(sqlTimeStamp, searchValue);
+				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndCgNmContainingAndStOrderLike(sqlTimeStamp, searchValue, "Y");
 				break;
 			case "결제방법" :
-				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndPaymentMtContaining(sqlTimeStamp, searchValue);
+				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndPaymentMtContainingAndStOrderLike(sqlTimeStamp, searchValue, "Y");
 				break;
 			case "배송방법" :
-				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndDeliveryMtContaining(sqlTimeStamp, searchValue);
+				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndDeliveryMtContainingAndStOrderLike(sqlTimeStamp, searchValue, "Y");
 				break;
 			}
 		}

@@ -16,12 +16,15 @@ import {decodeJwt} from '../../utils/tokenUtils';
 
 export default function Cart() {
 
+    
     const token = decodeJwt(window.localStorage.getItem("accessToken"));  
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const order  = useSelector(state => state.cartReducer);
-
+    const order = useSelector(state => state.cartReducer);
+    
     const [isOrdered, setIsOrdered] = useState(false);
+    
+    // console.log("토큰 확인", token);
 
     useEffect(
         () => {
@@ -51,6 +54,21 @@ export default function Cart() {
             window.location.reload();
         }
     }
+
+    /* props-drilling */
+    const [orderInfo, setOrderInfo] = useState({
+        deliveryMt: '',
+        deliveryCp: '',
+        cgNm: '',
+        cgPh: '',
+        cgAdsNum: '',
+        cgAds: '',
+        cgAdsDetail: '',
+        paymentMt: '',
+        orderPc: '',
+        deliveryPc: '',
+        totalPc: '',
+    });
 
     return (
         <>

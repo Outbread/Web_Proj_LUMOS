@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.project.lumos.cart.dto.ChangeValueDTO;
@@ -19,12 +18,10 @@ import com.project.lumos.order.dto.OrderProductDTO;
 import com.project.lumos.order.entity.Order;
 import com.project.lumos.order.entity.OrderAndOrderProductAndMember;
 import com.project.lumos.order.entity.OrderProduct;
-import com.project.lumos.order.entity.OrderProductAndPdAndOp;
 import com.project.lumos.order.repository.OrderAndOrderProductAndMemberRepository;
 import com.project.lumos.order.repository.OrderProductRepository;
 import com.project.lumos.order.repository.OrderRepository;
 import com.project.lumos.order.service.OrderService;
-import com.project.lumos.product.entity.Option;
 import com.project.lumos.product.repository.OptionRepository;
 import com.project.lumos.product.repository.ProductRepository;
 

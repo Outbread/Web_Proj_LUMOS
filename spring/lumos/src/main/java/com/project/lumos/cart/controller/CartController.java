@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -82,4 +81,5 @@ public class CartController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "장바구니 제품 삭제 성공",  cartService.deleteOrderProduct(memberId, orderPdNum)));
 		
 	}
+	
 }

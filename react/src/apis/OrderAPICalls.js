@@ -37,6 +37,7 @@ export const callOrderListAPI = ({currentPage}) => {
         .then(response => response.json());
 
         console.log("[callOrderListAPI] RESULT ▶ ", result);
+        
         if(result.status === 200){
             console.log("[callOrderListAPI] SUCCESS ◀ ");
             dispatch({type: GET_ORDER,  payload: result.data});

@@ -1,4 +1,13 @@
-export default function Bill({order}) {
+export default function Bill({order : {orderProductList : product, ...etc}}) {
+
+    // console.log("빌지인데 가격있냐..", product);
+    let orderPc = 0;
+    product.forEach(pd => orderPc += pd.pdPc * pd.orderAmount);
+    // console.log(orderPc);
+    const defaultDeliveryPc = 3000;
+
+    // ★ props-drilling
+
     return (
         <>
             <table>
@@ -8,22 +17,38 @@ export default function Bill({order}) {
                             주문서
                         </th>
                         <td>
-                            {order.orderCode}
+                            {etc.orderCode}
                         </td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th>주문가격</th>
-                        <td>{order.orderPc.toLocaleString('ko-KR')} 원</td>
+                        <td>{orderPc.toLocaleString('ko-KR')} 원</td>
                     </tr>
                     <tr>
                         <th>배송비</th>
-                        <td>{order.deliveryPc.toLocaleString('ko-KR')} 원</td>
+                        <td>
+                            {
+                                orderPc > 500000
+                                ?
+                                "무료배송"
+                                :
+                                defaultDeliveryPc.toLocaleString('ko-KR') + " 원"
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <th>합계</th>
-                        <td>{order.totalPc.toLocaleString('ko-KR')} 원</td>
+                        <td>
+                            {
+                                orderPc > 500000
+                                ?
+                                (orderPc + 0).toLocaleString('ko-KR') + " 원"
+                                :
+                                (orderPc + defaultDeliveryPc).toLocaleString('ko-KR') + " 원"
+                            }
+                        </td>
                     </tr>
                 </tbody>
             </table>

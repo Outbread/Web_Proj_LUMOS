@@ -26,6 +26,9 @@ export const PUT_PAYMENTMT  = 'cart/PUT_PAYMENTMT';
 /* 결제 결제 상태 변경 (카카오페이 API | https://developers.kakao.com/docs/latest/ko/kakaopay/common) */
 export const PUT_PATMENT    = 'cart/PUT_PATMENT';
 
+/* 주문자 정보 동일 */
+export const GET_USERINFO   = 'cart/GET_USERINFO';
+
 const actions = createActions({
     [POST_ITEM] : () => {},
     [GET_ORDER] : () => {},
@@ -34,7 +37,8 @@ const actions = createActions({
     [PUT_ADDRESS] : () => {},
     [PUT_DELEVERYMT] : () => {},
     [PUT_PAYMENTMT] : () => {},
-    [PUT_PATMENT] : () => {}
+    [PUT_PATMENT] : () => {},
+    [GET_USERINFO] : () => {}
 });
 
 const cartReducer = handleActions(
@@ -61,6 +65,9 @@ const cartReducer = handleActions(
             return payload;
         },
         [PUT_PATMENT] : (state, { payload }) => {
+            return payload;
+        },
+        [GET_USERINFO] : (state, { payload }) => {
             return payload;
         }
     },

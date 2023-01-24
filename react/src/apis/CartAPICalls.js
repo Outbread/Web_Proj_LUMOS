@@ -6,7 +6,8 @@ import {
     PUT_ADDRESS,
     PUT_DELEVERYMT,
     PUT_PAYMENTMT,
-    PUT_PATMENT
+    PUT_PATMENT,
+    GET_USERINFO
 } from '../modules/CartModule';
 
 /* 장바구니 상품 추가 및 신규 생성 */

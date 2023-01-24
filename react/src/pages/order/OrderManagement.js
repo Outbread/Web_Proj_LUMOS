@@ -116,6 +116,7 @@ export default function OrderManagement() {
     
     useEffect(
         () => {
+            // 날짜 O + 검색카테고리 O + 검색어 O
             if(search.searchDate.length != 0 && search.searchTitle.length != 0 && search.searchValue.length != 0) {
                 dispatch(callOrderSearchAPI({
                     searchDate: search.searchDate,
@@ -123,6 +124,7 @@ export default function OrderManagement() {
                     searchValue: search.searchValue
                 }));
                 // alert(`${searchOrderList?.length}건의 검색결과가 있습니다.`);
+            // 날짜 O + 검색어 X
             } else if(search.searchDate.length != 0 && search.searchValue.length == 0) {
                 const isGood = window.confirm("기간으로만 조회하시겠습니까?");
                 if(isGood == true) {
@@ -135,7 +137,8 @@ export default function OrderManagement() {
                 } else {
                     alert("검색어를 마저 입력해주세요.")
                 }
-            } else {
+            // 날짜 X + 검색어 X (초기값이 아님을 나타내기 위한 조건 필요)
+            } else if(search.searchDate.length == 0 && search.searchValue.length == 0) {
                 alert("검색을 원하실 경우 날짜를 선택해주세요.")
             }
         },
@@ -204,7 +207,8 @@ export default function OrderManagement() {
                                         :   <input 
                                                 type="text" 
                                                 name="searchValue"
-                                                placeholder="검색" 
+                                                placeholder="검색어를 입력해 주세요"
+                                                // defaultValue="검색어를 입력해 주세요"
                                                 onKeyUp={onEnterkeyHandler}
                                                 onChange={searchHandler}
                                             />
