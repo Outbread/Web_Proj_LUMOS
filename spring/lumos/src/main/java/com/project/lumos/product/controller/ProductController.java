@@ -1,6 +1,5 @@
 package com.project.lumos.product.controller;
 
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,6 @@ import com.project.lumos.common.Criteria;
 import com.project.lumos.common.PageDTO;
 import com.project.lumos.common.PagingResponseDTO;
 import com.project.lumos.common.ResponseDTO;
-import com.project.lumos.product.dto.OptionDTO;
-import com.project.lumos.product.dto.ProductImageDTO;
 import com.project.lumos.product.dto.ProductInsertDTO;
 import com.project.lumos.product.service.ProductService;
 

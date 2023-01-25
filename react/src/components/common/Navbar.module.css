@@ -1,5 +1,29 @@
 .Boxing {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    min-width: 800px;
+    list-style:none;
+    padding-left:0px;    
+    margin-top: 10px;
+    margin-bottom: 10px;
     border: 1px solid #73CEBE;
+}
+
+.Boxing li {
+    min-width: 170px;
+    height: auto;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;    
+    color: black;
+}
+
+a:focus, a:hover {
+    text-decoration: none;
+    color: slateblue;
+    font-weight: bold;
 }

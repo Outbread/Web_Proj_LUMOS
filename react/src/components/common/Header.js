@@ -19,15 +19,6 @@ export default function Header() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const onClickModeHandler = (e) => {
-        console.log(e.target.value);
-        switch(e.target.value) {
-           
-            case "관리자 모드" :
-                setMode("AdminMode");
-                break;
-        }
-    }
 
     /*==============================로그인=======================================*/
     const loginMember = useSelector(state => state.memberReducer); 
@@ -99,9 +90,6 @@ export default function Header() {
             { loginModal ? <LoginModal setLoginModal={ setLoginModal }/> : null}
             <div className={HeaderCSS.Boxing}>
                 <div><img src= {logo} className={HeaderCSS.Logo}/></div>
-                <div className={HeaderCSS.Mode}>
-                    <input type="button" onClick={onClickModeHandler} value="관리자 모드"/>
-                </div>
                 <div className={HeaderCSS.Menu}>
                     { (isLogin == null || isLogin === undefined) ? <AnonymousMode /> : <MemberMode />}
                 </div>
