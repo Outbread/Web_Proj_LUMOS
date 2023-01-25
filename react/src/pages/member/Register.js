@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { Navigate } from "react-router-dom";
-import { useParams } from 'react-router-dom'; /* 아이디 중복체크 */
+
 
 import {
     callRegisterAPI
@@ -13,9 +13,6 @@ import {
 import { 
     idCheckAPI
 } from '../../apis/MemberAPICalls'
-// import {
-//     duplicationCheckAPI
-// } from '../../apis/MemberAPICalls'
 
 import { POST_LOGIN } from '../../modules/MemberModule';
 
@@ -28,7 +25,6 @@ function Register() {
     /* 리덕스를 이용하기 위한 디스패처, 셀렉터 선언 */
     const dispatch = useDispatch();
     const member = useSelector(state => state.memberReducer);  // API 요청하여 가져온 loginMember 정보
-    const params = useParams(); /* 아이디 중복체크 */
 
     const [form, setForm] = useState({
         memberId: '',
@@ -92,22 +88,12 @@ function Register() {
     }
 
     /* 아이디 중복 체크 */
-    // const duplicationCheck = () => {
-    //     dispatch(callGetMemberAPI({	
-    //         memberId: form.memberId
-    //     }));            
-    //     if ( validId === memberId) {
-    //         alert('중복된 아이디입니다');
-    //     } else {
-    //         alert('사용 가능한 아이디입니다람쥣.')
-    //     }
-    // }
     const [usableId, setUsableId] = useState(false);
     const duplicationCheck = () => {
         idCheckAPI(memberId)
         .then((response) => {
-        console.log(response)
-        if(response === false){
+        console.log('돌아온 값: ', response.data);
+        if(response.data === false){
             alert('사용 가능한 아이디입니다다다.');
             setUsableId(response);
         }
@@ -123,7 +109,11 @@ function Register() {
 
     /* 회원가입 버튼 클릭시 유효성 검사 후 맞는 양식일 때에만 폼 제출 */
     const onClickRegisterHandler = () => {
-        if (!validId) {
+        if(form.memberId === '' || form.memberPassword === '' || form.memberName === '' 
+            || form.memberEmail === '' || form.memberBirth === '' || form.memberGen === '' 
+            || form.memberAdsNum === '' || form.memberAds === '' || form.memberAdsDetail){
+                alert('정보를 모두 입력해주세요.');
+            } else if (!validId) {
             alert("아이디를 다시 확인 해 주세요."); // 알람창
             setForm({ // 값 비워주기
               ...form,
@@ -175,7 +165,7 @@ function Register() {
           } else {
             dispatch(callRegisterAPI({
             form: form
-        }));
+            }));
             return alert("˗ˋˏ회원가입 성공!ˎˊ˗");
           }
         

@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import HeaderCSS from './Header.module.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { decodeJwt } from '../../utils/tokenUtils';
 import logo from '../../image/lumosLogo.png'
 
@@ -14,11 +14,13 @@ import LoginModal from './LoginModal';
 
 export default function Header() {
     
-    const [mode, setMode] = useState('');
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
+<<<<<<< HEAD
 
+=======
+    const [isAdmin, setIsAdmin] = useState('');
+>>>>>>> origin/master
 
     /*==============================로그인=======================================*/
     const loginMember = useSelector(state => state.memberReducer); 
@@ -39,6 +41,20 @@ export default function Header() {
         navigate(`/mypage`, { replace: true });
     }
 
+    // 관리자 권한 조회
+    useEffect(
+        () => {
+            if(isLogin != null) {
+                setIsAdmin(
+                    decodeJwt(window.localStorage.getItem("accessToken")).auth.includes("ROLE_ADMIN")
+                )
+            } else {
+                console.log('[Header] 관리자 권한 확인 : ', isAdmin);
+            }
+        },
+        [isLogin]
+    )
+
     // 로그아웃
     const onClickLogoutHandler = () => {
         window.localStorage.removeItem('accessToken');  
@@ -50,36 +66,56 @@ export default function Header() {
         window.location.reload();
     }
 
+    // 메인화면으로 이동
+    const onClickMainPageHandler = () => {
+        navigate("/", { replace: true });
+        window.location.reload();
+    }
+
+    // 관리자 메뉴 네비게이션
+    const onClickMoveHandler = (e) => {
+        navigate(`/${e.target.id}`, {replace: true});
+        window.location.reload();
+    }
+
+    // 장바구니 이동
+    const token = decodeJwt(window.localStorage.getItem("accessToken"));  
+    const onCartHandler = () => {
+        // 주소창이 같아 앞으로가기가 무한으로 생성되는 버그 수정을 위해 replace: false로 작성
+        navigate(`/cart/${token.sub}`, {replace: false});
+        window.location.reload();
+    }
+
     function AnonymousMode() { //로그인 전
 
         return (
             <div className={HeaderCSS.linkbox}>
                 <NavLink to="/login" className={HeaderCSS.headerNavLink}>로그인</NavLink>
                 <NavLink to="/register" className={HeaderCSS.headerNavLink}>회원가입</NavLink>
-                <NavLink to="/sample" className={HeaderCSS.headerNavLink}>장바구니</NavLink>
             </div>
         );
     }
 
-    function MemberMode() {   //로그인 후
+    function MemberMode() {   // 회원 로그인
         return (
             <div className={HeaderCSS.linkbox}>
-                <button onClick={ onClickLogoutHandler } className={HeaderCSS.headerbutton}>로그아웃</button>
-                <button onClick={ onClickMypageHandler } className={HeaderCSS.headerbutton}>마이페이지</button>
-                <NavLink to="/sample" className={HeaderCSS.headerNavLink}>장바구니</NavLink>
+                <button onClick={onClickLogoutHandler} className={HeaderCSS.headerbutton}>로그아웃</button>
+                <button onClick={onClickMypageHandler} className={HeaderCSS.headerbutton}>마이페이지</button>
+                <button onClick={onCartHandler} className={HeaderCSS.headerNavLink}>장바구니</button>
             </div>
         );
     }
 
-    function AdminMode() {
+    function AdminMode() {  // 관리자 로그인
 
         return (            
             <>
                 <div>
-                    <li><NavLink to="/sample">상점관리</NavLink></li>
-                    <li><NavLink to="/sample">상품관리</NavLink></li>
-                    <li><NavLink to="/sample">주문관리</NavLink></li>
-                    <li><NavLink to="/sample">회원관리</NavLink></li>
+                    <li onClick={onClickLogoutHandler}>로그아웃</li>
+                    <li onClick={onClickMoveHandler} id="order-management">상점관리</li>
+                    <li onClick={onClickMoveHandler} id="product-management">상품관리</li>
+                    <li onClick={onClickMoveHandler} id="order-dashboard">주문관리</li>
+                    <li onClick={onClickMoveHandler} id="member-management">회원관리</li>
                 </div>
             </>
         );
@@ -89,9 +125,13 @@ export default function Header() {
         <>
             { loginModal ? <LoginModal setLoginModal={ setLoginModal }/> : null}
             <div className={HeaderCSS.Boxing}>
+<<<<<<< HEAD
                 <div><img src= {logo} className={HeaderCSS.Logo}/></div>
+=======
+                <div><img src= {logo} className={HeaderCSS.Logo} onClick={onClickMainPageHandler}/></div>
+>>>>>>> origin/master
                 <div className={HeaderCSS.Menu}>
-                    { (isLogin == null || isLogin === undefined) ? <AnonymousMode /> : <MemberMode />}
+                    { (isLogin == null || isLogin === undefined) ? <AnonymousMode /> : (isAdmin ? <AdminMode/> : <MemberMode/>)}
                 </div>
             </div>
         </>

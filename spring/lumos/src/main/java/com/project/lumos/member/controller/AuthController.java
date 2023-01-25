@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.lumos.common.ResponseDTO;
@@ -61,7 +62,7 @@ public class AuthController {
 //	}
 	@Operation(summary = "아이디 중복 확인을 위한 회원 아이디 조회", description = "아이디가 조회됩니다.", tags = { "AuthController" })
 	@GetMapping("/check")
-	public ResponseEntity<ResponseDTO> selectMemberId( String memberId) {
+	public ResponseEntity<ResponseDTO> selectMemberId(@RequestParam String memberId) {
 		System.out.println("넘어온 회원: " + memberId);
 		return ResponseEntity
 				.ok()

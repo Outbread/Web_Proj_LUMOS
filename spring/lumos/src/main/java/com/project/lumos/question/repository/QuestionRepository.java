@@ -14,7 +14,9 @@ public interface QuestionRepository extends JpaRepository<Question, Integer>{
 	Page<Question> findByMemberCode(int searchValue, Pageable paging);
 
 	@Query(value = "SELECT MAX(QUESTION_CODE) FROM QUESTION", nativeQuery = true)
-	public int findMaxQuestionCode(); 
+	public int findMaxQuestionCode();
+
+	Question findByQuestionCode(int questionCode); 
 	
 
 
