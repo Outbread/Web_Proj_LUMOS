@@ -121,6 +121,7 @@ export default function Header() {
         <>
             { loginModal ? <LoginModal setLoginModal={ setLoginModal }/> : null}
             <div className={HeaderCSS.Boxing}>
+
                 <div><img src= {logo} className={HeaderCSS.Logo} onClick={onClickMainPageHandler}/></div>
                 <div className={HeaderCSS.Menu}>
                     { (isLogin == null || isLogin === undefined) ? <AnonymousMode /> : (isAdmin ? <AdminMode/> : <MemberMode/>)}

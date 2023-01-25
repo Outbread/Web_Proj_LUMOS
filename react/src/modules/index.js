@@ -5,6 +5,7 @@ import orderReducer from './OrderModule';           // 주문내역
 import cartReducer from './CartModule';             // 주문내역
 import footerReducer from './FooterModule';
 import productReducer from './ProductModule'        // 상품
+import productManagementReducer from './ProductManagementModule'; // 상품 관리
 
 const rootReducer = combineReducers({
     questionReducer,       // 문의사항 
@@ -12,8 +13,8 @@ const rootReducer = combineReducers({
     orderReducer,
     cartReducer,
     footerReducer,
-    productReducer          // 상품
-
+    productReducer,          // 상품
+    productManagementReducer // 상품 관리
 });
 
 export default rootReducer;
