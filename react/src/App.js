@@ -17,6 +17,10 @@ import OrderDetail from './pages/order/OrderDetail';                        // �
 import Cart from './pages/cart/Cart';                                       // 장바구니
 
 import ProductDetail from './pages/products/ProductDetail';
+import ProductManagement from './pages/admin/ProductManagement'
+import ProductRegistration from './pages/admin/ProductRegistration';
+import ProductUpdate from './pages/admin/ProductUpdate';
+import LED from './pages/products/LED';
 
 import {useState, createContext} from 'react';
 
@@ -32,14 +36,18 @@ function App() {
       <Routes>
         <Route path="/" element={ <Layout/> }>
             <Route index element={ <Main/> }/>   
+            <Route path="product/LED" element={<LED />} />
             <Route path="product/:productCode" element={<ProductDetail />} />
             <Route path="mypage" element={ <MyPageLayout/> } >
                 <Route index element={ <ProfileUpdate /> } />
                 <Route path="profileUpdate" element={ <ProfileUpdate /> } />
                 <Route path="questionregistration" element={ <QuestionRegistration /> } />
                 <Route path="question" element={<QuestionList />} />
-            <Route path="question/detail/:questionCode" element={<QuestionDetail />} />
+                <Route path="question/detail/:questionCode" element={<QuestionDetail />} />
             </Route>
+            <Route path="product-management" element={ <ProductManagement/> } />
+            <Route path="product-registration" element={ <ProductRegistration/> } />
+            <Route path="product-update/:productCode" element={ <ProductUpdate/> } />
             <Route path="order-dashboard" element={<OrderDashBoard/>}/>
             <Route path="order-management" element={<OrderManagement/>}/>
             <Route path="order-management/search" element={<OrderSearch/>}/>

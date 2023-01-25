@@ -1,13 +1,12 @@
 import { 
     GET_PRODUCT,
     GET_PRODUCTS,
-    GET_PRODUCTS_LED,
+    GET_PRODUCTS_MEAL,
     GET_PRODUCTS_DESSERT,
     GET_PRODUCTS_BEVERAGE,
     POST_PRODUCT,
-    PUT_PRODUCT,
-    DELETE_PRODUCT
-} from '../modules/ProductModule.js';
+    PUT_PRODUCT
+} from '../modules/ProductManagementModule.js';
 
 export const callSearchProductAPI = ({search}) => {
     console.log('[ProduceAPICalls] callSearchProductAPI Call');
@@ -124,29 +123,6 @@ export const callProductUpdateAPI = ({form}) => {
     };    
 }
 
-export const callProductDeleteAPI = ({imgNum}) => {
-    console.log('[ProduceAPICalls] callProductDeleteAPI Call');
-
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products/${imgNum}`;
-
-    return async (dispatch, getState) => {
-
-        const result = await fetch(requestURL, {
-            method: "DELETE",
-            headers: {
-                "Accept": "*/*",
-                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
-            }
-        })
-        .then(response => response.json());
-
-        console.log('[ProduceAPICalls] callProductDeleteAPI RESULT : ', result);
-
-        dispatch({ type: DELETE_PRODUCT,  payload: result });
-        
-    };    
-}
-
 export const callProductDetailForAdminAPI = ({imgNum}) => {
     const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products-management/${imgNum}`;
 
@@ -257,8 +233,8 @@ export const callProductListAPI = ({currentPage}) => {
     };
 }
 
-export const callProductListForNavAPI = () => {
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products`;
+export const callProductListAboutMealAPI = () => {
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products/meals`;
 
     return async (dispatch, getState) => {
 
@@ -272,28 +248,7 @@ export const callProductListForNavAPI = () => {
         .then(response => response.json());
         if(result.status === 200){
             console.log('[ProduceAPICalls] callProductListAboutMeal RESULT : ', result);
-            dispatch({ type: GET_PRODUCTS,  payload: result.data });
-        }
-        
-    };
-}
-
-export const callProductListAboutLEDAPI = () => {
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products/led`;
-
-    return async (dispatch, getState) => {
-
-        const result = await fetch(requestURL, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "*/*"                
-            }
-        })
-        .then(response => response.json());
-        if(result.status === 200){
-            console.log('[ProduceAPICalls] callProductListAboutMeal RESULT : ', result);
-            dispatch({ type: GET_PRODUCTS_LED,  payload: result.data });
+            dispatch({ type: GET_PRODUCTS_MEAL,  payload: result.data });
         }
         
     };
@@ -341,3 +296,4 @@ export const callProductListAboutBeverageAPI = () => {
         
     };
 }
+

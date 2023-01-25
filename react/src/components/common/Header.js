@@ -16,11 +16,7 @@ export default function Header() {
     
     const navigate = useNavigate();
     const dispatch = useDispatch();
-<<<<<<< HEAD
-
-=======
     const [isAdmin, setIsAdmin] = useState('');
->>>>>>> origin/master
 
     /*==============================로그인=======================================*/
     const loginMember = useSelector(state => state.memberReducer); 
@@ -125,11 +121,8 @@ export default function Header() {
         <>
             { loginModal ? <LoginModal setLoginModal={ setLoginModal }/> : null}
             <div className={HeaderCSS.Boxing}>
-<<<<<<< HEAD
-                <div><img src= {logo} className={HeaderCSS.Logo}/></div>
-=======
+
                 <div><img src= {logo} className={HeaderCSS.Logo} onClick={onClickMainPageHandler}/></div>
->>>>>>> origin/master
                 <div className={HeaderCSS.Menu}>
                     { (isLogin == null || isLogin === undefined) ? <AnonymousMode /> : (isAdmin ? <AdminMode/> : <MemberMode/>)}
                 </div>

@@ -10,7 +10,6 @@ function Product({ product : { product: {pdCode, pdName, pdPrice} , pdImgPath}})
         
     }
 
-    console.log(pdImgPath);
 
     return (
         <div 

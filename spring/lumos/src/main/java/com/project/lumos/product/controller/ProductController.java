@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +20,7 @@ import com.project.lumos.common.Criteria;
 import com.project.lumos.common.PageDTO;
 import com.project.lumos.common.PagingResponseDTO;
 import com.project.lumos.common.ResponseDTO;
+import com.project.lumos.product.dto.ProductDTO;
 import com.project.lumos.product.dto.ProductInsertDTO;
 import com.project.lumos.product.service.ProductService;
 
@@ -30,6 +33,7 @@ public class ProductController {
 	private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
 	private final ProductService productService;
+
 	@Autowired
 	public ProductController(ProductService productService) {
 		this.productService = productService;
@@ -39,7 +43,7 @@ public class ProductController {
 	@GetMapping("/products")
 	public ResponseEntity<ResponseDTO> selectProductListWithPaging(
 			@RequestParam(name = "offset", defaultValue = "1") String offset) {
-
+ 
 		/* common 패키지에 Criteria, PageDTO, PagingResponseDTO 추가 */
 		log.info("[ProductController] selectProductListWithPaging : " + offset);
 
@@ -60,26 +64,109 @@ public class ProductController {
 	@Operation(summary = "상품 상세 조회 요청", description = "상품의 상세 페이지 처리가 진행됩니다.", tags = { "ProductController" })
 	@GetMapping("/products/{pdCode}")
 	public ResponseEntity<ResponseDTO> selectProductDetail(@PathVariable int pdCode) {
+		log.info("123123123", pdCode);
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "상품 상세정보 조회 성공",  productService.selectProduct(pdCode)));
 	}
 	
 	
+	
+	
 	@Operation(summary = "상품 등록 요청", description = "해당 상품 등록이 진행됩니다.", tags = { "ProductController" })
     @PostMapping(value = "/products")
 	public ResponseEntity<ResponseDTO> insertProduct(@ModelAttribute ProductInsertDTO productInsertDTO, MultipartFile productImage) {
-//	public ResponseEntity<ResponseDTO> insertProduct(@ModelAttribute ProductInsertDTO productInsertDTO ,List<OptionDTO> option, List<ProductImageDTO> image ,MultipartFile productImage) {
-    	
-//		@ModelAttribute
-//		@RequestBody
-//		ProductInsertDTO productInsertDTO = new ProductInsertDTO();
-		
-//		MultipartFile productImage = productInsertDTO.getProductImage();
-		
-//		log.info("[ProductController]productInsertDTO:    " + productInsertDTO);
-
-//		log.info("ProductDTO: {}", productInsertDTO);
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "상품 입력 성공",  productService.insertProduct(productInsertDTO, productImage)));
     }
+	
+	@Operation(summary = "관리자 페이지 상품 리스트 조회 요청", description = "관리자 페이지에서 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
+    @GetMapping("/products-management")
+    public ResponseEntity<ResponseDTO> selectProductListWithPagingForAdmin(@RequestParam(name="offset", defaultValue="1") String offset) {
+        log.info("[ProductController] selectProductListWithPagingForAdmin : " + offset);
+        int total = productService.selectProductTotalForAdmin();
+        
+        Criteria cri = new Criteria(Integer.valueOf(offset), 10);
+        PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
+        pagingResponseDTO.setData(productService.selectProductListWithPagingForAdmin(cri));
+        pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
+    }
+	
+	@Operation(summary = "상품 수정 요청", description = "해당 상품 수정이 진행됩니다.", tags = { "ProductController" })
+	@PutMapping(value = "/products")
+	public ResponseEntity<ResponseDTO> updateProduct(@ModelAttribute ProductInsertDTO productInsertDTO, MultipartFile productImage) {
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "상품 수정 성공",  productService.updateProduct(productInsertDTO, productImage)));
+	}
+    
+	@Operation(summary = "관리자 페이지 상품 상세 페이지 조회 요청", description = "관리자 페이지에서 상품 상세 페이지 조회가 진행됩니다.", tags = { "ProductController" })
+    @GetMapping("/products-management/{imgNum}")
+    public ResponseEntity<ResponseDTO> selectProductDetailForAdmin(@PathVariable int imgNum) {
+		
+		log.info("11111111111111111111111111111111111111111");
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "관리자 페이지 상세정보 조회 성공",  productService.selectProductForAdmin(imgNum)));
+    }
+	
+	@Operation(summary = "상품 삭제 요청", description = "상품 삭제.", tags = { "ProductController" })
+	@DeleteMapping("/products/{imgNum}")
+	public ResponseEntity<ResponseDTO> deleteProduct(@PathVariable int imgNum) {
+		
+		log.info("11111111111111111111111111111111111111111");
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "상품 삭제 성공",  productService.deleteProduct(imgNum)));
+    }
+    
+	@Operation(summary = "LED 리스트 조회 요청", description = "LED에 해당하는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
+	@GetMapping("/products/led")
+    public ResponseEntity<ResponseDTO> selectProductListAboutLed() {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutLed()));
+    }
+	
+//	@Operation(summary = "검색 상품 리스트 조회 요청", description = "검색어에 해당되는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
+//	@GetMapping("/products/search")
+//    public ResponseEntity<ResponseDTO> selectSearchProductList(@RequestParam(name="s", defaultValue="all") String search) {
+//
+//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectSearchProductList(search)));
+//    }
+//	
+//	@Operation(summary = "식사 상품 리스트 조회 요청", description = "식사 카테고리에 해당하는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
+//	@GetMapping("/products/meals")
+//    public ResponseEntity<ResponseDTO> selectProductListAboutMeal() {
+//
+//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutMeal()));
+//    }
+//	
+//	@Operation(summary = "디저트 상품 리스트 조회 요청", description = "디저트 카테고리에 해당하는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
+//    @GetMapping("/products/dessert")
+//    public ResponseEntity<ResponseDTO> selectProductListAboutDessert() {
+//
+//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutDessert()));
+//    }
+//
+//	@Operation(summary = "음료 상품 리스트 조회 요청", description = "음료 카테고리에 해당하는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
+//    @GetMapping("/products/beverage")
+//    public ResponseEntity<ResponseDTO> selectProductListAboutBeverage() {
+//
+//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutBeverage()));
+//    }
+//    
+	
+//    
+//	@Operation(summary = "관리자 페이지 상품 상세 페이지 조회 요청", description = "관리자 페이지에서 상품 상세 페이지 조회가 진행됩니다.", tags = { "ProductController" })
+//    @GetMapping("/products-management/{productCode}")
+//    public ResponseEntity<ResponseDTO> selectProductDetailForAdmin(@PathVariable int productCode) {
+//
+//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "상품 상세정보 조회 성공",  productService.selectProductForAdmin(productCode)));
+//    }
+//    
+//    /* 
+//     * 파일 업로드 시에 static 폴더의 파일이 바로 적용되지 않는 시
+//     * (이미지가 정상적으로 업로드 되었음에도 불구하고 이미지를 읽어오지 못하는 경우)
+//     * : Window -> Preferences의 General -> Workspace에서 맨 위의 Refresh using native hooks or polling 체크할 것 
+//     */
+	
+
 }

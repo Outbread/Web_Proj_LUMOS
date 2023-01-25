@@ -33,9 +33,7 @@ function ProductDetail() {
         ,[]
     );
     
-    const {pdCode, pdDesc, pdName, pdPrice} = product;
-    const {productImage, productOption} = product;
-    // const {imgNum, mainImg, pdImgPath} = productImage;
+    const {pdCode, pdDesc, pdName, pdPrice, productImage, productOption} = product;
     
     console.log('productImage : ' , typeof(product));     
     

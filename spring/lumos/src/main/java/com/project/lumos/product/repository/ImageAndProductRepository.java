@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.util.Streamable;
 
 import com.project.lumos.product.entity.ImageAndProduct;
+import com.project.lumos.product.entity.Product;
 
 public interface ImageAndProductRepository extends JpaRepository<ImageAndProduct, Integer>{
 
@@ -16,9 +17,9 @@ public interface ImageAndProductRepository extends JpaRepository<ImageAndProduct
 
 	Page<ImageAndProduct> findByMainImg(String status, Pageable paging);
 
-
 	ImageAndProduct findByPdCodeAndMainImg(int pdCode, String string);
 
-	List<ImageAndProduct> findByPdCode(int pdCode);
+	ImageAndProduct findByPdCode(int pdCode);
+
 	
 }
