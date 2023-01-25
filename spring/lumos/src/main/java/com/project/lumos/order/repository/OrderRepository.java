@@ -34,4 +34,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	
 	Order findByOrderCode(String orderCode);
 
+	/* 구매시 기존 장바구니 정보 조회 */
+	Order findByOrderCodeLike(String orderCode);
+
 }

@@ -18,6 +18,7 @@ import com.project.lumos.cart.dto.ChangeValueDTO;
 import com.project.lumos.cart.service.CartService;
 import com.project.lumos.common.ResponseDTO;
 import com.project.lumos.order.controller.OrderController;
+import com.project.lumos.order.dto.OrderDTO;
 import com.project.lumos.order.dto.OrderProductDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,6 +80,18 @@ public class CartController {
 		log.info("[OrderController] deleteOrderProduct orderPdNum ▶ " + orderPdNum);
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "장바구니 제품 삭제 성공",  cartService.deleteOrderProduct(memberId, orderPdNum)));
+		
+	}
+	
+	/* [장바구니 상품 구매] */
+	@Operation(summary = "[회원] 주문 결제", description = "결제 API 성공 시 장바구니 상태값 변경 및 재고수량 변경", tags = {"CartController"})
+	@PutMapping(value = {"/cart/{orderCode}/purchase"})
+	public ResponseEntity<ResponseDTO> purcahseOrder(@PathVariable String orderCode, @ModelAttribute OrderDTO orderDTO) {
+		
+		log.info("[OrderController] purcahseOrder orderCode ▶ " + orderCode);
+		log.info("[OrderController] purcahseOrder orderDTO ▶ " + orderDTO);
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "장바구니 제품 구매 성공",  cartService.purcahseOrder(orderCode, orderDTO)));
 		
 	}
 	

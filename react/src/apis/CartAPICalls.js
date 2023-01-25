@@ -7,7 +7,8 @@ import {
     PUT_DELEVERYMT,
     PUT_PAYMENTMT,
     PUT_PATMENT,
-    GET_USERINFO
+    GET_USERINFO,
+    PUT_ORDER
 } from '../modules/CartModule';
 
 /* 장바구니 상품 추가 및 신규 생성 */
@@ -117,4 +118,29 @@ export const callItemDeleteAPI = ({memberId, orderPdNum}) => {
             dispatch({type: DELETE_ITEM,  payload: result.data});
         }
     };
+};
+
+/* 결제 버튼 클릭 */
+export const callPurchaseAPI = ({orderCode, form}) => {
+
+    console.log("[callPurchaseAPI] START ◀ ");
+
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/cart/${orderCode}/purchase`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "PUT",
+            headers: {
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+            },
+            body: form
+        })
+        .then(response => response.json());
+
+        console.log("[callPurchaseAPI] RESULT : ▶ ", result);
+
+        dispatch({ type: PUT_ORDER,  payload: result });
+    };    
 };

@@ -6,7 +6,7 @@ import {decodeJwt} from '../../utils/tokenUtils';
 import {callGetMemberAPI} from '../../apis/MemberAPICalls';
 import {useDaumPostcodePopup} from "react-daum-postcode";
 
-export default function Consignee({order}) {
+export default function Consignee({order, orderInfo, setOrderInfo}) {
     
     const token = decodeJwt(window.localStorage.getItem("accessToken"));  
     const roleAdmin = token.auth.filter(role => {return role == "ROLE_ADMIN"}).length;
@@ -25,17 +25,10 @@ export default function Consignee({order}) {
         []
     )
 
-    const [userAds, setUserAds] = useState({
-        cgNm: '',
-        cgPh: '',
-        cgAdsNum: '',
-        cgAds: '',
-        cgAdsDetail: ''
-    })
-
     const callUserAdsHandler = (e) => {
         if(e.target.checked == true) {
-            setUserAds({
+            setOrderInfo({
+                ...orderInfo,
                 cgNm: userInfo.memberName,
                 cgPh: userInfo.memberPhone,
                 cgAdsNum: userInfo.memberAdsNum,
@@ -43,7 +36,8 @@ export default function Consignee({order}) {
                 cgAdsDetail: userInfo.memberAdsDetail
             })
         } else {
-            setUserAds({
+            setOrderInfo({
+                ...orderInfo,
                 cgNm: '',
                 cgPh: '',
                 cgAdsNum: '',
@@ -54,12 +48,12 @@ export default function Consignee({order}) {
     };
 
     const adsInfoChangeHandler = (e) => {
-        setUserAds({
-            ...userAds,
+        setOrderInfo({
+            ...orderInfo,
             [e.target.name]: e.target.value
         })
     };
-    console.log("수동입력", userAds);
+    console.log("컨시어지 수동입력", orderInfo);
 
     // readOnly 일 경우 이벤트
     const adsClickHandler = () => {
@@ -87,8 +81,8 @@ export default function Consignee({order}) {
         }
         // console.log("data", data);
         // console.log("fullAddress", fullAddress);
-        setUserAds({
-            ...userAds,
+        setOrderInfo({
+            ...orderInfo,
             cgAdsNum: data.zonecode,
             cgAds: fullAddress
         })
@@ -146,7 +140,7 @@ export default function Consignee({order}) {
                             <input 
                                 name="cgNm" 
                                 onChange={adsInfoChangeHandler}
-                                value={userAds.cgNm ?? ''}
+                                value={orderInfo.cgNm ?? ''}
                             ></input>
                         </td>
                     </tr>
@@ -157,7 +151,7 @@ export default function Consignee({order}) {
                                 type={'tel'}
                                 name="cgPh" 
                                 onChange={adsInfoChangeHandler}
-                                value={phoneFomatter(userAds.cgPh) ?? ''}
+                                value={phoneFomatter(orderInfo.cgPh) ?? ''}
                                 placeholder="'-' 없이 숫자만 입력해 주세요"
                             ></input>
                         </td>
@@ -171,7 +165,7 @@ export default function Consignee({order}) {
                                 onChange={adsInfoChangeHandler}
                                 onClick={adsClickHandler}
                                 style={{width: "130px"}}
-                                value={userAds.cgAdsNum ?? ''}
+                                value={orderInfo.cgAdsNum ?? ''}
                                 placeholder="우편번호"
                                 // readOnly
                                 disabled
@@ -184,7 +178,7 @@ export default function Consignee({order}) {
                                 onChange={adsInfoChangeHandler} 
                                 onClick={adsClickHandler}
                                 style={{width: "350px"}}
-                                value={userAds.cgAds ?? ''}
+                                value={orderInfo.cgAds ?? ''}
                                 placeholder="주소"
                                 // readOnly
                                 disabled
@@ -193,7 +187,7 @@ export default function Consignee({order}) {
                                 name="cgAdsDetail" 
                                 id="cgAdsDetail"
                                 onChange={adsInfoChangeHandler}
-                                value={userAds.cgAdsDetail ?? ''}
+                                value={orderInfo.cgAdsDetail ?? ''}
                                 placeholder="상세주소"
                             ></input>
                         </td>
