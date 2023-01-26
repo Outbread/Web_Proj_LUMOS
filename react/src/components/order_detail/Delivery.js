@@ -112,7 +112,7 @@ export default function Delivery({order, orderInfo, setOrderInfo}) {
     /* ============================== [회원 기능] ============================== */
     // ★ props-drilling
     const deliveryInfoHandler = (e) => {
-        console.log("딜리버리 컴포넌트", e.target.name + ":::::" + e.target.value);
+        // console.log("딜리버리 컴포넌트", e.target.name + ":::::" + e.target.value);
         setOrderInfo({
             ...orderInfo,
             [e.target.name]: e.target.value

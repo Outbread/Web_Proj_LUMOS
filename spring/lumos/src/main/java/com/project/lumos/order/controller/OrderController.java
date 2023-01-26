@@ -33,7 +33,25 @@ public class OrderController {
 	public OrderController(OrderService orderService) {
 		this.orderService = orderService;
 	}
+	
+	/* [주문내역 리스트 조회 for 대시보드] 주문 상태 여부 확인 및 페이징처리 없음 */
+	@Operation(summary = "[관리자] 대시보드", description = "전체 주문내역 조회", tags = {"OrderController"})
+	@GetMapping("/order-dashboard")
+	public ResponseEntity<ResponseDTO> selectOrderList() {
 
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", orderService.selectOrderList()));
+		
+	}
+	
+	/* [문의내역 리스트 조회 for 대시보드] 페이징처리 없음 */
+	@Operation(summary = "[관리자] 대시보드", description = "전체 주문내역 조회", tags = {"OrderController"})
+	@GetMapping("/question-dashboard")
+	public ResponseEntity<ResponseDTO> selectQuestionList() {
+
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", orderService.selectQuestionList()));
+		
+	}
+	
 	/* [주문내역 리스트 조회] 주문 상태 여부 확인 */
 	@Operation(summary = "[관리자] 주문 내역 조회", description = "전체 주문내역 조회 및 페이징 처리", tags = {"OrderController"})
 	@GetMapping("/order-management")

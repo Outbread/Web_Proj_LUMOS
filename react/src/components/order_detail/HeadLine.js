@@ -17,7 +17,7 @@ export default function HeadLine({order}) {
                         <td className={OrderDetailCSS.headline1}>주문번호</td>
                         <td className={OrderDetailCSS.headline2}>{order.orderCode}</td>
                         <td className={OrderDetailCSS.headline1}>클레임상태</td>
-                        <td className={OrderDetailCSS.headline2}>{order.stClaim}</td>
+                        <td className={OrderDetailCSS.headline2}>{order.stClaim ? order.stClaim : "-"}</td>
                     </tr>
                 </tbody>
             </table>

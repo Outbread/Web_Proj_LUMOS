@@ -248,7 +248,7 @@ export default function Cart() {
                 </div>
             </div>
             : 
-            <h1>장바구니에 상품이 없습니다.</h1>
+            <h1 style={{textAlign: "center"}}>장바구니에 상품이 없습니다.</h1>
             }
         </>
     )

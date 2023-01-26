@@ -27,7 +27,6 @@ import com.project.lumos.order.repository.OrderProductRepository;
 import com.project.lumos.order.repository.OrderRepository;
 import com.project.lumos.order.service.OrderService;
 import com.project.lumos.product.entity.Option;
-import com.project.lumos.product.entity.ProductImage;
 import com.project.lumos.product.repository.OptionRepository;
 import com.project.lumos.product.repository.ProductImageRepository;
 import com.project.lumos.product.repository.ProductRepository;
@@ -119,11 +118,6 @@ public class CartService {
 			 */
 			
 			orderProductDTO.setOrderNum(newCart.getOrderNum());
-			
-			// 이미지 경로 매핑은 조회 화면에서만 (∵ 기존 경로 그대로 저장 시 배포 시 문제 발생) | ProductImage [imgNum=183, pdImgPath=100.JPG, pdCode=100, mainImg=Y]
-			ProductImage originImg = productImageRepository.findByPdCodeAndMainImgLike(orderProductDTO.getPdCode(), "Y");
-			orderProductDTO.setMainImgPath(originImg.getPdImgPath());
-			
 			OrderProduct addItem = modelMapper.map(orderProductDTO, OrderProduct.class);
 			orderProductRepository.save(addItem);
 			
@@ -150,11 +144,6 @@ public class CartService {
 			if(selectResult == null) {
 				/* 장바구니가 있는 경우 기존 장바구니 식별 번호(주문식별번호) 추출 후 매핑 */
 				orderProductDTO.setOrderNum(cart.getOrderNum());
-				
-				// 이미지 경로 매핑은 조회 화면에서만 (∵ 기존 경로 그대로 저장 시 배포 시 문제 발생) | ProductImage [imgNum=183, pdImgPath=100.JPG, pdCode=100, mainImg=Y]
-				ProductImage originImg = productImageRepository.findByPdCodeAndMainImgLike(orderProductDTO.getPdCode(), "Y");
-				orderProductDTO.setMainImgPath(originImg.getPdImgPath());
-				
 				OrderProduct addItem = modelMapper.map(orderProductDTO, OrderProduct.class);
 				orderProductRepository.save(addItem);
 				
@@ -194,12 +183,17 @@ public class CartService {
 		
 		if(cart != null) {
 			orderDetail = orderAndOrderProductAndMemberRepository.findByOrderCode(cart.getOrderCode());
-			// 이미지 경로 설정
+			
+			/* 이미지 경로 & 상품명 & 옵션명 설정 (관리자가 상품정보를 바꾸어도 즉각 반영됨) */
 			List<OrderProduct> orderProductList = orderProductRepository.findAllByOrderNumLike(orderDetail.getOrderNum());
 			for(OrderProduct orderProduct : orderProductList) {
-				orderProduct.setMainImgPath(IMAGE_URL + orderProduct.getMainImgPath());
+				orderProduct.setMainImgPath(IMAGE_URL + productImageRepository.findByPdCodeAndMainImgLike(orderProduct.getPdCode(), "Y").getPdImgPath());
+				orderProduct.setPdName(productRepository.findById(orderProduct.getPdCode()).get().getPdName());
+				orderProduct.setOpName(optionRepository.findById(orderProduct.getOpCode()).get().getOptionNm());
 			}
+			
 			result = 1;
+			
 			log.info("[CartService] orderDetail ▶ {}", orderDetail);
 		} else {
 			log.info("[CartService] 기존 장바구니가 없습니다.");
@@ -296,7 +290,7 @@ public class CartService {
 	@Transactional
 	public Object purcahseOrder(String orderCode, OrderDTO orderDTO) {
 		
-		log.info("[CartService] deleteOrderProduct Start ===================================");
+		log.info("[CartService] purcahseOrder Start ===================================");
 		
 		int result = 0;
 		
@@ -349,6 +343,16 @@ public class CartService {
 			String orderCodeNew = orderCode1New + "-" + bufOrderCode2New;
 			log.info("[CartService] orderCodeNew ▶ {}", orderCodeNew);
 			
+			/* 구매시점의 이미지 경로 & 상품명 & 옵션명 매핑 */
+			List<OrderProduct> orderProductList = orderProductRepository.findAllByOrderNumLike(originOrder.getOrderNum());
+			for(OrderProduct orderProduct : orderProductList) {
+				orderProduct.setMainImgPath(productImageRepository.findByPdCodeAndMainImgLike(orderProduct.getPdCode(), "Y").getPdImgPath());
+				orderProduct.setPdName(productRepository.findById(orderProduct.getPdCode()).get().getPdName());
+				orderProduct.setOpName(optionRepository.findById(orderProduct.getOpCode()).get().getOptionNm());
+			}
+			orderProductRepository.saveAll(orderProductList);
+			
+			/* 사용자 입력 값 저장 */
 			originOrder.setCgAds(orderDTO.getCgAds());
 			originOrder.setCgAdsDetail(orderDTO.getCgAdsDetail());
 			originOrder.setCgAdsNum(orderDTO.getCgAdsNum());
@@ -390,7 +394,7 @@ public class CartService {
 			throw new RuntimeException(e);
 		}
 		
-		log.info("[CartService] deleteOrderProduct End ===================================");
+		log.info("[CartService] purcahseOrder End ===================================");
 		
 		return (result > 0) ? "주문 성공" : "주문 실패";
 	}

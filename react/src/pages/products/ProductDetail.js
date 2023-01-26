@@ -61,14 +61,25 @@ function ProductDetail() {
         () => {
             setOrderProductDTO({
                 orderAmount : 1,
-                orderNum : 999999999,
-                // mainImgPath : document.getElementById("mainImg")?.children[0]?.src,
-                mainImgPath : "willSetInJpa",
+                orderNum : 0,
                 pdCode : product.pdCode,
-                opCode : Array.isArray(productOption) ? productOption[0]?.opCode : 9999,
+                opCode : Array.isArray(productOption) ? productOption[0]?.opCode : 0,
+                pdPc : product.pdPrice,
+
+                /* 화면단에 노출된 값으로 저장하는 방법 (옵션은 첫번째 노출된 0번째 선택 | 조원이 id를 CSS로 선점해서 children 사용) */
+                // mainImgPath : document.getElementById("mainImg")?.children[0]?.src.split('/').slice(-1),
+                // pdName : product.pdName,
+                // opName : document.getElementById("seletTag")?.value,
+
+                /* 디비에서 긁어온 값으로 저장하는 방법 (옵션은 첫번째 노출된 0번째 선택) */
+                mainImgPath : productImage?.filter(img => img.mainImg == "Y")[0]?.pdImgPath.split('/').slice(-1),
                 pdName : product.pdName,
-                opName : Array.isArray(productOption) ? productOption[0]?.optionNm : 9999,
-                pdPc : product.pdPrice 
+                opName : Array.isArray(productOption) ? productOption[0]?.optionNm : 0,
+
+                /* 테스트용 값 (jpa가 매핑을 잘 하는지 확인 가능 cartService 201~203행) */
+                // mainImgPath : "willSetInJpa",
+                // pdName : "willSetInJpa",
+                // opName : "willSetInJpa",
             })
         }
         ,[product]

@@ -33,6 +33,9 @@ import com.project.lumos.order.repository.OrderRepository;
 import com.project.lumos.product.repository.OptionRepository;
 import com.project.lumos.product.repository.ProductImageRepository;
 import com.project.lumos.product.repository.ProductRepository;
+import com.project.lumos.question.dto.QuestionDTO;
+import com.project.lumos.question.entity.Question;
+import com.project.lumos.question.repository.QuestionRepository;
 
 @Service
 public class OrderService {
@@ -45,6 +48,7 @@ public class OrderService {
 	private final ProductRepository productRepository;
 	private final OptionRepository optionRepository;
 	private final ProductImageRepository productImageRepository;
+	private final QuestionRepository questionRepository;
 	private final ModelMapper modelMapper;
 	
 	@Autowired
@@ -52,7 +56,8 @@ public class OrderService {
 			OrderAndOrderProductAndMemberRepository orderAndOrderProductAndMemberRepository,
 			OrderProductRepository orderProductRepository, OrderRepository orderRepository,
 			ProductRepository productRepository, OptionRepository optionRepository, 
-			ProductImageRepository productImageRepository, ModelMapper modelMapper) {
+			ProductImageRepository productImageRepository, 
+			QuestionRepository questionRepository, ModelMapper modelMapper) {
 		this.memberRepository = memberRepository;
 		this.orderAndOrderProductAndMemberRepository = orderAndOrderProductAndMemberRepository;
 		this.orderProductRepository = orderProductRepository;
@@ -60,12 +65,43 @@ public class OrderService {
 		this.productRepository = productRepository;
 		this.optionRepository = optionRepository;
 		this.productImageRepository = productImageRepository;
+		this.questionRepository = questionRepository;
 		this.modelMapper = modelMapper;
 	}
 	
     @Value("${image.image-url}")
     private String IMAGE_URL;
 
+    /* [주문내역 리스트 조회 for 대시보드] 주문 상태 여부 확인 및 페이징처리 없음 */
+	public Object selectOrderList() {
+		
+		log.info("[OrderService] selectOrderListWithPaging Start ===================================");
+		
+        List<OrderAndOrderProductAndMember> orderList = orderAndOrderProductAndMemberRepository.findByStOrder("Y");
+        
+//        log.info("[OrderService] No paging orderList ▶ {}", orderList);
+        
+        log.info("[OrderService] selectOrderListWithPaging End ===================================");
+        
+        return orderList.stream().map(order -> modelMapper.map(order, OrderAndOrderProductAndMemberDTO.class)).collect(Collectors.toList());
+        
+	}
+	
+	/* [문의내역 리스트 조회 for 대시보드] 페이징처리 없음 */
+	public Object selectQuestionList() {
+		
+		log.info("[OrderService] selectQuestionList Start ===================================");
+		
+        List<Question> questionList = questionRepository.findByQuestionCategoryAndQuestionStatusLikeOrQuestionCategoryAndQuestionStatusLike("주문취소", "미해결", "반품요청", "미해결");
+        
+        log.info("[OrderService] No paging questionList ▶ {}", questionList);
+        
+        log.info("[OrderService] selectQuestionList End ===================================");
+        
+        return questionList.stream().map(question -> modelMapper.map(question, QuestionDTO.class)).collect(Collectors.toList());
+        
+	}
+	
 	/* [주문내역 리스트 조회] 주문 상태 여부 확인 | 주문 내역 총 갯수 반환 */
 	public int selectOrderListTotal() {
 		
@@ -93,7 +129,7 @@ public class OrderService {
         Page<OrderAndOrderProductAndMember> result = orderAndOrderProductAndMemberRepository.findByStOrder("Y", paging);
         List<OrderAndOrderProductAndMember> orderList = (List<OrderAndOrderProductAndMember>)result.getContent();
         
-        log.info("[OrderService] orderList ▶ {}", orderList);
+//        log.info("[OrderService] orderList ▶ {}", orderList);
         
         log.info("[OrderService] selectOrderListWithPaging End ===================================");
         
@@ -106,7 +142,7 @@ public class OrderService {
 		
 		log.info("[OrderService] selectOrderByOrderCode Start ===================================");
 		
-		log.info("[OrderService] orderCode ▶ " + orderCode);
+		log.info("[OrderService] orderCode ▶ {}" + orderCode);
 		
         OrderAndOrderProductAndMember orderDetail = orderAndOrderProductAndMemberRepository.findByOrderCode(orderCode);
         

@@ -291,7 +291,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                                         )
                                     }
                                 </td>
-                                <td onClick={() => onClickHandler(order.orderCode)}>{order.stClaim}</td>
+                                <td onClick={() => onClickHandler(order.orderCode)}>{order.stClaim ? order.stClaim : "-"}</td>
                             </tr>
                             )
                         )
