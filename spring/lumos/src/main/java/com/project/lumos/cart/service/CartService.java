@@ -1,6 +1,9 @@
 package com.project.lumos.cart.service;
 
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -22,6 +25,7 @@ import com.project.lumos.order.repository.OrderAndOrderProductAndMemberRepositor
 import com.project.lumos.order.repository.OrderProductRepository;
 import com.project.lumos.order.repository.OrderRepository;
 import com.project.lumos.order.service.OrderService;
+import com.project.lumos.product.entity.Option;
 import com.project.lumos.product.repository.OptionRepository;
 import com.project.lumos.product.repository.ProductRepository;
 
@@ -94,7 +98,7 @@ public class CartService {
 			log.info("[CartService] replaceOrderCode2 is return ? ▶ {}", replaceOrderCode2);
 			
 			if(orderCode2 == null) {
-				replaceOrderCode2 = "1";
+				replaceOrderCode2 = "0";
 			} else {
 				// ex : 000001 -> 1
 				replaceOrderCode2 = orderCode2.replaceAll("[0]", "");
@@ -234,19 +238,6 @@ public class CartService {
 
 			/* 주문 제품 정보 가져옴 (옵션에 해당하는 정보이므로, 주문번호와 옵션코드를 같이 조회) */
 			OrderProduct orderProductInfo = orderProductRepository.findByOrderNumAndOpCodeLike(orderDetail.getOrderNum(), changeValueDTO.getOpCode());
-			
-//			/* 옵션 수량 가져옴 (옵션 수량보다 높은 수량은 화면단에서 막음) */
-//			Option optionInfo = optionRepository.findById(changeValueDTO.getOpCode()).get();
-//
-//			/* 옵션 재고 수량 수정 및 저장 (기존 주문 수량과 비교하여야함) */
-//			// 기존 주문 수량 < 변경 수량 => 재고 - (변경 수량 - 기존 수량) || 10 < 12 => 100 - (12 - 10) = 98
-//			if(orderProductInfo.getOrderAmount() < changeValueDTO.getAmount()) {
-//				optionInfo.setOptionStock(optionInfo.getOptionStock() - (changeValueDTO.getAmount() - orderProductInfo.getOrderAmount()));
-//			// 기존 주문 수량 >= 변경 수량 => 재고 + (기존 수량 - 변경 수량) || 10 > 8 => 100 + (10 - 8) = 102 || 10 >= 10 => 100 + (10 - 10) = 100
-//			} else {
-//				optionInfo.setOptionStock(optionInfo.getOptionStock() + (orderProductInfo.getOrderAmount() - changeValueDTO.getAmount()));
-//			}
-//			optionRepository.save(optionInfo);
 
 			/* 장바구니 옵션 수량 수정 및 저장 (구매 전 장바구니는 옵션을 조절할 필요 없음 & 옵션 수량보다 높은 수량은 화면단에서 막음) */
 			orderProductInfo.setOrderAmount(changeValueDTO.getAmount());
@@ -285,14 +276,6 @@ public class CartService {
 			/* 주문 제품 정보 가져옴 (옵션에 해당하는 정보이므로, 주문번호와 옵션코드를 같이 조회) */
 			OrderProduct orderProductInfo = orderProductRepository.findById(Integer.valueOf(orderPdNum)).get();
 
-//			/* 옵션 수량 가져옴 (옵션 수량보다 높은 수량은 화면단에서 막음) */
-//			Option optionInfo = optionRepository.findById(orderProductInfo.getOpCode()).get();
-//
-//			/* 옵션 재고 수량 수정 및 저장 (기존 주문 수량과 비교하여야함) */
-//			// 재고 수량 + 기존 주문 수량
-//			optionInfo.setOptionStock(optionInfo.getOptionStock() + orderProductInfo.getOrderAmount());
-//			optionRepository.save(optionInfo);
-
 			/* 주문 제품 삭제 */
 			orderProductRepository.deleteById(orderProductInfo.getOrderPdNum());
 
@@ -306,6 +289,109 @@ public class CartService {
         
         return (result > 0) ? modelMapper.map(orderDetail, OrderAndOrderProductAndMemberDTO.class) : "상품 삭제 실패";
         
+	}
+
+	/* [장바구니 상품 구매] */
+	@Transactional
+	public Object purcahseOrder(String orderCode, OrderDTO orderDTO) {
+		
+		log.info("[CartService] deleteOrderProduct Start ===================================");
+		
+		int result = 0;
+		
+		/* Step 1 > 해당 장바구니 DTO 가져오기 */
+		Order originOrder =  orderRepository.findByOrderCodeLike(orderCode);
+		log.info("[CartService] step 1 originOrder", originOrder);
+		
+		try {
+			/* Step 2 > 기존 장바구니에 값 매핑 : cgAds, cgAdsDetail, cgAdsNum, cgNm, cgPh, deliveryMsg, deliveryMt, deliveryPc, orderPc, paymentMt, stOrder, stPayment, totalPc */
+			// 주문일은 주문시점을 기준으로 생성
+			/* util date 생성 및 포맷 (★★★ 9시간 => OffsetDateTime 활용 ★★★) */
+			OffsetDateTime now = OffsetDateTime.now();
+			ZoneOffset offset = now.getOffset();
+			int seconds = offset.getTotalSeconds();
+			OffsetDateTime offsetDateTime = null;
+			offsetDateTime = now.plusSeconds(seconds);
+			java.sql.Timestamp sqlTimeStamp = java.sql.Timestamp.valueOf(offsetDateTime.toLocalDateTime());
+			
+			// 주문번호 새로 생성
+			/* 주문코드 앞쪽 생성을 위한 로직 */
+			java.util.Date nowNew = new java.util.Date();
+			SimpleDateFormat sdfNew = new SimpleDateFormat("yyyyMMdd");
+			String orderCode1New = sdfNew.format(nowNew);
+			
+			/* 주문코드 뒷쪽 생성을 위한 로직 */
+			String orderCode2New = orderRepository.todayMaxOrderNum();
+			String replaceOrderCode2New = "";
+			
+			log.info("[CartService] replaceOrderCode2 is return ? ▶ {}", replaceOrderCode2New);
+			
+			if(orderCode2New == null) {
+				replaceOrderCode2New = "0";
+			} else {
+				// ex : 000001 -> 1
+				replaceOrderCode2New = orderCode2New.replaceAll("[0]", "");
+			}
+			
+			log.info("[CartService] replaceOrderCode2 ▶ {}", replaceOrderCode2New);
+			
+			/* 6자리 숫자를 만드는 로직 */
+			int diffNew = 6 - replaceOrderCode2New.length();
+			int sumOrderCode2New = Integer.valueOf(replaceOrderCode2New) + 1;
+			String newOrderCode2New = String.valueOf(sumOrderCode2New);
+			StringBuffer bufOrderCode2New = new StringBuffer(newOrderCode2New);
+			for(int i = 0; i < diffNew; i++) {
+				bufOrderCode2New.insert(i, "0");
+			}
+			
+			/* 주문코드 앞쪽과 뒷쪽 합성 */
+			String orderCodeNew = orderCode1New + "-" + bufOrderCode2New;
+			log.info("[CartService] orderCodeNew ▶ {}", orderCodeNew);
+			
+			originOrder.setCgAds(orderDTO.getCgAds());
+			originOrder.setCgAdsDetail(orderDTO.getCgAdsDetail());
+			originOrder.setCgAdsNum(orderDTO.getCgAdsNum());
+			originOrder.setCgNm(orderDTO.getCgNm());
+			originOrder.setCgPh(orderDTO.getCgPh());
+			originOrder.setDeliveryMsg(orderDTO.getDeliveryMsg());
+			originOrder.setDeliveryMt(orderDTO.getDeliveryMt());
+			originOrder.setDeliveryPc(orderDTO.getDeliveryPc());
+			originOrder.setOrderPc(orderDTO.getOrderPc());
+			originOrder.setPaymentMt(orderDTO.getPaymentMt());
+			originOrder.setStOrder(orderDTO.getStOrder());
+			originOrder.setStPayment(orderDTO.getStPayment());
+			originOrder.setTotalPc(orderDTO.getTotalPc());
+			originOrder.setOrderDate(sqlTimeStamp);
+			originOrder.setOrderCode(orderCodeNew);
+			
+			orderRepository.save(originOrder);
+			
+			log.info("[CartService] step 2 originOrder", originOrder);
+			
+			/* Step 3 > 옵션 재고수량 수정 */
+			/* 옵션 수량 가져옴 (옵션 수량보다 높은 수량은 화면단에서 막음) */
+			List<OrderProduct> originOrderProductList = orderProductRepository.findAllByOrderNumLike(originOrder.getOrderNum());
+			for(OrderProduct originOrderProduct : originOrderProductList) {
+				Option optionInfo = optionRepository.findById(originOrderProduct.getOpCode()).get();
+				// 기존 재고 수량 - 주문 수량
+				if(optionInfo.getOptionStock() >= originOrderProduct.getOrderAmount()) {
+					optionInfo.setOptionStock(optionInfo.getOptionStock() - originOrderProduct.getOrderAmount());
+					optionRepository.save(optionInfo);
+					
+					result = 1;
+					
+					log.info("[CartService] step 3 optionInfo", optionInfo);
+				} else {
+					result = 0;
+				}
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+		log.info("[CartService] deleteOrderProduct End ===================================");
+		
+		return (result > 0) ? "주문 성공" : "주문 실패";
 	}
 
 }

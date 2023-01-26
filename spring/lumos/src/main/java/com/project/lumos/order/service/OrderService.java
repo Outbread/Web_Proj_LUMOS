@@ -1,6 +1,5 @@
 package com.project.lumos.order.service;
 
-import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,11 +23,9 @@ import com.project.lumos.member.entity.Member;
 import com.project.lumos.member.repository.MemberRepository;
 import com.project.lumos.order.dto.OrderAndOrderProductAndMemberDTO;
 import com.project.lumos.order.dto.OrderDTO;
-import com.project.lumos.order.dto.OrderProductDTO;
 import com.project.lumos.order.dto.UpdateHistoryDTO;
 import com.project.lumos.order.entity.Order;
 import com.project.lumos.order.entity.OrderAndOrderProductAndMember;
-import com.project.lumos.order.entity.OrderProduct;
 import com.project.lumos.order.repository.OrderAndOrderProductAndMemberRepository;
 import com.project.lumos.order.repository.OrderProductRepository;
 import com.project.lumos.order.repository.OrderRepository;

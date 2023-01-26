@@ -9,7 +9,7 @@ import Bill from '../../components/cart_detatil/Bill';
 
 import OrderDetailCSS from '../order/OrderDetail.module.css';
 import BtnCSS from '../../components/order_detail/Btn.module.css';
-import {callPostItemAPI} from '../../apis/CartAPICalls';
+import {callPurchaseAPI} from '../../apis/CartAPICalls';
 import {callCartDetailAPI} from '../../apis/CartAPICalls';
 
 import {decodeJwt} from '../../utils/tokenUtils';
@@ -21,7 +21,8 @@ export default function Cart() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const order = useSelector(state => state.cartReducer);
-    
+    console.log("order", order);
+
     const [isOrdered, setIsOrdered] = useState(false);
     
     // console.log("토큰 확인", token);
@@ -55,20 +56,104 @@ export default function Cart() {
         }
     }
 
-    /* props-drilling */
+    // ★ props-drilling
     const [orderInfo, setOrderInfo] = useState({
-        deliveryMt: '',
-        deliveryCp: '',
+        deliveryMt: '일반택배',
+        deliveryMsg: '',
         cgNm: '',
         cgPh: '',
         cgAdsNum: '',
         cgAds: '',
         cgAdsDetail: '',
-        paymentMt: '',
+        paymentMt: '카카오페이',
         orderPc: '',
         deliveryPc: '',
         totalPc: '',
+        stOrder: 'N',
+        stPayment: ''
     });
+
+    /* ========================= 결제 ========================= */
+    // Terminal ▶ npm install jquery ▶ import jQuery from "jquery";
+    // const CDN = "https://cdn.iamport.kr/js/iamport.payment-1.1.8.js";
+    // const REST_API_KEY = "4728270083760125";
+    // const REST_API_SECRET = "11vAK9vuP0nwnZHrA31LHQf0if3XN7I10OhAZutW7G69BNTXRhXrReK7TNBGPZ7hsRLEDnjG5OalmRgN";
+
+    const KEY = "imp26753837";
+    var IMP = window.IMP;
+    IMP.init(KEY);
+
+    const [isEffectWork, setIsEffectWork] = useState(false);
+
+    const purchaseHandler = () => {
+        if(orderInfo.paymentMt == "카카오페이") {
+            IMP.request_pay({
+            pg: "kakaopay",
+            // pay_method: "card",
+            merchant_uid: order.orderNum,
+            name: order.orderProductList[0].pdName + "외 " + (order.orderProductList.length - 1) + "건",
+            amount: orderInfo.totalPc,
+            buyer_email: "12151782@inha.edu",
+            buyer_name: "LUMOS",
+            buyer_tel: "010-9256-9135",
+            buyer_addr: "서울특별시 종로구 인사동길12",
+            buyer_postcode: "03163"
+            }, rsp => {
+                if(rsp.success) {
+                    setOrderInfo({
+                        ...orderInfo,
+                        stOrder: "Y",
+                        stPayment: rsp.success.toString()
+                    });
+                    setIsEffectWork(!isEffectWork);
+                } else {
+                    // alert("결제에 실패하였습니다.\n메인화면으로 이동합니다.\n");
+                    alert(rsp.error_msg);
+                    navigate('/');
+                }
+            });
+        } else {
+            setOrderInfo({
+                ...orderInfo,
+                stOrder: "Y",
+                stPayment: "입금대기"
+            });
+            setIsEffectWork(!isEffectWork);
+        }
+    };
+    
+    useEffect(
+        () => {
+            console.log("orderInfo.stOrder", orderInfo.stOrder);
+            if(orderInfo.stOrder == "Y") {
+                const formData = new FormData();
+                formData.append("deliveryMt", orderInfo.deliveryMt);
+                formData.append("deliveryMsg", orderInfo.deliveryMsg);
+                formData.append("cgNm", orderInfo.cgNm);
+                formData.append("cgPh", orderInfo.cgPh);
+                formData.append("cgAdsNum", orderInfo.cgAdsNum);
+                formData.append("cgAds", orderInfo.cgAds);
+                formData.append("cgAdsDetail", orderInfo.cgAdsDetail);
+                formData.append("paymentMt", orderInfo.paymentMt);
+                formData.append("orderPc", orderInfo.orderPc);
+                formData.append("deliveryPc", orderInfo.deliveryPc);
+                formData.append("totalPc", orderInfo.totalPc);
+                formData.append("stOrder", orderInfo.stOrder);
+                formData.append("stPayment", orderInfo.stPayment);
+                formData.append("orderCode", order.orderCode);
+                
+                dispatch(callPurchaseAPI({
+                    orderCode: order.orderCode,
+                    form: formData
+                }))
+                alert("결제에 성공하였습니다.\n메인화면으로 이동합니다.\n");
+                navigate('/');
+            }
+        },
+        [isEffectWork]
+    )
+
+    /* ========================= 결제 ========================= */
 
     return (
         <>
@@ -83,13 +168,28 @@ export default function Cart() {
                             ?
                             <>
                                 <div className={OrderDetailCSS.leftTh}>
-                                    <Consignee key={order.orderCode} order={order}/>
+                                    <Consignee 
+                                        key={order.orderCode} 
+                                        order={order}
+                                        orderInfo={orderInfo}
+                                        setOrderInfo={setOrderInfo}
+                                    />
                                 </div>
                                 <div className={OrderDetailCSS.leftTh}>
-                                    <Delivery key={order.orderCode} order={order}/>
+                                    <Delivery
+                                        key={order.orderCode} 
+                                        order={order}
+                                        orderInfo={orderInfo}
+                                        setOrderInfo={setOrderInfo}
+                                    />
                                 </div>
                                 <div>
-                                    <Payment key={order.orderCode} order={order}/>
+                                    <Payment
+                                        key={order.orderCode}
+                                        order={order}
+                                        orderInfo={orderInfo}
+                                        setOrderInfo={setOrderInfo}
+                                    />
                                 </div>
                             </>
                             : null
@@ -101,17 +201,25 @@ export default function Cart() {
                     </div>
                     <div className={OrderDetailCSS.right}>
                         <div>
-                            <Bill key={order.orderCode} order={order}/>
+                            <Bill 
+                                key={order.orderCode} 
+                                order={order}
+                                orderInfo={orderInfo}
+                                setOrderInfo={setOrderInfo}
+                            />
                         </div>
                         {
                             isOrdered
-                            ? <button className={BtnCSS.cartBtn}>결제</button>
-                            : <button
+                            ? 
+                            <button 
+                                className={BtnCSS.cartBtn}
+                                onClick={purchaseHandler}
+                            >결제</button>
+                            : 
+                            <button
                                 className={BtnCSS.cartBtn}
                                 onClick={orderSubmitHandler}
-                              >
-                                주문
-                              </button>
+                            >주문</button>
                         }
                     </div>
                 </div>

@@ -9,7 +9,7 @@ import {decodeJwt} from '../../utils/tokenUtils';
 
 import BtnCSS from './Btn.module.css';
 
-export default function Delivery({order}) {
+export default function Delivery({order, orderInfo, setOrderInfo}) {
 
     const token = decodeJwt(window.localStorage.getItem("accessToken"));  
     const roleAdmin = token.auth.filter(role => {return role == "ROLE_ADMIN"}).length;
@@ -89,25 +89,35 @@ export default function Delivery({order}) {
             orderCode: order.orderCode,
             form: formData
         }));
-        alert("처리가 완료되었습니다.");
+        alert("배송 완료 처리가 완료되었습니다.");
         window.location.reload();
     };
 
     /* 퀵, 방문수령 배송출발 처리 */
     const deliveryStartHandler = () => {
-        const formData = new FormData();
-        formData.append("updateKind", "배송출발처리");
-        dispatch(callHistoryUpdateAPI({
-            orderCode: order.orderCode,
-            form: formData
-        }));
-        alert("처리가 완료되었습니다.");
-        window.location.reload();
+        if(order.orderConf == null) {
+            alert("발주 확인처리를 먼저 진행해주세요.");
+            navigate(`/order-management/`, { replace: false });
+        } else {
+            const formData = new FormData();
+            formData.append("updateKind", "배송출발처리");
+            dispatch(callHistoryUpdateAPI({
+                orderCode: order.orderCode,
+                form: formData
+            }));
+            alert("배송 출발 처리가 완료되었습니다.");
+            window.location.reload();
+        }
     }
 
     /* ============================== [회원 기능] ============================== */
-    const deliveryInfoHandler = () => {
-        // 여기서부터 작성 ★★★propsdrilling 각..
+    // props-drilling
+    const deliveryInfoHandler = (e) => {
+        console.log("딜리버리 컴포넌트", e.target.name + ":::::" + e.target.value);
+        setOrderInfo({
+            ...orderInfo,
+            [e.target.name]: e.target.value
+        })
     }
 
     return (
@@ -153,9 +163,9 @@ export default function Delivery({order}) {
                         <tr>
                             <th>배송 방법</th>
                             <td>
-                                <select onChange={deliveryInfoHandler}>
-                                    <option value="방문수령">방문수령</option>
+                                <select name="deliveryMt" onChange={deliveryInfoHandler}>
                                     <option value="일반택배">일반택배</option>
+                                    <option value="방문수령">방문수령</option>
                                     <option value="퀵">퀵</option>
                                 </select>
                             </td>

@@ -29,6 +29,9 @@ export const PUT_PATMENT    = 'cart/PUT_PATMENT';
 /* 주문자 정보 동일 */
 export const GET_USERINFO   = 'cart/GET_USERINFO';
 
+/* 결제 버튼 클릭 */
+export const PUT_ORDER      = 'cart/PUT_ORDER';
+
 const actions = createActions({
     [POST_ITEM] : () => {},
     [GET_ORDER] : () => {},
@@ -38,7 +41,8 @@ const actions = createActions({
     [PUT_DELEVERYMT] : () => {},
     [PUT_PAYMENTMT] : () => {},
     [PUT_PATMENT] : () => {},
-    [GET_USERINFO] : () => {}
+    [GET_USERINFO] : () => {},
+    [PUT_ORDER] : () => {}
 });
 
 const cartReducer = handleActions(
@@ -68,6 +72,9 @@ const cartReducer = handleActions(
             return payload;
         },
         [GET_USERINFO] : (state, { payload }) => {
+            return payload;
+        },
+        [PUT_ORDER] : (state, { payload }) => {
             return payload;
         }
     },
