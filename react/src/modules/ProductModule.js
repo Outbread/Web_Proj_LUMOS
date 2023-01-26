@@ -7,10 +7,8 @@ const initialState = [];
 export const GET_PRODUCT            = 'product/GET_PRODUCT';
 export const GET_PRODUCTS           = 'product/GET_PRODUCTS';
 export const GET_PRODUCTS_LED       = 'product/GET_PRODUCTS_LED';
-export const GET_PRODUCTS_LAMP      = 'product/GET_PRODUCTS_LAMP';
-export const GET_PRODUCTS_PENDANT   = 'product/GET_PRODUCTS_PENDANT';
-export const GET_PRODUCTS_DOWNLIGHT = 'product/GET_PRODUCTS_DOWNLIGHT';
-export const GET_PRODUCTS_SWITCH    = 'product/GET_PRODUCTS_SWITCH';
+export const GET_PRODUCTS_DESSERT   = 'product/GET_PRODUCTS_DESSERT';
+export const GET_PRODUCTS_BEVERAGE  = 'product/GET_PRODUCTS_BEVERAGE';
 export const POST_PRODUCT           = 'product/POST_PRODUCT';
 export const PUT_PRODUCT            = 'product/PUT_PRODUCT';
 export const DELETE_PRODUCT         = 'product/DELETE_PRODUCT';
@@ -19,10 +17,8 @@ const actions = createActions({
     [GET_PRODUCT]: () => {},
     [GET_PRODUCTS]: () => {},
     [GET_PRODUCTS_LED]: () => {},
-    [GET_PRODUCTS_LAMP]: () => {},
-    [GET_PRODUCTS_PENDANT]: () => {},
-    [GET_PRODUCTS_DOWNLIGHT]: () => {},
-    [GET_PRODUCTS_SWITCH]: () => {},
+    [GET_PRODUCTS_DESSERT]: () => {},
+    [GET_PRODUCTS_BEVERAGE]: () => {},
     [POST_PRODUCT]: () => {},
     [PUT_PRODUCT]: () => {},
     [DELETE_PRODUCT]: () => {}
@@ -43,19 +39,11 @@ const productReducer = handleActions(
             
             return payload;
         },
-        [GET_PRODUCTS_LAMP]: (state, { payload }) => {
+        [GET_PRODUCTS_DESSERT]: (state, { payload }) => {
             
             return payload;
         },
-        [GET_PRODUCTS_PENDANT]: (state, { payload }) => {
-            
-            return payload;
-        },
-        [GET_PRODUCTS_DOWNLIGHT]: (state, { payload }) => {
-            
-            return payload;
-        },
-        [GET_PRODUCTS_SWITCH]: (state, { payload }) => {
+        [GET_PRODUCTS_BEVERAGE]: (state, { payload }) => {
             
             return payload;
         },

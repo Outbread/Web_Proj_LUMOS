@@ -24,8 +24,13 @@ export default function Delivery({order, orderInfo, setOrderInfo}) {
     /* ============================== [관리자 기능] ============================== */
     /* 배송 정보 수정 모드 */
     const onModifyModeHandler = () => {
-        alert("수정내역을 반영하시려면 저장버튼을 눌러주세요.")
-        setModifyMode(true);
+        if(order.orderConf == null) {
+            alert("발주 확인처리를 먼저 진행해주세요.");
+            navigate(`/order-management/`, { replace: false });
+        } else {
+            alert("수정내역을 반영하시려면 저장버튼을 눌러주세요.")
+            setModifyMode(true);
+        }
     }
 
     /* 수정 정보 */
@@ -41,14 +46,12 @@ export default function Delivery({order, orderInfo, setOrderInfo}) {
 
     /* 배송 정보 수정 내역 업데이트 */
     const onSubmitHandler = () => {
-        // 송장번호 형식 O + 발주 확인 처리 O + 배송업체 not null
-        if((!!deliveryNumCheck(form.deliveryNum) && order.orderConf != null) && form.deliveryCp != null) {
+        // 송장번호 형식 O + 배송업체 not null
+        if(!!deliveryNumCheck(form.deliveryNum) && form.deliveryCp != null) {
             const formData = new FormData();
             formData.append("deliveryCp", form.deliveryCp);
             formData.append("deliveryNum", form.deliveryNum);
 
-            const updateFormData = new FormData();
-            updateFormData.append("updateKind", "배송출발처리");
             // 배송 출발 처리용 dispatch가 호출되어도 db반영이 안되는 오류로 인해, 동일한 dispatch를 각 if, else문 안에 작성함
             if(order.deliveryStart == null) {
                 dispatch(callDeliveryCpUpdateAPI({
@@ -57,7 +60,7 @@ export default function Delivery({order, orderInfo, setOrderInfo}) {
                 }));
                 dispatch(callHistoryUpdateAPI({
                     orderCode: order.orderCode,
-                    form: updateFormData
+                    updateKind: "배송출발처리"
                 }));
                 alert("배송출발 처리되었습니다.");
             } else {
@@ -68,14 +71,10 @@ export default function Delivery({order, orderInfo, setOrderInfo}) {
                 alert("배송 정보가 변경되었습니다.");
             }
             window.location.reload();
-        // 송장번호 형식 O + 발주 확인 처리 O + 배송업체 null
-        } else if((!!deliveryNumCheck(form.deliveryNum) && order.orderConf != null) && form.deliveryCp == null) {
+        // 송장번호 형식 O + 배송업체 null
+        } else if(!!deliveryNumCheck(form.deliveryNum) && form.deliveryCp == null) {
             alert("택배사를 선택해 주세요.")
-        // 발주 확인 처리 X
-        } else if(order.orderConf == null) {
-            alert("발주 확인처리를 먼저 진행해주세요.");
-            navigate(`/order-management/`, { replace: false });
-        // 송장번호 형식 X + 발주 확인 처리 O + 배송업체 not null
+        // 송장번호 형식 X + 배송업체 not null
         } else {
             alert("송장 번호 형식이 잘못되었습니다.");
         }
@@ -111,7 +110,7 @@ export default function Delivery({order, orderInfo, setOrderInfo}) {
     }
 
     /* ============================== [회원 기능] ============================== */
-    // props-drilling
+    // ★ props-drilling
     const deliveryInfoHandler = (e) => {
         console.log("딜리버리 컴포넌트", e.target.name + ":::::" + e.target.value);
         setOrderInfo({

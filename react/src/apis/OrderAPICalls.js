@@ -130,24 +130,22 @@ export const callDeliveryCpUpdateAPI = ({orderCode, form}) => {
 };
 
 /* [관리자] 발주확인, 배송완료처리, 주문취소처리, 반품접수, 반품완료처리 */
-export const callHistoryUpdateAPI = ({orderCode, form}) => {
+export const callHistoryUpdateAPI = ({orderCode, updateKind}) => {
 
     console.log("[callHistoryUpdateAPI] START ◀ ");
     console.log("API orderCode", orderCode);
-    console.log("API form.updateKind", form);
+    console.log("API updateKind", updateKind);
 
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/${orderCode}/history-update`;
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/${orderCode}/history-update/${updateKind}`;
 
     return async(dispatch, getState) => {
 
         const result = await fetch(requestURL, {
             method: "PUT",
             headers: {
-                // "Content-Type": "application/json",
                 "Accept": "*/*",
                 "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
-            },
-            body: form
+            }
         })
         .then(response => response.json());
 

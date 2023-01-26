@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -11,9 +12,9 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.project.lumos.cart.dto.ChangeValueDTO;
 import com.project.lumos.member.repository.MemberRepository;
 import com.project.lumos.order.dto.OrderAndOrderProductAndMemberDTO;
 import com.project.lumos.order.dto.OrderDTO;
@@ -26,7 +27,9 @@ import com.project.lumos.order.repository.OrderProductRepository;
 import com.project.lumos.order.repository.OrderRepository;
 import com.project.lumos.order.service.OrderService;
 import com.project.lumos.product.entity.Option;
+import com.project.lumos.product.entity.ProductImage;
 import com.project.lumos.product.repository.OptionRepository;
+import com.project.lumos.product.repository.ProductImageRepository;
 import com.project.lumos.product.repository.ProductRepository;
 
 @Service
@@ -39,22 +42,28 @@ public class CartService {
 	private final OrderRepository orderRepository;
 	private final ProductRepository productRepository;
 	private final OptionRepository optionRepository;
+	private final ProductImageRepository productImageRepository;
 	private final ModelMapper modelMapper;
 	
 	@Autowired
 	public CartService(MemberRepository memberRepository,
 			OrderAndOrderProductAndMemberRepository orderAndOrderProductAndMemberRepository,
 			OrderProductRepository orderProductRepository, OrderRepository orderRepository,
-			ProductRepository productRepository, OptionRepository optionRepository, ModelMapper modelMapper) {
+			ProductRepository productRepository, OptionRepository optionRepository,
+			ProductImageRepository productImageRepository, ModelMapper modelMapper) {
 		this.memberRepository = memberRepository;
 		this.orderAndOrderProductAndMemberRepository = orderAndOrderProductAndMemberRepository;
 		this.orderProductRepository = orderProductRepository;
 		this.orderRepository = orderRepository;
 		this.productRepository = productRepository;
 		this.optionRepository = optionRepository;
+		this.productImageRepository = productImageRepository;
 		this.modelMapper = modelMapper;
 	}
 	
+    @Value("${image.image-url}")
+    private String IMAGE_URL;
+    
 	/* [장바구니 생성 및 상품 추가] 장바구니가 없는 경우(N) 생성, 있는 경우 추가 */
 	@Transactional
 	public Object createAndUpdateCart(String memberId, OrderProductDTO orderProductDTO) {
@@ -86,41 +95,11 @@ public class CartService {
 			
 			log.info("[CartService] newCartDTO ▶ {}", newCartDTO);
 			
-			/* 주문코드 앞쪽 생성을 위한 로직 */
-			java.util.Date now = new java.util.Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-			String orderCode1 = sdf.format(now);
-			
-			/* 주문코드 뒷쪽 생성을 위한 로직 */
-			String orderCode2 = orderRepository.todayMaxOrderNum();
-			String replaceOrderCode2 = "";
-			
-			log.info("[CartService] replaceOrderCode2 is return ? ▶ {}", replaceOrderCode2);
-			
-			if(orderCode2 == null) {
-				replaceOrderCode2 = "0";
-			} else {
-				// ex : 000001 -> 1
-				replaceOrderCode2 = orderCode2.replaceAll("[0]", "");
-			}
-			
-			log.info("[CartService] replaceOrderCode2 ▶ {}", replaceOrderCode2);
-			
-			/* 6자리 숫자를 만드는 로직 */
-			int diff = 6 - replaceOrderCode2.length();
-			int sumOrderCode2 = Integer.valueOf(replaceOrderCode2) + 1;
-			String newOrderCode2 = String.valueOf(sumOrderCode2);
-			StringBuffer bufOrderCode2 = new StringBuffer(newOrderCode2);
-			for(int i = 0; i < diff; i++) {
-				bufOrderCode2.insert(i, "0");
-			}
-			
-			/* 주문코드 앞쪽과 뒷쪽 합성 */
-			String orderCode = orderCode1 + "-" + bufOrderCode2;
-			log.info("[CartService] orderCode ▶ {}", orderCode);
+			/* 구매전 주문코드 임의 생성 */
+			String temporaryOrderCode = UUID.randomUUID().toString().replace("-", "");
 			
 			/* 주문코드, 합계 금액, 주문상태, 회원코드(회원정보) 매핑 및 장바구니 생성 */
-			newCartDTO.setOrderCode(orderCode);
+			newCartDTO.setOrderCode(temporaryOrderCode);
 			newCartDTO.setTotalPc(0);
 			newCartDTO.setStOrder("N");
 			newCartDTO.setMemberCode(memberCode);
@@ -140,11 +119,15 @@ public class CartService {
 			 */
 			
 			orderProductDTO.setOrderNum(newCart.getOrderNum());
+			
+			// 이미지 경로 매핑은 조회 화면에서만 (∵ 기존 경로 그대로 저장 시 배포 시 문제 발생) | ProductImage [imgNum=183, pdImgPath=100.JPG, pdCode=100, mainImg=Y]
+			ProductImage originImg = productImageRepository.findByPdCodeAndMainImgLike(orderProductDTO.getPdCode(), "Y");
+			orderProductDTO.setMainImgPath(originImg.getPdImgPath());
+			
 			OrderProduct addItem = modelMapper.map(orderProductDTO, OrderProduct.class);
+			orderProductRepository.save(addItem);
 			
 			log.info("[CartService] addItem ▶ {}", addItem);
-			
-			orderProductRepository.save(addItem);
 			
 			/* 2개의 save가 순차적으로 이루어질 수 없다는 가정하에 단방향 save 진행 */
 			/* jpql을 사용한 조회 단계를 일부러 거쳐 인서트 시킴 */
@@ -167,6 +150,11 @@ public class CartService {
 			if(selectResult == null) {
 				/* 장바구니가 있는 경우 기존 장바구니 식별 번호(주문식별번호) 추출 후 매핑 */
 				orderProductDTO.setOrderNum(cart.getOrderNum());
+				
+				// 이미지 경로 매핑은 조회 화면에서만 (∵ 기존 경로 그대로 저장 시 배포 시 문제 발생) | ProductImage [imgNum=183, pdImgPath=100.JPG, pdCode=100, mainImg=Y]
+				ProductImage originImg = productImageRepository.findByPdCodeAndMainImgLike(orderProductDTO.getPdCode(), "Y");
+				orderProductDTO.setMainImgPath(originImg.getPdImgPath());
+				
 				OrderProduct addItem = modelMapper.map(orderProductDTO, OrderProduct.class);
 				orderProductRepository.save(addItem);
 				
@@ -206,6 +194,11 @@ public class CartService {
 		
 		if(cart != null) {
 			orderDetail = orderAndOrderProductAndMemberRepository.findByOrderCode(cart.getOrderCode());
+			// 이미지 경로 설정
+			List<OrderProduct> orderProductList = orderProductRepository.findAllByOrderNumLike(orderDetail.getOrderNum());
+			for(OrderProduct orderProduct : orderProductList) {
+				orderProduct.setMainImgPath(IMAGE_URL + orderProduct.getMainImgPath());
+			}
 			result = 1;
 			log.info("[CartService] orderDetail ▶ {}", orderDetail);
 		} else {
@@ -220,7 +213,7 @@ public class CartService {
 
 	/* [장바구니 상품 수량 수정] */
 	@Transactional
-	public Object updateOrderProductAmount(String memberId, ChangeValueDTO changeValueDTO) {
+	public Object updateOrderProductAmount(String memberId, int opCode, int amount) {
 		
 		log.info("[CartService] updateOrderProductAmount Start ===================================");
 		
@@ -237,10 +230,10 @@ public class CartService {
 			orderDetail = orderAndOrderProductAndMemberRepository.findByOrderCode(cart.getOrderCode());
 
 			/* 주문 제품 정보 가져옴 (옵션에 해당하는 정보이므로, 주문번호와 옵션코드를 같이 조회) */
-			OrderProduct orderProductInfo = orderProductRepository.findByOrderNumAndOpCodeLike(orderDetail.getOrderNum(), changeValueDTO.getOpCode());
+			OrderProduct orderProductInfo = orderProductRepository.findByOrderNumAndOpCodeLike(orderDetail.getOrderNum(), opCode);
 
 			/* 장바구니 옵션 수량 수정 및 저장 (구매 전 장바구니는 옵션을 조절할 필요 없음 & 옵션 수량보다 높은 수량은 화면단에서 막음) */
-			orderProductInfo.setOrderAmount(changeValueDTO.getAmount());
+			orderProductInfo.setOrderAmount(amount);
 			orderProductRepository.save(orderProductInfo);
 
 			result = 1;
@@ -272,15 +265,23 @@ public class CartService {
 		if(cart != null) {
 			/* 장바구니 정보 가져옴 */
 			orderDetail = orderAndOrderProductAndMemberRepository.findByOrderCode(cart.getOrderCode());
+			int orderProductAmount = orderDetail.getOrderProductList().size();
 
 			/* 주문 제품 정보 가져옴 (옵션에 해당하는 정보이므로, 주문번호와 옵션코드를 같이 조회) */
 			OrderProduct orderProductInfo = orderProductRepository.findById(Integer.valueOf(orderPdNum)).get();
 
 			/* 주문 제품 삭제 */
 			orderProductRepository.deleteById(orderProductInfo.getOrderPdNum());
-
+			
+			/* 장바구니 삭제 */
+			if(orderProductAmount - 1 == 0) {
+				log.info("[CartService] 장바구니에 남은 상품 갯수가 0인가? {}", orderProductAmount - 1 == 0);
+				orderRepository.delete(cart);
+				log.info("[CartService] 장바구니에 남은 상품이 없어 장바구니가 삭제되었습니다.");
+			}
+			
 			result = 1;
-			log.info("[CartService] orderDetail ▶ {}", orderDetail.getOrderProductList());
+			
 		} else {
 			log.info("[CartService] 상품 삭제를 실패하였습니다.");
 		}

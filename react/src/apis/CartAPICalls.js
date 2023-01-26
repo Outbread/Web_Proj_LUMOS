@@ -65,13 +65,13 @@ export const callCartDetailAPI = ({memberId}) => {
 };
 
 /* 장바구니 제품 수량 수정 */
-export const callAmountUpdateAPI = ({memberId, form}) => {
+export const callAmountUpdateAPI = ({memberId, opCode, amount}) => {
 
     console.log("[callAmountUpdateAPI] START ◀ ");
     console.log("API memberId", memberId);
-    console.log("API form", form);
+    console.log("API opCode & amount", opCode, " & ", amount);
 
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/cart/${memberId}/amount-update`;
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/cart/${memberId}/amount-update/${opCode}/${amount}`;
 
     return async(dispatch, getState) => {
 
@@ -80,8 +80,7 @@ export const callAmountUpdateAPI = ({memberId, form}) => {
             headers: {
                 "Accept": "*/*",
                 "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
-            },
-            body: form
+            }
         })
         .then(response => response.json());
 

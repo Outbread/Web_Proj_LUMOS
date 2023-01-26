@@ -12,11 +12,12 @@ import BtnCSS from '../../components/order_detail/Btn.module.css';
 import {callPurchaseAPI} from '../../apis/CartAPICalls';
 import {callCartDetailAPI} from '../../apis/CartAPICalls';
 
+import LoginModal from '../../components/common/LoginModal';
 import {decodeJwt} from '../../utils/tokenUtils';
 
 export default function Cart() {
 
-    
+    const [loginModal, setLoginModal] = useState(false); 
     const token = decodeJwt(window.localStorage.getItem("accessToken"));  
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -29,6 +30,12 @@ export default function Cart() {
 
     useEffect(
         () => {
+            if (token.exp * 1000 < Date.now()) {
+                alert("로그인이 만료되었습니다. 다시 로그인해 주세요.");
+                setLoginModal(true);
+                return;
+            }
+
             dispatch(callCartDetailAPI({	
                 memberId: token.sub
             }));            
@@ -37,10 +44,19 @@ export default function Cart() {
     );
 
     const orderSubmitHandler = () => {
+        /* [주문자정보 동일 버튼을 위함] 토큰이 만료되었을때 다시 로그인 */
+        // 주문 상품정보와 가격은 그대로 노출됨 (모달창의 css로 가리던지 하여야 함)
+        if (token.exp * 1000 < Date.now()) {
+            alert("로그인이 만료되었습니다. 다시 로그인해 주세요.");
+            setLoginModal(true);
+            return;
+        }
+
         setIsOrdered(!isOrdered);
     }
 
     /* 뒤로 가기 이벤트 발생 시 */
+    // 로그인 여부 확인할지 말지 애매함
     const location = useLocation();
     window.onpopstate = function(event) {
         var previewPage = document.referrer;
@@ -86,7 +102,10 @@ export default function Cart() {
     const [isEffectWork, setIsEffectWork] = useState(false);
 
     const purchaseHandler = () => {
-        if(orderInfo.paymentMt == "카카오페이") {
+        const deliveryValidatior = (orderInfo.cgNm + orderInfo.cgPh).length;
+        console.log(deliveryValidatior);
+
+        if(orderInfo.paymentMt == "카카오페이" && (deliveryValidatior >= 2 && orderInfo.cgAdsNum.length != 0)) {
             IMP.request_pay({
             pg: "kakaopay",
             // pay_method: "card",
@@ -112,13 +131,15 @@ export default function Cart() {
                     navigate('/');
                 }
             });
-        } else {
+        } else if(orderInfo.paymentMt == "무통장입금" && (deliveryValidatior >= 2 && orderInfo.cgAdsNum.length != 0)) {
             setOrderInfo({
                 ...orderInfo,
                 stOrder: "Y",
                 stPayment: "입금대기"
             });
             setIsEffectWork(!isEffectWork);
+        } else {
+            alert("배송지 정보를 모두 입력해 주세요.")
         }
     };
     
@@ -146,7 +167,7 @@ export default function Cart() {
                     orderCode: order.orderCode,
                     form: formData
                 }))
-                alert("결제에 성공하였습니다.\n메인화면으로 이동합니다.\n");
+                alert("결제에 성공하였습니다.\n메인화면으로 이동합니다.");
                 navigate('/');
             }
         },
@@ -157,7 +178,9 @@ export default function Cart() {
 
     return (
         <>
-            {order.orderCode
+            {loginModal ? <LoginModal setLoginModal={ setLoginModal }/> : null}
+            {
+            order.orderCode
             ?
             <div className={OrderDetailCSS.boxing}>
                 {console.log("▶ OrderDetail ◀ rendering component")}
@@ -224,7 +247,8 @@ export default function Cart() {
                     </div>
                 </div>
             </div>
-            : <h1>장바구니에 상품이 없습니다.</h1>
+            : 
+            <h1>장바구니에 상품이 없습니다.</h1>
             }
         </>
     )

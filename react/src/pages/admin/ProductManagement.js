@@ -14,9 +14,6 @@ function ProductManagement() {
     const products  = useSelector(state => state.productManagementReducer);
     const productList = products.data;
     
-    const [limit, setLimit] = useState(10);
-    const [page, setPage] = useState(1);
-    const offset = (page - 1) * limit;
 
     console.log('products' , products);
     console.log('productManagement', productList);
@@ -27,15 +24,15 @@ function ProductManagement() {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageEnd, setPageEnd] = useState(1);
 
+   
+    // console.log('productImage' , products.productImage);
+    // console.log('productOption ' , products.productOption);
+
     const pageNumber = [];
     if(pageInfo){
         for(let i = 1; i <= pageInfo.pageEnd ; i++){
             pageNumber.push(i);
         }
-    }
-
-    const onChangeHandler = (e) => {
-        setLimit(e.target.value);
     }
 
     useEffect(
@@ -66,22 +63,7 @@ function ProductManagement() {
                 >
                     상품 등록
                 </button>
-            </div>          
-            <label>
-                표시할 게시물 수:&nbsp;
-                <select
-                    type="number"
-                    value={limit}
-                    onChange={onChangeHandler}
-                >
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="200">200</option>
-                </select>
-            </label>  
+            </div>            
             <table className={ ProductManagementCSS.productTable }>
                 <colgroup>
                     <col width="15%" />
@@ -101,7 +83,7 @@ function ProductManagement() {
                     </tr>
                 </thead>
                 <tbody>
-                    { Array.isArray(products) && products.slice(offset, offset + limit).map((p) => (
+                    { Array.isArray(productList) && productList.map((p) => (
                         <tr
                             key={ p.imgNum }
                             onClick={ () => onClickTableTr(p.imgNum) }

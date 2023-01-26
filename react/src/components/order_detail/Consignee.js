@@ -55,11 +55,6 @@ export default function Consignee({order, orderInfo, setOrderInfo}) {
     };
     console.log("컨시어지 수동입력", orderInfo);
 
-    // readOnly 일 경우 이벤트
-    const adsClickHandler = () => {
-        alert("검색 버튼을 눌러 주소를 검색해 주세요")
-    }
-
     /* ========================= 다음 주소 API ========================= */
     const addressAPI = () => {
         open({onComplete: completeHandler, left: 500, top: 150, popupTitle: "LUMOS 주소 검색" , theme: {bgColor: "#B9E7DF"}});
@@ -86,6 +81,8 @@ export default function Consignee({order, orderInfo, setOrderInfo}) {
             cgAdsNum: data.zonecode,
             cgAds: fullAddress
         })
+
+        document.getElementById("cgAdsDetail").focus();
     };
 
 
@@ -125,7 +122,7 @@ export default function Consignee({order, orderInfo, setOrderInfo}) {
                     </tr>
                     <tr>
                         <th>연락처</th>
-                        <td>{phoneFomatter(order.cgPh)}</td>
+                        <td>{order.cgPh ? phoneFomatter(order.cgPh) : order.cgPh}</td>
                     </tr>
                     <tr>
                         <th>주소</th>
@@ -163,11 +160,9 @@ export default function Consignee({order, orderInfo, setOrderInfo}) {
                                 name="cgAdsNum" 
                                 id="cgAdsNum"
                                 onChange={adsInfoChangeHandler}
-                                onClick={adsClickHandler}
                                 style={{width: "130px"}}
                                 value={orderInfo.cgAdsNum ?? ''}
                                 placeholder="우편번호"
-                                // readOnly
                                 disabled
                             ></input>&nbsp;&nbsp;&nbsp;
                             <button onClick={addressAPI}>검색</button>
@@ -176,11 +171,9 @@ export default function Consignee({order, orderInfo, setOrderInfo}) {
                                 name="cgAds" 
                                 id="cgAds"
                                 onChange={adsInfoChangeHandler} 
-                                onClick={adsClickHandler}
                                 style={{width: "350px"}}
                                 value={orderInfo.cgAds ?? ''}
                                 placeholder="주소"
-                                // readOnly
                                 disabled
                             ></input>&nbsp;&nbsp;&nbsp;
                             <input 

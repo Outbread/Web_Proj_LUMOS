@@ -44,26 +44,28 @@ export default function OrderProduct({order : {orderProductList : product, ...et
     const valueChangeHandler = (e) => {
         // console.log("해당 옵션 코드", e.target.parentNode.parentNode.parentNode.id);
         // console.log("변경 옵션 수량", e.target.parentNode.children[0].value);
+        // console.log("변경 옵션 수량", e.target.value);
         setChangeValue({
             opCode: e.target.parentNode.parentNode.parentNode.id,
-            amount: e.target.parentNode.children[0].value
+            amount: e.target.value
         })
     }
     // console.log("changeValue", changeValue);
 
     const amountSubmitHandler = (e) => {
-        const formData = new FormData();
-        formData.append("opCode", changeValue.opCode);
-        formData.append("amount", changeValue.amount);
-
-        dispatch(callAmountUpdateAPI({
-            memberId: token.sub,
-            form: formData
-        }))
-
-        window.location.reload();
-        alert("수량 수정이 완료되었습니다.");
-
+        if(changeValue.amount < 1) {
+            alert("1개 이상의 수량만 가능합니다.");
+            e.target.parentNode.children[0].focus();
+        } else {
+            dispatch(callAmountUpdateAPI({
+                memberId: token.sub,
+                opCode: changeValue.opCode,
+                amount: changeValue.amount
+            }))
+    
+            window.location.reload();
+            alert("수량 수정이 완료되었습니다.");
+        }
     };
 
     const deleteHandler = (p) => {
@@ -125,6 +127,7 @@ export default function OrderProduct({order : {orderProductList : product, ...et
                                             ? 
                                             <input 
                                                 type={'number'} 
+                                                min="1"
                                                 defaultValue={p.orderAmount} 
                                                 style={{width: "80px"}}
                                                 onChange={valueChangeHandler}

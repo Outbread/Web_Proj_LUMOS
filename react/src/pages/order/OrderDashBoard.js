@@ -11,7 +11,6 @@ import {OrderContext} from '../../App';
 export default function OrderDashBoard() {
 
     const navigate = useNavigate();
-    
     const context = useContext(OrderContext);
     const {ckeckCode, setCheckCode} = context;
     
@@ -116,7 +115,8 @@ export default function OrderDashBoard() {
                             <tr>
                                 <th>최근 주문 내역</th>
                                 <td>
-                                    <button onClick={onPrintHandler}>주문 내역 출력</button>
+                                    {/* ▶ 전체 주문 출력 시 활성화할 태그 */}
+                                    {/* <button onClick={onPrintHandler}>주문 내역 출력</button> */}
                                     <button onClick={onClickHandler}>전체 주문 조회</button>
                                 </td>
                             </tr>

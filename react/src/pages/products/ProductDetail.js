@@ -62,7 +62,8 @@ function ProductDetail() {
             setOrderProductDTO({
                 orderAmount : 1,
                 orderNum : 999999999,
-                mainImgPath : document.getElementById("mainImg")?.children[0]?.src,
+                // mainImgPath : document.getElementById("mainImg")?.children[0]?.src,
+                mainImgPath : "willSetInJpa",
                 pdCode : product.pdCode,
                 opCode : Array.isArray(productOption) ? productOption[0]?.opCode : 9999,
                 pdName : product.pdName,
