@@ -64,13 +64,10 @@ public class ProductController {
 	@Operation(summary = "상품 상세 조회 요청", description = "상품의 상세 페이지 처리가 진행됩니다.", tags = { "ProductController" })
 	@GetMapping("/products/{pdCode}")
 	public ResponseEntity<ResponseDTO> selectProductDetail(@PathVariable int pdCode) {
-		log.info("123123123", pdCode);
+		log.info("123123123"+ pdCode);
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "상품 상세정보 조회 성공",  productService.selectProduct(pdCode)));
 	}
-	
-	
-	
 	
 	@Operation(summary = "상품 등록 요청", description = "해당 상품 등록이 진행됩니다.", tags = { "ProductController" })
     @PostMapping(value = "/products")
@@ -81,16 +78,18 @@ public class ProductController {
 	
 	@Operation(summary = "관리자 페이지 상품 리스트 조회 요청", description = "관리자 페이지에서 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
     @GetMapping("/products-management")
-    public ResponseEntity<ResponseDTO> selectProductListWithPagingForAdmin(@RequestParam(name="offset", defaultValue="1") String offset) {
-        log.info("[ProductController] selectProductListWithPagingForAdmin : " + offset);
-        int total = productService.selectProductTotalForAdmin();
-        
-        Criteria cri = new Criteria(Integer.valueOf(offset), 10);
-        PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
-        pagingResponseDTO.setData(productService.selectProductListWithPagingForAdmin(cri));
-        pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
+    public ResponseEntity<ResponseDTO> selectProductListWithPagingForAdmin(
+//    		@RequestParam(name="offset", defaultValue="1") String offset
+    		) {
+//        log.info("[ProductController] selectProductListWithPagingForAdmin : " + offset);
+//        int total = productService.selectProductTotalForAdmin();
+//        
+//        Criteria cri = new Criteria(Integer.valueOf(offset), 10);
+//        PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
+//        pagingResponseDTO.setData(productService.selectProductListWithPagingForAdmin());
+//        pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", productService.selectProductListWithPagingForAdmin()));
     }
 	
 	@Operation(summary = "상품 수정 요청", description = "해당 상품 수정이 진행됩니다.", tags = { "ProductController" })
@@ -123,6 +122,34 @@ public class ProductController {
     public ResponseEntity<ResponseDTO> selectProductListAboutLed() {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutLed()));
+    }
+	
+	@Operation(summary = "LAMP 리스트 조회 요청", description = "LAMP에 해당하는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
+	@GetMapping("/products/lamp")
+    public ResponseEntity<ResponseDTO> selectProductListAboutLamp() {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutLamp()));
+    }
+	
+	@Operation(summary = "PENDANT 리스트 조회 요청", description = "PENDANT에 해당하는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
+	@GetMapping("/products/pendant")
+    public ResponseEntity<ResponseDTO> selectProductListAboutPendant() {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutPendant()));
+    }
+	
+	@Operation(summary = "DOWNLIGHT 리스트 조회 요청", description = "DOWNLIGHT에 해당하는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
+	@GetMapping("/products/downlight")
+    public ResponseEntity<ResponseDTO> selectProductListAboutDownlight() {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutDownlight()));
+    }
+	
+	@Operation(summary = "SWITCH 리스트 조회 요청", description = "SWITCH에 해당하는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
+	@GetMapping("/products/switch")
+    public ResponseEntity<ResponseDTO> selectProductListAboutSwitch() {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutSwitch()));
     }
 	
 //	@Operation(summary = "검색 상품 리스트 조회 요청", description = "검색어에 해당되는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
