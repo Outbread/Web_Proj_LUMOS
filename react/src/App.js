@@ -23,7 +23,13 @@ import ProductDetail from './pages/products/ProductDetail';
 import ProductManagement from './pages/admin/ProductManagement'
 import ProductRegistration from './pages/admin/ProductRegistration';
 import ProductUpdate from './pages/admin/ProductUpdate';
-import LED from './pages/products/LED';
+import Led from './pages/products/Led';
+import Lamp from './pages/products/Lamp';
+import Pendant from './pages/products/Pendant';
+import Downlight from './pages/products/Downlight';
+import Switch from './pages/products/Switch';
+import Search from './pages/products/Search';
+import ProductAll from './pages/products/ProductAll'
 
 import ShopManagement from './pages/admin/ShopManagement';                  // 상점관리
 
@@ -41,7 +47,13 @@ function App() {
       <Routes>
         <Route path="/" element={ <Layout/> }>
             <Route index element={ <Main/> }/>   
-            <Route path="product/LED" element={<LED />} />
+            <Route path="productall" element={ <ProductAll /> }/>
+            <Route path="search" element={ <Search /> }/>
+            <Route path="product/led" element={<Led />} />
+            <Route path="product/lamp" element={<Lamp />} />
+            <Route path="product/pendant" element={<Pendant />} />
+            <Route path="product/downlight" element={<Downlight />} />
+            <Route path="product/switch" element={<Switch />} />
             <Route path="product/:productCode" element={<ProductDetail />} />
             <Route path="mypage" element={ <MyPageLayout/> } >
                 <Route index element={ <ProfileUpdate /> } />
