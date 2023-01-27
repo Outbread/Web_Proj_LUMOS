@@ -1,6 +1,22 @@
-/* 주문자 휴대폰 번호 & 구매자 휴대폰 번호 */
+/* 사업자 등록번호 */
+export function bsrNumFomatter(value) {
+    let str = value?.toString();
+    return str?.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{2})(\d{5})$/, `$1-$2-$3`);
+}
+
+/* 사업자 대표 번호 */
+export function cpTelFomatter(value) {
+    return value?.replace(/[^0-9]/g, '').replace(/^(\d{2})(\d{4})(\d{4})$/, `$1-$2-$3`);
+}
+
+/* 고객센터 번호 */
+export function picTelFomatter(value) {
+    return value?.replace(/[^0-9]/g, '').replace(/^(\d{2})(\d{4})(\d{4})$/, `$1-$2-$3`);
+}
+
+/* 주문자, 구매자, 개인정보보호책임자 휴대폰 번호 */
 export function phoneFomatter(value) {
-    return value.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+    return value?.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
 }
 
 /* 날짜 형식 변환 (yyyy-MM-dd) */

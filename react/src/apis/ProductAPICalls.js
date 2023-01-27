@@ -2,8 +2,10 @@ import {
     GET_PRODUCT,
     GET_PRODUCTS,
     GET_PRODUCTS_LED,
-    GET_PRODUCTS_DESSERT,
-    GET_PRODUCTS_BEVERAGE,
+    GET_PRODUCTS_LAMP,
+    GET_PRODUCTS_PENDANT,
+    GET_PRODUCTS_DOWNLIGHT,
+    GET_PRODUCTS_SWITCH,
     POST_PRODUCT,
     PUT_PRODUCT,
     DELETE_PRODUCT
@@ -14,6 +16,7 @@ export const callSearchProductAPI = ({search}) => {
 
     const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products/search?s=${search}`;
     
+    console.log('search', search);
     return async (dispatch, getState) => {
 
         const result = await fetch(requestURL, {
@@ -32,48 +35,12 @@ export const callSearchProductAPI = ({search}) => {
     };    
 };
 
-export const testAPI = ({form}) => {
-    console.log('[ProduceAPICalls] callProductRegistAPI Call');
-
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/test`;
-
-    console.log("타입-----------", form.productImage);
-
-    return async (dispatch, getState) => {
-
-        const result = await fetch(requestURL, {
-            method: "POST",
-            headers: {
-                "Accept": "*/*",
-                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
-            },
-            body: form
-
-        })
-        .then(response => response.json());
-
-        console.log('[ProduceAPICalls] callProductRegistAPI RESULT : ', result);
-
-        dispatch({ type: POST_PRODUCT,  payload: result });
-        
-    };    
-}
-
 
 export const callProductRegistAPI = ({form}) => {
     console.log('[ProduceAPICalls] callProductRegistAPI Call');
 
     const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products`;
 
-    // const obj = {
-    //     product: form.form,
-    //     option: form.optionForm,
-    //     image: form.imgForm,
-    //     productImage: form.productImage
-    // };
-    // console.log("보내는 json문자열: ", obj);
-    console.log("타입-----------", form);
-
     return async (dispatch, getState) => {
 
         const result = await fetch(requestURL, {
@@ -83,13 +50,6 @@ export const callProductRegistAPI = ({form}) => {
                 "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
             },
             body: form
-
-            // JSON.stringify({
-            //     product: form.form,
-            //     option: form.optionForm,
-            //     image: form.imgForm,
-            //     productImage: form.productImage
-            // })
         })
         .then(response => response.json());
 
@@ -299,8 +259,8 @@ export const callProductListAboutLEDAPI = () => {
     };
 }
 
-export const callProductListAboutDessertAPI = () => {
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products/dessert`;
+export const callProductListAboutLAMPAPI = () => {
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products/lamp`;
 
     return async (dispatch, getState) => {
 
@@ -313,16 +273,15 @@ export const callProductListAboutDessertAPI = () => {
         })
         .then(response => response.json());
         if(result.status === 200){
-            console.log('[ProduceAPICalls] callProductListAboutDessert RESULT : ', result);
-            dispatch({ type: GET_PRODUCTS_DESSERT,  payload: result.data });
+            console.log('[ProduceAPICalls] callProductListAboutMeal RESULT : ', result);
+            dispatch({ type: GET_PRODUCTS_LAMP,  payload: result.data });
         }
         
     };
 }
 
-
-export const callProductListAboutBeverageAPI = () => {
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products/beverage`;
+export const callProductListAboutPENDANTAPI = () => {
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products/pendant`;
 
     return async (dispatch, getState) => {
 
@@ -335,8 +294,50 @@ export const callProductListAboutBeverageAPI = () => {
         })
         .then(response => response.json());
         if(result.status === 200){
-            console.log('[ProduceAPICalls] callProductListAboutBeverage RESULT : ', result);
-            dispatch({ type: GET_PRODUCTS_BEVERAGE,  payload: result.data });
+            console.log('[ProduceAPICalls] callProductListAboutMeal RESULT : ', result);
+            dispatch({ type: GET_PRODUCTS_PENDANT,  payload: result.data });
+        }
+        
+    };
+}
+
+export const callProductListAboutDOWNLIGHTAPI = () => {
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products/downlight`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*"                
+            }
+        })
+        .then(response => response.json());
+        if(result.status === 200){
+            console.log('[ProduceAPICalls] callProductListAboutMeal RESULT : ', result);
+            dispatch({ type: GET_PRODUCTS_DOWNLIGHT,  payload: result.data });
+        }
+        
+    };
+}
+
+export const callProductListAboutSWITCHAPI = () => {
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products/switch`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*"                
+            }
+        })
+        .then(response => response.json());
+        if(result.status === 200){
+            console.log('[ProduceAPICalls] callProductListAboutMeal RESULT : ', result);
+            dispatch({ type: GET_PRODUCTS_SWITCH,  payload: result.data });
         }
         
     };

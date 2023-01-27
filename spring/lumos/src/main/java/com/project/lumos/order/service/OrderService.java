@@ -92,7 +92,7 @@ public class OrderService {
 		
 		log.info("[OrderService] selectQuestionList Start ===================================");
 		
-        List<Question> questionList = questionRepository.findByQuestionCategoryAndQuestionStatusLikeOrQuestionCategoryAndQuestionStatusLike("주문취소", "미해결", "반품요청", "미해결");
+        List<Question> questionList = questionRepository.findByQuestionCategoryAndQuestionStatusLikeOrQuestionCategoryAndQuestionStatusLike("주문취소", "미해결", "환불", "미해결");
         
         log.info("[OrderService] No paging questionList ▶ {}", questionList);
         

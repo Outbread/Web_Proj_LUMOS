@@ -8,5 +8,8 @@ import com.project.lumos.product.entity.ProductAndImage;
 
 public interface ProductAndImageRepository extends JpaRepository<ProductAndImage, Integer>{
 
+
+	List<ProductAndImage> findByPdNameContaining(String search);
+
 	
 }

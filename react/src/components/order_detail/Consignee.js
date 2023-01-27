@@ -79,7 +79,8 @@ export default function Consignee({order, orderInfo, setOrderInfo}) {
         setOrderInfo({
             ...orderInfo,
             cgAdsNum: data.zonecode,
-            cgAds: fullAddress
+            cgAds: fullAddress,
+            cgAdsDetail: ''
         })
 
         document.getElementById("cgAdsDetail").focus();
@@ -137,7 +138,7 @@ export default function Consignee({order, orderInfo, setOrderInfo}) {
                             <input 
                                 name="cgNm" 
                                 onChange={adsInfoChangeHandler}
-                                value={orderInfo.cgNm ?? ''}
+                                defaultValue={orderInfo.cgNm ?? ''}
                             ></input>
                         </td>
                     </tr>
@@ -148,6 +149,7 @@ export default function Consignee({order, orderInfo, setOrderInfo}) {
                                 type={'tel'}
                                 name="cgPh" 
                                 onChange={adsInfoChangeHandler}
+                                // value로 작성 시 '-' 실시간 반영
                                 value={phoneFomatter(orderInfo.cgPh) ?? ''}
                                 placeholder="'-' 없이 숫자만 입력해 주세요"
                             ></input>
@@ -161,7 +163,7 @@ export default function Consignee({order, orderInfo, setOrderInfo}) {
                                 id="cgAdsNum"
                                 onChange={adsInfoChangeHandler}
                                 style={{width: "130px"}}
-                                value={orderInfo.cgAdsNum ?? ''}
+                                defaultValue={orderInfo.cgAdsNum ?? ''}
                                 placeholder="우편번호"
                                 disabled
                             ></input>&nbsp;&nbsp;&nbsp;
@@ -172,7 +174,7 @@ export default function Consignee({order, orderInfo, setOrderInfo}) {
                                 id="cgAds"
                                 onChange={adsInfoChangeHandler} 
                                 style={{width: "350px"}}
-                                value={orderInfo.cgAds ?? ''}
+                                defaultValue={orderInfo.cgAds ?? ''}
                                 placeholder="주소"
                                 disabled
                             ></input>&nbsp;&nbsp;&nbsp;
@@ -180,7 +182,7 @@ export default function Consignee({order, orderInfo, setOrderInfo}) {
                                 name="cgAdsDetail" 
                                 id="cgAdsDetail"
                                 onChange={adsInfoChangeHandler}
-                                value={orderInfo.cgAdsDetail ?? ''}
+                                defaultValue={orderInfo.cgAdsDetail ?? ''}
                                 placeholder="상세주소"
                             ></input>
                         </td>
