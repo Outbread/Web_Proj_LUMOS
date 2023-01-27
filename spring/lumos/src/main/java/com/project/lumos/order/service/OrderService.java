@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,14 +24,18 @@ import com.project.lumos.member.entity.Member;
 import com.project.lumos.member.repository.MemberRepository;
 import com.project.lumos.order.dto.OrderAndOrderProductAndMemberDTO;
 import com.project.lumos.order.dto.OrderDTO;
-import com.project.lumos.order.dto.UpdateHistoryDTO;
 import com.project.lumos.order.entity.Order;
 import com.project.lumos.order.entity.OrderAndOrderProductAndMember;
+import com.project.lumos.order.entity.OrderProduct;
 import com.project.lumos.order.repository.OrderAndOrderProductAndMemberRepository;
 import com.project.lumos.order.repository.OrderProductRepository;
 import com.project.lumos.order.repository.OrderRepository;
 import com.project.lumos.product.repository.OptionRepository;
+import com.project.lumos.product.repository.ProductImageRepository;
 import com.project.lumos.product.repository.ProductRepository;
+import com.project.lumos.question.dto.QuestionDTO;
+import com.project.lumos.question.entity.Question;
+import com.project.lumos.question.repository.QuestionRepository;
 
 @Service
 public class OrderService {
@@ -42,22 +47,61 @@ public class OrderService {
 	private final OrderRepository orderRepository;
 	private final ProductRepository productRepository;
 	private final OptionRepository optionRepository;
+	private final ProductImageRepository productImageRepository;
+	private final QuestionRepository questionRepository;
 	private final ModelMapper modelMapper;
 	
 	@Autowired
 	public OrderService(MemberRepository memberRepository,
 			OrderAndOrderProductAndMemberRepository orderAndOrderProductAndMemberRepository,
 			OrderProductRepository orderProductRepository, OrderRepository orderRepository,
-			ProductRepository productRepository, OptionRepository optionRepository, ModelMapper modelMapper) {
+			ProductRepository productRepository, OptionRepository optionRepository, 
+			ProductImageRepository productImageRepository, 
+			QuestionRepository questionRepository, ModelMapper modelMapper) {
 		this.memberRepository = memberRepository;
 		this.orderAndOrderProductAndMemberRepository = orderAndOrderProductAndMemberRepository;
 		this.orderProductRepository = orderProductRepository;
 		this.orderRepository = orderRepository;
 		this.productRepository = productRepository;
 		this.optionRepository = optionRepository;
+		this.productImageRepository = productImageRepository;
+		this.questionRepository = questionRepository;
 		this.modelMapper = modelMapper;
 	}
+	
+    @Value("${image.image-url}")
+    private String IMAGE_URL;
 
+    /* [주문내역 리스트 조회 for 대시보드] 주문 상태 여부 확인 및 페이징처리 없음 */
+	public Object selectOrderList() {
+		
+		log.info("[OrderService] selectOrderListWithPaging Start ===================================");
+		
+        List<OrderAndOrderProductAndMember> orderList = orderAndOrderProductAndMemberRepository.findByStOrder("Y");
+        
+//        log.info("[OrderService] No paging orderList ▶ {}", orderList);
+        
+        log.info("[OrderService] selectOrderListWithPaging End ===================================");
+        
+        return orderList.stream().map(order -> modelMapper.map(order, OrderAndOrderProductAndMemberDTO.class)).collect(Collectors.toList());
+        
+	}
+	
+	/* [문의내역 리스트 조회 for 대시보드] 페이징처리 없음 */
+	public Object selectQuestionList() {
+		
+		log.info("[OrderService] selectQuestionList Start ===================================");
+		
+        List<Question> questionList = questionRepository.findByQuestionCategoryAndQuestionStatusLikeOrQuestionCategoryAndQuestionStatusLike("주문취소", "미해결", "환불", "미해결");
+        
+        log.info("[OrderService] No paging questionList ▶ {}", questionList);
+        
+        log.info("[OrderService] selectQuestionList End ===================================");
+        
+        return questionList.stream().map(question -> modelMapper.map(question, QuestionDTO.class)).collect(Collectors.toList());
+        
+	}
+	
 	/* [주문내역 리스트 조회] 주문 상태 여부 확인 | 주문 내역 총 갯수 반환 */
 	public int selectOrderListTotal() {
 		
@@ -85,7 +129,7 @@ public class OrderService {
         Page<OrderAndOrderProductAndMember> result = orderAndOrderProductAndMemberRepository.findByStOrder("Y", paging);
         List<OrderAndOrderProductAndMember> orderList = (List<OrderAndOrderProductAndMember>)result.getContent();
         
-        log.info("[OrderService] orderList ▶ {}", orderList);
+//        log.info("[OrderService] orderList ▶ {}", orderList);
         
         log.info("[OrderService] selectOrderListWithPaging End ===================================");
         
@@ -98,9 +142,15 @@ public class OrderService {
 		
 		log.info("[OrderService] selectOrderByOrderCode Start ===================================");
 		
-		log.info("[OrderService] orderCode ▶ " + orderCode);
+		log.info("[OrderService] orderCode ▶ {}" + orderCode);
 		
         OrderAndOrderProductAndMember orderDetail = orderAndOrderProductAndMemberRepository.findByOrderCode(orderCode);
+        
+		// 이미지 경로 설정
+		List<OrderProduct> orderProductList = orderProductRepository.findAllByOrderNumLike(orderDetail.getOrderNum());
+		for(OrderProduct orderProduct : orderProductList) {
+			orderProduct.setMainImgPath(IMAGE_URL + orderProduct.getMainImgPath());
+		}
         
         log.info("[OrderService] orderDetail ▶ {}", orderDetail);
         
@@ -192,10 +242,10 @@ public class OrderService {
 	
 	/* [주문내역 상세 수정] 배송 정보 수정에 따른 날짜 정보 입력 */
 	@Transactional
-	public Object updateHistory(String orderCode, UpdateHistoryDTO updateHistoryDTO) {
+	public Object updateHistory(String orderCode, String updateKind) {
 		
 		log.info("[OrderService] updateHistory Start ===================================");
-		log.info("[OrderService] updateHistoryDTO", updateHistoryDTO.getUpdateKind());
+		log.info("[OrderService] updateKind", updateKind);
 		
 		int result = 0;
 		
@@ -211,39 +261,26 @@ public class OrderService {
 			OffsetDateTime offsetDateTime = null;
 			offsetDateTime = now.plusSeconds(seconds);
 			
-//			java.util.Date utilDate = new java.util.Date();
 			java.sql.Timestamp sqlTimeStamp = java.sql.Timestamp.valueOf(offsetDateTime.toLocalDateTime());
 			
 			log.info("[OrderService] offsetDateTime ▶ " + offsetDateTime);
 			log.info("[OrderService] sqlTimeStamp ▶ " + sqlTimeStamp);
 			
-			switch(updateHistoryDTO.getUpdateKind()) {
+			switch(updateKind) {
 				case "발주확인" :
 					log.info("[OrderService] 발주확인");
 					originOrder.setOrderConf(sqlTimeStamp);
 					orderRepository.save(originOrder);
 					break;
-				// 모달로 입력받아 수정 로직 추가
-				case "송장번호입력/수정" : 
-					log.info("[OrderService] 송장번호입력");
-					if(originOrder.getStClaim().equals("배송중")) break;
-					else {
-//						originOrder.setStClaim("배송중");
-						originOrder.setDeliveryStart(sqlTimeStamp);
-						orderRepository.save(originOrder);
-						break;
-					}
-				// 모달로 입력받아 수정 로직 추가
-				case "배송지수정" : break;
+//				모달로 입력받아 수정 로직 추가
+//				case "송장번호입력" : break;
 				case "배송출발처리" :
 					log.info("[OrderService] 배송출발처리");
-//					originOrder.setStClaim("배송출발");
 					originOrder.setDeliveryStart(sqlTimeStamp);
 					orderRepository.save(originOrder);
 					break;
 				case "배송완료처리" : 
 					log.info("[OrderService] 배송완료처리");
-//					originOrder.setStClaim("배송완료");
 					originOrder.setDeliveryEnd(sqlTimeStamp);
 					orderRepository.save(originOrder);
 					break;

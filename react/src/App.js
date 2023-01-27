@@ -7,13 +7,16 @@ import Profile from './pages/member/Profile';                               // �
 import QuestionRegistration from './pages/member/QuestionRegistration';     // 문의사항 등록
 import QuestionList from './pages/member/QuestionList';                     // 회원별 문의사항
 import QuestionDetail from './pages/member/QuestionDetail';                 // 문의사항 상세 조회
+import AdminQuestionList from './pages/admin/AdminQuestionList';            // 관리자 문의사항 전체 조회
+import MemberList from './pages/admin/MemberList'                           // 관리자 회원 전체 조회
+import QuestionAnswer from './pages/admin/QuestionAnswer';                  // 관리자 문의사항 답변
 import Login from './pages/member/Login';                                   // 로그인
 import Register from './pages/member/Register';                             // 회원가입
 import ProfileUpdate from './pages/member/ProfileUpdate';
 import OrderDashBoard from './pages/order/OrderDashBoard';                  // 주문대시보드
 import OrderManagement from './pages/order/OrderManagement';                // 주문목록
+import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세                      
 import OrderSearch from './pages/order/OrderDetail';                        // 주문내역검색
-import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세
 import Cart from './pages/cart/Cart';                                       // 장바구니
 
 import ProductDetail from './pages/products/ProductDetail';
@@ -62,9 +65,16 @@ function App() {
             <Route path="product-update/:productCode" element={ <ProductUpdate/> } />
             <Route path="order-dashboard" element={<OrderDashBoard/>}/>
             <Route path="order-management" element={<OrderManagement/>}/>
+            <Route path="order-management/:orderCode" element={<OrderDetail />} />
+
+            <Route path="question-management" element={<AdminQuestionList />} />
+            <Route path="questionAnswer/:questionCode" element={<QuestionAnswer />} />
+            <Route path="member-management" element={<MemberList />} />
+
             <Route path="order-management/search" element={<OrderSearch/>}/>
             <Route path="order-management/:orderCode" element={<OrderDetail/>}/>
             <Route path="cart/:memberId" element={<Cart/>}/>
+
             <Route path="/login" element={ <Login/> } />
             <Route path="/register" element={ <Register/> } />  
         </Route>
@@ -75,7 +85,6 @@ function App() {
         {/* </Route> */}
         
       </Routes>
-      
     </BrowserRouter>
     </OrderContext.Provider>
   );

@@ -1,6 +1,6 @@
 import {useNavigate, useParams} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import {useEffect} from 'react';
+import {useState, useEffect} from 'react';
 
 import {callOrderDetailAPI} from '../../apis/OrderAPICalls';
 
@@ -14,10 +14,15 @@ import Orderer from '../../components/order_detail/Orderer';
 
 import OrderDetailCSS from './OrderDetail.module.css';
 
+import LoginModal from '../../components/common/LoginModal';
+import {decodeJwt} from '../../utils/tokenUtils';
+
 export default function OrderDetail() {
 
     console.log("▶ OrderDetail ◀");
 
+    const [loginModal, setLoginModal] = useState(false); 
+    const token = decodeJwt(window.localStorage.getItem("accessToken")); 
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const params = useParams();
@@ -32,6 +37,12 @@ export default function OrderDetail() {
 
     useEffect(
         () => {
+            if (token.exp * 1000 < Date.now()) {
+                alert("로그인이 만료되었습니다. 다시 로그인해 주세요.");
+                setLoginModal(true);
+                return;
+            }
+
             console.log("▶ OrderDetail ◀ useEffect")
             dispatch(callOrderDetailAPI({	
                 orderCode: params.orderCode
@@ -59,6 +70,7 @@ export default function OrderDetail() {
 
     return (
         <>
+            {loginModal ? <LoginModal setLoginModal={ setLoginModal }/> : null}
             {order.orderCode &&
             <div className={OrderDetailCSS.boxing}>
                 {console.log("▶ OrderDetail ◀ rendering component")}

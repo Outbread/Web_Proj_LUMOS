@@ -18,7 +18,6 @@ import com.project.lumos.common.PageDTO;
 import com.project.lumos.common.PagingResponseDTO;
 import com.project.lumos.common.ResponseDTO;
 import com.project.lumos.order.dto.OrderDTO;
-import com.project.lumos.order.dto.UpdateHistoryDTO;
 import com.project.lumos.order.service.OrderService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +33,25 @@ public class OrderController {
 	public OrderController(OrderService orderService) {
 		this.orderService = orderService;
 	}
+	
+	/* [주문내역 리스트 조회 for 대시보드] 주문 상태 여부 확인 및 페이징처리 없음 */
+	@Operation(summary = "[관리자] 대시보드", description = "전체 주문내역 조회", tags = {"OrderController"})
+	@GetMapping("/order-dashboard")
+	public ResponseEntity<ResponseDTO> selectOrderList() {
 
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", orderService.selectOrderList()));
+		
+	}
+	
+	/* [문의내역 리스트 조회 for 대시보드] 페이징처리 없음 */
+	@Operation(summary = "[관리자] 대시보드", description = "전체 주문내역 조회", tags = {"OrderController"})
+	@GetMapping("/question-dashboard")
+	public ResponseEntity<ResponseDTO> selectQuestionList() {
+
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", orderService.selectQuestionList()));
+		
+	}
+	
 	/* [주문내역 리스트 조회] 주문 상태 여부 확인 */
 	@Operation(summary = "[관리자] 주문 내역 조회", description = "전체 주문내역 조회 및 페이징 처리", tags = {"OrderController"})
 	@GetMapping("/order-management")
@@ -76,11 +93,7 @@ public class OrderController {
 	/* [주문내역 상세 수정] 배송 정보 또는 상태 정보 수정 */
 	@Operation(summary = "[관리자] 주문 내역 상세 수정", description = "주문내역 정보 수정", tags = {"OrderController"})
 	@PutMapping(value = {"/order-management/{orderCode}/delivery-update"})
-	public ResponseEntity<ResponseDTO> updateOrderStatus(@PathVariable String orderCode, @ModelAttribute OrderDTO orderDTO, @ModelAttribute UpdateHistoryDTO updateHistoryDTO) {
-		
-//		log.info("[OrderController] updateOrderStatus getDeliveryCp ▶ " + orderDTO.getDeliveryCp());
-//		log.info("[OrderController] updateOrderStatus getDeliveryNum ▶ " + orderDTO.getDeliveryNum());
-//		log.info("[OrderController] updateOrderStatus updateHistoryDTO ▶ " + updateHistoryDTO.getUpdateKind());
+	public ResponseEntity<ResponseDTO> updateOrderStatus(@PathVariable String orderCode, @ModelAttribute OrderDTO orderDTO) {
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "주문 내역 상세 수정 성공",  orderService.updateOrderDelivery(orderCode, orderDTO)));
 		
@@ -88,12 +101,10 @@ public class OrderController {
 	
 	/* [주문내역 상세 수정] 배송 정보 수정에 따른 날짜 정보 입력 */
 	@Operation(summary = "[관리자] 배송 처리 내역 수정", description = "배송처리 내역의 날짜 정보 수정(입력)", tags = {"OrderController"})
-	@PutMapping(value = {"/order-management/{orderCode}/history-update"})
-	public ResponseEntity<ResponseDTO> updateHistory(@PathVariable String orderCode, @ModelAttribute UpdateHistoryDTO updateHistoryDTO) {
+	@PutMapping(value = {"/order-management/{orderCode}/history-update/{updateKind}"})
+	public ResponseEntity<ResponseDTO> updateHistory(@PathVariable String orderCode, @PathVariable String updateKind) {
 		
-//		log.info("[OrderController] updateHistoryDTO ▶ " + updateHistoryDTO);
-		
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "주문 내역 날짜 수정 성공",  orderService.updateHistory(orderCode, updateHistoryDTO)));
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "주문 내역 날짜 수정 성공",  orderService.updateHistory(orderCode, updateKind)));
 		
 	}
 	

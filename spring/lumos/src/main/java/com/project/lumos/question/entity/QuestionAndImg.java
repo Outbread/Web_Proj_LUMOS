@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -26,7 +26,7 @@ public class QuestionAndImg {
 				strategy = GenerationType.SEQUENCE,
 				generator = "QUESTION_IMG_SEQ_GENERATOR"
 			)
-		private int questionImgCode;
+		public int questionImgCode;
 		
 		@Column(name = "ORIGINAL_NAME")                // 디비 스크립트 original로 수정 바람 i빠짐
 		private String originalName;
@@ -34,16 +34,21 @@ public class QuestionAndImg {
 		@Column(name = "NEW_NAME")
 		private String newName;
 		
-		@ManyToOne
-		@JoinColumn(name = "QUESTION_CODE")
-		private Question questionCode;
+		@Column(name = "QUESTION_CODE")
+		private int questionCode;
+		
+		@OneToOne
+		@JoinColumn(name = "QUESTION_CODE", referencedColumnName = "QUESTION_CODE", insertable = false, updatable = false)
+		private Question question;
 
-		public QuestionAndImg(int questionImgCode, String originalName, String newName, Question questionCode) {
+		public QuestionAndImg(int questionImgCode, String originalName, String newName, int questionCode,
+				Question question) {
 			super();
 			this.questionImgCode = questionImgCode;
 			this.originalName = originalName;
 			this.newName = newName;
 			this.questionCode = questionCode;
+			this.question = question;
 		}
 
 		public QuestionAndImg() {
@@ -74,19 +79,28 @@ public class QuestionAndImg {
 			this.newName = newName;
 		}
 
-		public Question getQuestionCode() {
+		public int getQuestionCode() {
 			return questionCode;
 		}
 
-		public void setQuestionCode(Question questionCode) {
+		public void setQuestionCode(int questionCode) {
 			this.questionCode = questionCode;
+		}
+
+		public Question getQuestion() {
+			return question;
+		}
+
+		public void setQuestion(Question question) {
+			this.question = question;
 		}
 
 		@Override
 		public String toString() {
 			return "QuestionAndImg [questionImgCode=" + questionImgCode + ", originalName=" + originalName
-					+ ", newName=" + newName + ", questionCode=" + questionCode + "]";
+					+ ", newName=" + newName + ", questionCode=" + questionCode + ", question=" + question + "]";
 		}
 
+		
 		
 }

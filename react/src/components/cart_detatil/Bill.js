@@ -34,7 +34,7 @@ export default function Bill({order : {orderProductList : product, ...etc}, orde
                             주문서
                         </th>
                         <td>
-                            {etc.orderCode}
+                            {/* {etc.orderCode} */}
                         </td>
                     </tr>
                 </thead>

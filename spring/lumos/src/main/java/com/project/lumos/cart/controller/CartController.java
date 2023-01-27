@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.lumos.cart.dto.ChangeValueDTO;
 import com.project.lumos.cart.service.CartService;
 import com.project.lumos.common.ResponseDTO;
 import com.project.lumos.order.controller.OrderController;
@@ -61,13 +60,14 @@ public class CartController {
 
 	/* [장바구니 상품 수량 수정] */
 	@Operation(summary = "[회원] 주문 수량 수정", description = "장바구니 주문 수량 수정", tags = {"CartController"})
-	@PutMapping(value = {"/cart/{memberId}/amount-update"})
-	public ResponseEntity<ResponseDTO> updateOrderProductAmount(@PathVariable String memberId, @ModelAttribute ChangeValueDTO changeValueDTO) {
+	@PutMapping(value = {"/cart/{memberId}/amount-update/{opCode}/{amount}"})
+	public ResponseEntity<ResponseDTO> updateOrderProductAmount(@PathVariable String memberId, @PathVariable int opCode, @PathVariable int amount) {
 		
 		log.info("[OrderController] updateOrderProductAmount memberId ▶ " + memberId);
-		log.info("[OrderController] updateOrderProductAmount changeValueDTO ▶ " + changeValueDTO);
+		log.info("[OrderController] updateOrderProductAmount opCode ▶ " + opCode);
+		log.info("[OrderController] updateOrderProductAmount amount ▶ " + amount);
 		
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "장바구니 제품 수량 수정 성공",  cartService.updateOrderProductAmount(memberId, changeValueDTO)));
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "장바구니 제품 수량 수정 성공",  cartService.updateOrderProductAmount(memberId, opCode, amount)));
 		
 	}
 	

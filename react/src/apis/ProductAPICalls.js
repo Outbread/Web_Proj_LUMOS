@@ -16,6 +16,7 @@ export const callSearchProductAPI = ({search}) => {
 
     const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products/search?s=${search}`;
     
+    console.log('search', search);
     return async (dispatch, getState) => {
 
         const result = await fetch(requestURL, {
@@ -34,48 +35,12 @@ export const callSearchProductAPI = ({search}) => {
     };    
 };
 
-export const testAPI = ({form}) => {
-    console.log('[ProduceAPICalls] callProductRegistAPI Call');
-
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/test`;
-
-    console.log("타입-----------", form.productImage);
-
-    return async (dispatch, getState) => {
-
-        const result = await fetch(requestURL, {
-            method: "POST",
-            headers: {
-                "Accept": "*/*",
-                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
-            },
-            body: form
-
-        })
-        .then(response => response.json());
-
-        console.log('[ProduceAPICalls] callProductRegistAPI RESULT : ', result);
-
-        dispatch({ type: POST_PRODUCT,  payload: result });
-        
-    };    
-}
-
 
 export const callProductRegistAPI = ({form}) => {
     console.log('[ProduceAPICalls] callProductRegistAPI Call');
 
     const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/products`;
 
-    // const obj = {
-    //     product: form.form,
-    //     option: form.optionForm,
-    //     image: form.imgForm,
-    //     productImage: form.productImage
-    // };
-    // console.log("보내는 json문자열: ", obj);
-    console.log("타입-----------", form);
-
     return async (dispatch, getState) => {
 
         const result = await fetch(requestURL, {
@@ -85,13 +50,6 @@ export const callProductRegistAPI = ({form}) => {
                 "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
             },
             body: form
-
-            // JSON.stringify({
-            //     product: form.form,
-            //     option: form.optionForm,
-            //     image: form.imgForm,
-            //     productImage: form.productImage
-            // })
         })
         .then(response => response.json());
 

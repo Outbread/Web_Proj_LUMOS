@@ -55,10 +55,13 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
 
     useEffect(
         () => {
+            const parentCheckBox = document.getElementById("parentCheck");
             const childCheckBoxes = document.querySelectorAll("input[id='childCheck']");
 
-            if(updateKind.updateKind === "발주확인") {
-                // 체크박스 disabled 해제
+            if(updateKind === "발주확인") {
+                // 체크박스 disabled 해제 및 이벤트 속성 추가
+                parentCheckBox.disabled = false;
+                parentCheckBox.onclick = selectAllHandler;
                 childCheckBoxes.forEach(checkBox => {
                     if(checkBox.parentNode.parentNode.children[9].innerText == "주문완료") {
                         checkBox.disabled = false;
@@ -75,9 +78,12 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                     setIsAbled(!isAbled);
                     alert("발주확인 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
                 }
-            } else if(updateKind.updateKind === "송장번호입력") {
+            } else if(updateKind === "송장번호입력") {
                 alert("송장번호 일괄 입력 기능은 준비중입니다. 주문내역 상세 페이지에서 입력해주세요.")
-            } else if(updateKind.updateKind === "배송출발처리") {
+            } else if(updateKind === "배송출발처리") {
+                // 체크박스 disabled 해제 및 이벤트 속성 추가
+                parentCheckBox.disabled = false;
+                parentCheckBox.onclick = selectAllHandler;
                 childCheckBoxes.forEach(checkBox => {
                     if(checkBox.parentNode.parentNode.children[8].innerText != "일반택배"
                         && checkBox.parentNode.parentNode.children[9].innerText == "발주확인") {
@@ -94,7 +100,10 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                     setIsAbled(!isAbled);
                     alert("배송출발 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
                 }
-            } else if(updateKind.updateKind === "배송완료처리") {
+            } else if(updateKind === "배송완료처리") {
+                // 체크박스 disabled 해제 및 이벤트 속성 추가
+                parentCheckBox.disabled = false;
+                parentCheckBox.onclick = selectAllHandler;
                 childCheckBoxes.forEach(checkBox => {
                     if(checkBox.parentNode.parentNode.children[9].innerText == "배송중") {
                         checkBox.disabled = false;
@@ -110,7 +119,10 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                     setIsAbled(!isAbled);
                     alert("배송완료 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
                 }
-            } else if(updateKind.updateKind === "주문취소처리") {
+            } else if(updateKind === "주문취소처리") {
+                // 체크박스 disabled 해제 및 이벤트 속성 추가
+                parentCheckBox.disabled = false;
+                parentCheckBox.onclick = selectAllHandler;
                 childCheckBoxes.forEach(checkBox => {
                     if(checkBox.parentNode.parentNode.children[9].innerText == "주문완료"
                         || checkBox.parentNode.parentNode.children[9].innerText == "발주확인") {
@@ -127,7 +139,10 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                     setIsAbled(!isAbled);
                     alert("주문취소 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
                 }
-            } else if(updateKind.updateKind === "반품접수") {
+            } else if(updateKind === "반품접수") {
+                // 체크박스 disabled 해제 및 이벤트 속성 추가
+                parentCheckBox.disabled = false;
+                parentCheckBox.onclick = selectAllHandler;
                 childCheckBoxes.forEach(checkBox => {
                     if(checkBox.parentNode.parentNode.children[9].innerText == "배송완료") {
                         checkBox.disabled = false;
@@ -143,7 +158,10 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                     setIsAbled(!isAbled);
                     alert("반품접수 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
                 }
-            } else if(updateKind.updateKind === "반품완료처리") {
+            } else if(updateKind === "반품완료처리") {
+                // 체크박스 disabled 해제 및 이벤트 속성 추가
+                parentCheckBox.disabled = false;
+                parentCheckBox.onclick = selectAllHandler;
                 childCheckBoxes.forEach(checkBox => {
                     if(checkBox.parentNode.parentNode.children[9].innerText == "반품접수") {
                         checkBox.disabled = false;
@@ -176,10 +194,12 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 const orderCode = checkBox.parentNode.nextElementSibling.nextElementSibling.innerText;
                 // const devStatus = checkBox.parentNode.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.innerText;
                 // console.log("devStatus", devStatus);
-                checkBox.checked = e.target.checked;
-                ckeckCode.add(orderCode);
-                setCheckCode(ckeckCode);
-                console.log("전체 선택", ckeckCode);
+                if(checkBox.disabled == false) {
+                    checkBox.checked = e.target.checked;
+                    ckeckCode.add(orderCode);
+                    setCheckCode(ckeckCode);
+                    console.log("전체 선택", ckeckCode);
+                }
             })
         } else {
             childCheckBoxes.forEach(checkBox => {
@@ -222,8 +242,10 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                             {
                                 // pathname == "/order-dashboard" 
                                 pathname == "/order-management/" 
-                                ? <th><input type={'checkbox'} onClick={selectAllHandler} id="parentCheck" disabled></input></th>
-                                : <th><input type={'checkbox'} onClick={selectAllHandler} id="parentCheck"></input></th>
+                                ? <th><input type={'checkbox'} id="parentCheck" disabled></input></th>
+                                // ▶ 전체 주문 출력 시 활성화할 태그
+                                // : <th><input type={'checkbox'} onClick={selectAllHandler} id="parentCheck"></input></th>
+                                : null
                             }
                             <th>주문일</th>
                             <th>주문번호</th>
@@ -245,8 +267,10 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                                 {
                                     // pathname == "/order-dashboard"
                                     pathname == "/order-management/" 
-                                    ? <td><input type={'checkbox'} onClick={selectHandler} id="childCheck" disabled></input></td>
-                                    : <td><input type={'checkbox'} onClick={selectHandler} id="childCheck"></input></td>
+                                    ? <td><input type={'checkbox'} id="childCheck" disabled></input></td>
+                                    // ▶ 전체 주문 출력 시 활성화할 태그
+                                    // : <td><input type={'checkbox'} onClick={selectHandler} id="childCheck"></input></td>
+                                    : null
                                 }
                                 <td onClick={() => onClickHandler(order.orderCode)}>{dateFomatter(order.orderDate)}</td>
                                 <td onClick={() => onClickHandler(order.orderCode)}>{order.orderCode}</td>
@@ -267,7 +291,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                                         )
                                     }
                                 </td>
-                                <td onClick={() => onClickHandler(order.orderCode)}>{order.stClaim}</td>
+                                <td onClick={() => onClickHandler(order.orderCode)}>{order.stClaim ? order.stClaim : "-"}</td>
                             </tr>
                             )
                         )

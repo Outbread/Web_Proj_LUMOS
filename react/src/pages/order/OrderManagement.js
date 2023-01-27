@@ -15,22 +15,24 @@ import OrderManagementCSS from './OrderManagement.module.css';
 
 import {OrderContext} from '../../App';
 
+import LoginModal from '../../components/common/LoginModal';
+import {decodeJwt} from '../../utils/tokenUtils';
+
 export default function OrderManagement() {
 
     console.log("▶ OrderManagement ◀");
 
-    const dispatch = useDispatch();
+    const [loginModal, setLoginModal] = useState(false); 
+    const token = decodeJwt(window.localStorage.getItem("accessToken")); 
 
-    const [modal, setModel] = useState(false);
+    const dispatch = useDispatch();
 
     /* 체크박스 처리를 위한 context 활용 */
     const context = useContext(OrderContext);
     const {ckeckCode, setCheckCode} = context;
 
     /* 처리의 종류 (ex: 발주확인, 배송완료처리...) */
-    const [updateKind, setUpdateKind] = useState({
-        updateKind: '1'
-    });
+    const [updateKind, setUpdateKind] = useState('1');
 
     /* 처리 버튼 클릭 시 */
     // 버튼 활성화 여부
@@ -38,20 +40,16 @@ export default function OrderManagement() {
 
     // 백단에 전달할 값 세팅 및 SearchResult의 useEffect 작동
     const updatekindHandler = (e) => {
-        setUpdateKind({
-            ['updateKind']: e.target.name
-        });
+        setUpdateKind(e.target.name);
     };
 
     /* 확인 버튼 클릭 시 */
     const dateInsertHandler = () => {
-        const formData = new FormData();
-        formData.append("updateKind", updateKind.updateKind);
 
         ckeckCode.forEach(element => {
             dispatch(callHistoryUpdateAPI({
                 orderCode: element,
-                form: formData
+                updateKind: updateKind
             }));
         })
         
@@ -59,7 +57,7 @@ export default function OrderManagement() {
         window.location.reload();
     }
 
-    /* ========================= SearchHead Component ========================= */
+    /* ========================= ↓ SearchHead Component ↓ ========================= */
     const searchOrderList  = useSelector(state => state.orderReducer);  
 
     const [search, setSearch] = useState({
@@ -67,8 +65,6 @@ export default function OrderManagement() {
         searchTitle: '주문번호',
         searchValue: ''
     })
-
-    const [isEffectWork, setIsEffectWork] = useState(false);
 
     const dateHandler = (e) => {
         console.log("e.target.innerText", e.target.innerText);
@@ -110,50 +106,57 @@ export default function OrderManagement() {
         }
     };
 
+    const [isAlert, setIsAlret] = useState(false);
+
     const submitHandler = () => {
-        setIsEffectWork(!isEffectWork);
-    };
-    
-    useEffect(
-        () => {
-            // 날짜 O + 검색카테고리 O + 검색어 O
-            if(search.searchDate.length != 0 && search.searchTitle.length != 0 && search.searchValue.length != 0) {
+        // 날짜 O + 검색어 O
+        if(search.searchDate.length != 0 && search.searchValue.length != 0) {
+            dispatch(callOrderSearchAPI({
+                searchDate: search.searchDate,
+                searchTitle: search.searchTitle,
+                searchValue: search.searchValue
+            }));
+            setIsAlret(true);
+        // 날짜 O + 검색어 X
+        } else if(search.searchDate.length != 0 && search.searchValue.length == 0) {
+            const isGood = window.confirm("기간으로만 조회하시겠습니까?");
+            if(isGood == true) {
                 dispatch(callOrderSearchAPI({
                     searchDate: search.searchDate,
-                    searchTitle: search.searchTitle,
-                    searchValue: search.searchValue
+                    searchTitle: 'non',
+                    searchValue: 'non'
                 }));
-                // alert(`${searchOrderList?.length}건의 검색결과가 있습니다.`);
-            // 날짜 O + 검색어 X
-            } else if(search.searchDate.length != 0 && search.searchValue.length == 0) {
-                const isGood = window.confirm("기간으로만 조회하시겠습니까?");
-                if(isGood == true) {
-                    dispatch(callOrderSearchAPI({
-                        searchDate: search.searchDate,
-                        searchTitle: 'non',
-                        searchValue: 'non'
-                    }));
-                    // alert(`${searchOrderList?.length}건의 검색결과가 있습니다.`);
-                } else {
-                    alert("검색어를 마저 입력해주세요.")
-                }
-            // 날짜 X + 검색어 X (초기값이 아님을 나타내기 위한 조건 필요)
-            } else if(search.searchDate.length == 0 && search.searchValue.length == 0) {
-                alert("검색을 원하실 경우 날짜를 선택해주세요.")
+                setIsAlret(true);
+            } else {
+                alert("검색어를 마저 입력해주세요.");
             }
-        },
-        [isEffectWork]
-    )
+        // 날짜 X + 검색어 O
+        } else if(search.searchDate.length == 0 && search.searchValue.length != 0) {
+            alert("날짜를 선택해주세요.");
+        // 날짜 X + 검색어 X
+        } else {
+            alert("검색 기간을 설정해 주세요.");
+        }
+    };
 
-    /* 위의 useEffect에 함께 할 경우 처음에 undefined로 출력되어 따로 동작하도록 함 */
     useEffect(
         () => {
-            if(searchOrderList.length != undefined) alert(`${searchOrderList?.length}건의 검색결과가 있습니다.`);
+            if (token.exp * 1000 < Date.now()) {
+                alert("로그인이 만료되었습니다. 다시 로그인해 주세요.");
+                setLoginModal(true);
+                return;
+            }
+            if(isAlert && searchOrderList?.length == 0) alert(`검색 결과가 없습니다.`);
+            // [주의] else로 작성 시 undefined가 뜸
+            if(isAlert && searchOrderList?.length > 0) alert(`${searchOrderList?.length}건의 검색 결과가 있습니다.`);
+            setIsAlret(false);
         }, [searchOrderList]
     )
+    /* ========================= ↑ SearchHead Component ↑ ========================= */
 
     return (
         <>
+            {loginModal ? <LoginModal setLoginModal={ setLoginModal }/> : null}
             <div className={OrderManagementCSS.searchHead}>
                 <table>
                     <thead>
