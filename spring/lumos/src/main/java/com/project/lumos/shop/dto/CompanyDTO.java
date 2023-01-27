@@ -1,4 +1,4 @@
-package com.project.lumos.company.dto;
+package com.project.lumos.shop.dto;
 
 public class CompanyDTO {
 
@@ -13,119 +13,119 @@ public class CompanyDTO {
 //	CP_ADS_DETAIL	VARCHAR2(100 BYTE)	사업장 상세 주소
 //	CP_EMAIL		VARCHAR2(100 BYTE)	이메일
 
-	private int BsrNum;
-	private String CpNm;
-	private String RpNm;
-	private String CpTel;
-	private String BsType;
-	private String BsItem;
-	private String CpAdsNum;
-	private String CpAds;
-	private String CpAdsDetail;
-	private String CpEmail;
+	private int bsrNum;
+	private String cpNm;
+	private String rpNm;
+	private String cpTel;
+	private String bsType;
+	private String bsItem;
+	private String cpAdsNum;
+	private String cpAds;
+	private String cpAdsDetail;
+	private String cpEmail;
 	
 	public CompanyDTO() {
 	}
 
 	public CompanyDTO(int bsrNum, String cpNm, String rpNm, String cpTel, String bsType, String bsItem, String cpAdsNum,
 			String cpAds, String cpAdsDetail, String cpEmail) {
-		BsrNum = bsrNum;
-		CpNm = cpNm;
-		RpNm = rpNm;
-		CpTel = cpTel;
-		BsType = bsType;
-		BsItem = bsItem;
-		CpAdsNum = cpAdsNum;
-		CpAds = cpAds;
-		CpAdsDetail = cpAdsDetail;
-		CpEmail = cpEmail;
+		this.bsrNum = bsrNum;
+		this.cpNm = cpNm;
+		this.rpNm = rpNm;
+		this.cpTel = cpTel;
+		this.bsType = bsType;
+		this.bsItem = bsItem;
+		this.cpAdsNum = cpAdsNum;
+		this.cpAds = cpAds;
+		this.cpAdsDetail = cpAdsDetail;
+		this.cpEmail = cpEmail;
 	}
 
 	public int getBsrNum() {
-		return BsrNum;
+		return bsrNum;
 	}
 
 	public void setBsrNum(int bsrNum) {
-		BsrNum = bsrNum;
+		this.bsrNum = bsrNum;
 	}
 
 	public String getCpNm() {
-		return CpNm;
+		return cpNm;
 	}
 
 	public void setCpNm(String cpNm) {
-		CpNm = cpNm;
+		this.cpNm = cpNm;
 	}
 
 	public String getRpNm() {
-		return RpNm;
+		return rpNm;
 	}
 
 	public void setRpNm(String rpNm) {
-		RpNm = rpNm;
+		this.rpNm = rpNm;
 	}
 
 	public String getCpTel() {
-		return CpTel;
+		return cpTel;
 	}
 
 	public void setCpTel(String cpTel) {
-		CpTel = cpTel;
+		this.cpTel = cpTel;
 	}
 
 	public String getBsType() {
-		return BsType;
+		return bsType;
 	}
 
 	public void setBsType(String bsType) {
-		BsType = bsType;
+		this.bsType = bsType;
 	}
 
 	public String getBsItem() {
-		return BsItem;
+		return bsItem;
 	}
 
 	public void setBsItem(String bsItem) {
-		BsItem = bsItem;
+		this.bsItem = bsItem;
 	}
 
 	public String getCpAdsNum() {
-		return CpAdsNum;
+		return cpAdsNum;
 	}
 
 	public void setCpAdsNum(String cpAdsNum) {
-		CpAdsNum = cpAdsNum;
+		this.cpAdsNum = cpAdsNum;
 	}
 
 	public String getCpAds() {
-		return CpAds;
+		return cpAds;
 	}
 
 	public void setCpAds(String cpAds) {
-		CpAds = cpAds;
+		this.cpAds = cpAds;
 	}
 
 	public String getCpAdsDetail() {
-		return CpAdsDetail;
+		return cpAdsDetail;
 	}
 
 	public void setCpAdsDetail(String cpAdsDetail) {
-		CpAdsDetail = cpAdsDetail;
+		this.cpAdsDetail = cpAdsDetail;
 	}
 
 	public String getCpEmail() {
-		return CpEmail;
+		return cpEmail;
 	}
 
 	public void setCpEmail(String cpEmail) {
-		CpEmail = cpEmail;
+		this.cpEmail = cpEmail;
 	}
 
 	@Override
 	public String toString() {
-		return "CompanyDTO [BsrNum=" + BsrNum + ", CpNm=" + CpNm + ", RpNm=" + RpNm + ", CpTel=" + CpTel + ", BsType="
-				+ BsType + ", BsItem=" + BsItem + ", CpAdsNum=" + CpAdsNum + ", CpAds=" + CpAds + ", CpAdsDetail="
-				+ CpAdsDetail + ", CpEmail=" + CpEmail + "]";
+		return "CompanyDTO [bsrNum=" + bsrNum + ", cpNm=" + cpNm + ", rpNm=" + rpNm + ", cpTel=" + cpTel + ", bsType="
+				+ bsType + ", bsItem=" + bsItem + ", cpAdsNum=" + cpAdsNum + ", cpAds=" + cpAds + ", cpAdsDetail="
+				+ cpAdsDetail + ", cpEmail=" + cpEmail + "]";
 	}
 
 }

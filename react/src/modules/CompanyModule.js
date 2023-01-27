@@ -2,24 +2,24 @@ import {createActions, handleActions} from 'redux-actions';
 
 const initialState = [];
 
-export const GET_COMPANYINFO = 'footer/GET_COMPANYINFO';
-export const GET_SHOPINFO = 'footer/GET_SHOPINFO';
+export const GET_COMPANYINFO = 'company/GET_COMPANYINFO';
+export const PUT_COMPANYINFO = 'company/PUT_COMPANYINFO';
 
 const actions = createActions({
     [GET_COMPANYINFO] : () => {},
-    [GET_SHOPINFO] : () => {}
+    [PUT_COMPANYINFO] : () => {}
 });
 
-const footerReducer = handleActions(
+const companyReducer = handleActions(
     {
         [GET_COMPANYINFO] : (state, { payload }) => {
             return payload;
         },
-        [GET_SHOPINFO] : (state, { payload }) => {
+        [PUT_COMPANYINFO] : (state, { payload }) => {
             return payload;
         }
     },
     initialState
 );
 
-export default footerReducer;
+export default companyReducer;

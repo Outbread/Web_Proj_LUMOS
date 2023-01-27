@@ -118,7 +118,7 @@ export default function Header() {
             <>
                 <div>
                     <li onClick={onClickLogoutHandler}>로그아웃</li>
-                    <li onClick={onClickMoveHandler} id="order-management">상점관리</li>
+                    <li onClick={onClickMoveHandler} id="shop-management">상점관리</li>
                     <li onClick={onClickMoveHandler} id="product-management">상품관리</li>
                     <li onClick={onClickMoveHandler} id="order-dashboard">주문관리</li>
                     <li onClick={onClickMoveHandler} id="member-management">회원관리</li>

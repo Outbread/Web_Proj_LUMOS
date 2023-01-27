@@ -30,10 +30,8 @@ export default function OrderDashBoard() {
 
     useEffect(
         () => {
-            dispatch(callOrderDashBoardAPI({	
-            }));   
-            dispatch(callClaimDashBoardClaimAPI({	
-            }));             
+            dispatch(callOrderDashBoardAPI());   
+            dispatch(callClaimDashBoardClaimAPI());             
         }
         ,[]
     );

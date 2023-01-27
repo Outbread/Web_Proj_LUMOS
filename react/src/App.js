@@ -25,6 +25,8 @@ import ProductRegistration from './pages/admin/ProductRegistration';
 import ProductUpdate from './pages/admin/ProductUpdate';
 import LED from './pages/products/LED';
 
+import ShopManagement from './pages/admin/ShopManagement';                  // 상점관리
+
 import {useState, createContext} from 'react';
 
 export const OrderContext = createContext(null);
@@ -62,6 +64,8 @@ function App() {
             <Route path="order-management/search" element={<OrderSearch/>}/>
             <Route path="order-management/:orderCode" element={<OrderDetail/>}/>
             <Route path="cart/:memberId" element={<Cart/>}/>
+
+            <Route path="shop-management" element={<ShopManagement/>}/>
 
             <Route path="/login" element={ <Login/> } />
             <Route path="/register" element={ <Register/> } />  

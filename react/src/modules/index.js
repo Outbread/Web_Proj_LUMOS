@@ -4,9 +4,10 @@ import memberReducer from './MemberModule';         // 로그인, 회원가입
 import orderReducer from './OrderModule';           // 주문내역
 import cartReducer from './CartModule';             // 주문내역
 import dashBoardReducer from './OrderDashBoardModule';           // 주문내역
-import footerReducer from './FooterModule';
 import productReducer from './ProductModule'        // 상품
 import productManagementReducer from './ProductManagementModule'; // 상품 관리
+import shopReducer from './ShopModule';             // 쇼핑몰 정보
+import companyReducer from './CompanyModule';       // 사업자 정보
 
 const rootReducer = combineReducers({
     questionReducer,       // 문의사항 
@@ -14,9 +15,10 @@ const rootReducer = combineReducers({
     orderReducer,
     cartReducer,
     dashBoardReducer,
-    footerReducer,
     productReducer,          // 상품
-    productManagementReducer // 상품 관리
+    productManagementReducer, // 상품 관리
+    shopReducer,
+    companyReducer
 });
 
 export default rootReducer;

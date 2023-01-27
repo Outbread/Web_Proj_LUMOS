@@ -1,8 +1,8 @@
-package com.project.lumos.company.repository;
+package com.project.lumos.shop.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.project.lumos.company.entity.Company;
+import com.project.lumos.shop.entity.Company;
 
 public interface CompanyRepository extends JpaRepository<Company, Integer>{
 
