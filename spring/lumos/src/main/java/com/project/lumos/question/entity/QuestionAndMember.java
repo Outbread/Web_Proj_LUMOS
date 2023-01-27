@@ -51,4 +51,94 @@ public class QuestionAndMember {
 	@Column(name = "QUESTION_CREATE_DATE")
 	private String questionCreateDate;
 
+	public QuestionAndMember(int questionCode, String questionTitle, String questionCategory, String questionContent,
+			String answerContent, String questionStatus, Member member, String questionCreateDate) {
+		super();
+		this.questionCode = questionCode;
+		this.questionTitle = questionTitle;
+		this.questionCategory = questionCategory;
+		this.questionContent = questionContent;
+		this.answerContent = answerContent;
+		this.questionStatus = questionStatus;
+		this.member = member;
+		this.questionCreateDate = questionCreateDate;
+	}
+
+	public QuestionAndMember() {
+		super();
+	}
+
+	@Override
+	public String toString() {
+		return "QuestionAndMember [questionCode=" + questionCode + ", questionTitle=" + questionTitle
+				+ ", questionCategory=" + questionCategory + ", questionContent=" + questionContent + ", answerContent="
+				+ answerContent + ", questionStatus=" + questionStatus + ", member=" + member + ", questionCreateDate="
+				+ questionCreateDate + "]";
+	}
+
+	public int getQuestionCode() {
+		return questionCode;
+	}
+
+	public void setQuestionCode(int questionCode) {
+		this.questionCode = questionCode;
+	}
+
+	public String getQuestionTitle() {
+		return questionTitle;
+	}
+
+	public void setQuestionTitle(String questionTitle) {
+		this.questionTitle = questionTitle;
+	}
+
+	public String getQuestionCategory() {
+		return questionCategory;
+	}
+
+	public void setQuestionCategory(String questionCategory) {
+		this.questionCategory = questionCategory;
+	}
+
+	public String getQuestionContent() {
+		return questionContent;
+	}
+
+	public void setQuestionContent(String questionContent) {
+		this.questionContent = questionContent;
+	}
+
+	public String getAnswerContent() {
+		return answerContent;
+	}
+
+	public void setAnswerContent(String answerContent) {
+		this.answerContent = answerContent;
+	}
+
+	public String getQuestionStatus() {
+		return questionStatus;
+	}
+
+	public void setQuestionStatus(String questionStatus) {
+		this.questionStatus = questionStatus;
+	}
+
+	public Member getMember() {
+		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
+	}
+
+	public String getQuestionCreateDate() {
+		return questionCreateDate;
+	}
+
+	public void setQuestionCreateDate(String questionCreateDate) {
+		this.questionCreateDate = questionCreateDate;
+	}
+
+	
 }

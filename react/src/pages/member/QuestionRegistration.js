@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { decodeJwt } from '../../utils/tokenUtils';
 
 import {
-    callQuestionRegistAPI
+    callQuestionRegistAPI,
+    callNewQuestionCodeAPI
 } from '../../apis/QuestionAPICalls';
 
 function QuestionRegistration() {
@@ -17,7 +18,8 @@ function QuestionRegistration() {
     const imageInput = useRef();
     const navigate = useNavigate();
     const token = decodeJwt(window.localStorage.getItem("accessToken"));   
-
+    const newQuestion = useSelector(state => state.questionReducer); 
+    const questionCode = newQuestion.data;
     const [form, setForm] = useState({
         questionTitle : '',
         questionCategory : '',
@@ -25,9 +27,6 @@ function QuestionRegistration() {
         memberCode: '',
         questionStatus: '미해결',
         memberId: token.sub
-        // questionImgCode : '',
-        // originalName : '',
-        // newName: ''
     });
 
     useEffect(() => {
@@ -45,18 +44,6 @@ function QuestionRegistration() {
         }
     },
     [image]);
-
-
-    // useEffect(
-    //     () => {    
-    //         if(token !== null) {
-    //             dispatch(callQuestionRegistAPI({	
-    //                 memberId: token.sub
-    //             }));            
-    //         }
-    //     }
-    //     ,[]
-    // );
 
     const onChangeImageUpload = (e) => {
 
@@ -94,13 +81,18 @@ function QuestionRegistration() {
 
         dispatch(callQuestionRegistAPI({	// 문의 등록 
             form: formData
-        }));        
+        }));    
         
-        alert('문의 리스트로 이동합니다.');
-        // navigate('/mypage/questionregistration', { replace: true});
-        // window.location.reload();
+        dispatch(callNewQuestionCodeAPI({	// 새로 생성된 questionCode 조회
+             memberId: token.sub
+        })); 
     }
     
+    if ((newQuestion + 0) > 0) {
+        console.log(newQuestion);
+        navigate(`/mypage/question/detail/${newQuestion}`, { replace: true });
+        // window.location.reload();
+    }
 
     return (
         <div>

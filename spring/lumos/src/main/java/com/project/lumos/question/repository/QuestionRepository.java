@@ -18,8 +18,8 @@ public interface QuestionRepository extends JpaRepository<Question, Integer>{
 
 	Question findByQuestionCode(int questionCode); 
 	
-
-
+	@Query(value = "SELECT MAX(QUESTION_CODE) FROM QUESTION WHERE MEMBER_CODE = :memberCode", nativeQuery = true)
+	public int findNewQuestionCode(int memberCode);
 
 
 	
