@@ -18,7 +18,7 @@ function ProductDetail() {
     const params = useParams();
     const product  = useSelector(state => state.productReducer);
 
-    // const [amount, setAmount] = useState(1);
+    const [amount, setAmount] = useState(1);
     const [loginModal, setLoginModal] = useState(false);
    
     console.log('product : ' , product);
@@ -56,6 +56,8 @@ function ProductDetail() {
         pdPc : ''
     })
     
+
+    
     // dispatch 이후 동작시키기 위해 분리
     useEffect(
         () => {
@@ -90,6 +92,7 @@ function ProductDetail() {
 
     const onChangeAmountHandler = (e) => {
         console.log("왜안바뀌니?", e.target.value);
+        setAmount(e.target.value);
         setOrderProductDTO({
             ...orderProductDTO,
             orderAmount: e.target.value
@@ -121,10 +124,10 @@ function ProductDetail() {
         }
 
         /* 구매 가능 수량 확인 */
-        // if(amount > product.productStock) {
-        //     alert('구매 가능 수량을 확인해주세요');
-        //     return;
-        // }
+        if(amount > productOption.optionStock) {
+            alert('구매 가능 수량을 확인해주세요');
+            return;
+        }
 
         //////////////////////////////[ ↓ 구도연 ↓ ]//////////////////////////////
         // 장바구니 버튼 클릭 시 api 호출 및 이동
@@ -204,7 +207,7 @@ function ProductDetail() {
                                     <select onChange={optionSelectHandler} id="seletTag">
                                         {productOption?.map(res =>
                                             <option value={res.optionNm + res.optionStock} id={res.opCode} key={res.opCode}>
-                                                {res.optionNm + res.optionStock}
+                                                {res.optionNm}
                                             </option>
                                         )}
                                     </select>
@@ -216,19 +219,19 @@ function ProductDetail() {
                                 <td>
                                     <input 
                                         type='number'
-                                        defaultValue={1}
                                         onChange = { onChangeAmountHandler }
+                                        value={ amount }
                                     />
                                 </td>
                             </tr>    
                             <tr>                            
                                 <td colSpan={ 2 }>
-                                    <button
+                                    {decodeJwt(window.localStorage.getItem("accessToken")).auth.includes("ROLE_ADMIN") || <button
                                         className={ ProductDetailCSS.productBuyBtn }
                                         onClick= { onClickPurchaseHandler }
                                     >
                                         장바구니담기
-                                    </button>
+                                    </button>}
                                 </td>
                             </tr>    
                         </tbody>                    

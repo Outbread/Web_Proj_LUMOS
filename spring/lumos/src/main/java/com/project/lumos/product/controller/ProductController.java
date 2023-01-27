@@ -20,7 +20,6 @@ import com.project.lumos.common.Criteria;
 import com.project.lumos.common.PageDTO;
 import com.project.lumos.common.PagingResponseDTO;
 import com.project.lumos.common.ResponseDTO;
-import com.project.lumos.product.dto.ProductDTO;
 import com.project.lumos.product.dto.ProductInsertDTO;
 import com.project.lumos.product.service.ProductService;
 
@@ -152,48 +151,15 @@ public class ProductController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutSwitch()));
     }
 	
-//	@Operation(summary = "검색 상품 리스트 조회 요청", description = "검색어에 해당되는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
-//	@GetMapping("/products/search")
-//    public ResponseEntity<ResponseDTO> selectSearchProductList(@RequestParam(name="s", defaultValue="all") String search) {
-//
-//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectSearchProductList(search)));
-//    }
-//	
-//	@Operation(summary = "식사 상품 리스트 조회 요청", description = "식사 카테고리에 해당하는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
-//	@GetMapping("/products/meals")
-//    public ResponseEntity<ResponseDTO> selectProductListAboutMeal() {
-//
-//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutMeal()));
-//    }
-//	
-//	@Operation(summary = "디저트 상품 리스트 조회 요청", description = "디저트 카테고리에 해당하는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
-//    @GetMapping("/products/dessert")
-//    public ResponseEntity<ResponseDTO> selectProductListAboutDessert() {
-//
-//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutDessert()));
-//    }
-//
-//	@Operation(summary = "음료 상품 리스트 조회 요청", description = "음료 카테고리에 해당하는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
-//    @GetMapping("/products/beverage")
-//    public ResponseEntity<ResponseDTO> selectProductListAboutBeverage() {
-//
-//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectProductListAboutBeverage()));
-//    }
-//    
+	@Operation(summary = "검색 상품 리스트 조회 요청", description = "검색어에 해당되는 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
+	@GetMapping("/products/search")
+    public ResponseEntity<ResponseDTO> selectSearchProductList(@RequestParam(name="s", defaultValue="all") String search) {
+
+		log.info("search" + search);
+		
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  productService.selectSearchProductList(search)));
+    }
 	
-//    
-//	@Operation(summary = "관리자 페이지 상품 상세 페이지 조회 요청", description = "관리자 페이지에서 상품 상세 페이지 조회가 진행됩니다.", tags = { "ProductController" })
-//    @GetMapping("/products-management/{productCode}")
-//    public ResponseEntity<ResponseDTO> selectProductDetailForAdmin(@PathVariable int productCode) {
-//
-//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "상품 상세정보 조회 성공",  productService.selectProductForAdmin(productCode)));
-//    }
-//    
-//    /* 
-//     * 파일 업로드 시에 static 폴더의 파일이 바로 적용되지 않는 시
-//     * (이미지가 정상적으로 업로드 되었음에도 불구하고 이미지를 읽어오지 못하는 경우)
-//     * : Window -> Preferences의 General -> Workspace에서 맨 위의 Refresh using native hooks or polling 체크할 것 
-//     */
 	
 
 }

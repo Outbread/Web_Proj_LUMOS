@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.transaction.Transactional;
 
@@ -128,6 +126,29 @@ public class ProductService {
 		log.info("[ProductService] selectProduct End ===================================");
 		
 		return modelMapper.map(productList, ProductAndImage.class);
+	}
+	
+	public Object selectSearchProductList(String search) {
+		log.info("[ProductService] selectSearchProductList Start ===================================");
+        log.info("[ProductService] searchValue : " + search);
+        
+        List<ProductAndImage> SearchValue = productAndImageRepository.findByPdNameContaining(search);
+        List<ProductImage> imageList = productImageRepository.findAll();
+        
+        log.info("SearchValue1" + SearchValue);
+        
+        for(ProductImage image : imageList) {
+        	for(int i = 0; i < SearchValue.size();i++) {
+        		if(image.getPdCode() == SearchValue.get(i).getPdCode()) {
+        			image.setPdImgPath(IMAGE_URL + image.getPdImgPath());
+        		}
+        	}
+        }            
+        log.info("SearchValue2" + SearchValue);
+        
+        log.info("[ProductService] selectSearchProductList End ===================================");
+
+        return SearchValue.stream().map(product -> modelMapper.map(product, ProductAndImageDTO.class)).collect(Collectors.toList());
 	}
 	
 	@Transactional
@@ -383,21 +404,6 @@ public class ProductService {
         
         return productList.stream().filter(res -> res.getProduct().getCatMain().equals("스위치/콘센트")).map(r->modelMapper.map(r, ImageAndProductDTO.class)).collect(Collectors.toList());
 	}
-//
-//	public Object selectSearchProductList(String search) {
-//		log.info("[ProductService] selectSearchProductList Start ===================================");
-//        log.info("[ProductService] searchValue : " + search);
-//        
-//        List<Product> productListWithSearchValue = productRepository.findByProductNameContaining(search);
-//        
-//        log.info("[ProductService] productListWithSearchValue : " + productListWithSearchValue);
-//
-//        for(int i = 0 ; i < productListWithSearchValue.size() ; i++) {
-//            productListWithSearchValue.get(i).setProductImageUrl(IMAGE_URL + productListWithSearchValue.get(i).getProductImageUrl());
-//        }
-//        
-//        log.info("[ProductService] selectSearchProductList End ===================================");
-//
-//        return productListWithSearchValue.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
-//	}
+
+	
 }
