@@ -1,10 +1,14 @@
 package com.project.lumos.product.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -40,16 +44,27 @@ public class ProductInsert {
 	@Column(name = "CAT_SUB")
 	private String catSub;
 
+	@OneToMany
+	@JoinColumn(name = "PD_CODE", insertable=false, updatable = false)
+	private List<ProductImage> productImage;
+
+	@OneToMany
+	@JoinColumn(name = "PD_CODE", insertable=false, updatable = false)
+	private List<Option> productOption;
+
 	public ProductInsert() {
 	}
 
-	public ProductInsert(int pdCode, String pdName, int pdPrice, String pdDesc, String catMain, String catSub) {
+	public ProductInsert(int pdCode, String pdName, int pdPrice, String pdDesc, String catMain, String catSub,
+			List<ProductImage> productImage, List<Option> productOption) {
 		this.pdCode = pdCode;
 		this.pdName = pdName;
 		this.pdPrice = pdPrice;
 		this.pdDesc = pdDesc;
 		this.catMain = catMain;
 		this.catSub = catSub;
+		this.productImage = productImage;
+		this.productOption = productOption;
 	}
 
 	public int getPdCode() {
@@ -100,11 +115,29 @@ public class ProductInsert {
 		this.catSub = catSub;
 	}
 
+	public List<ProductImage> getProductImage() {
+		return productImage;
+	}
+
+	public void setProductImage(List<ProductImage> productImage) {
+		this.productImage = productImage;
+	}
+
+	public List<Option> getProductOption() {
+		return productOption;
+	}
+
+	public void setProductOption(List<Option> productOption) {
+		this.productOption = productOption;
+	}
+
 	@Override
 	public String toString() {
 		return "ProductInsert [pdCode=" + pdCode + ", pdName=" + pdName + ", pdPrice=" + pdPrice + ", pdDesc=" + pdDesc
-				+ ", catMain=" + catMain + ", catSub=" + catSub + "]";
+				+ ", catMain=" + catMain + ", catSub=" + catSub + ", productImage=" + productImage + ", productOption="
+				+ productOption + "]";
 	}
+	
 	
 	
 }

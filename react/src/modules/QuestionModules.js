@@ -12,6 +12,7 @@ export const GET_ALLQUESTIONS = 'question/GET_ALLQUESTIONS';
 export const PUT_ANSWER = 'question/PUT_ANSWER';
 export const GET_QUESTIONADMIN = 'question/GET_QUESTIONADMIN';
 export const GET_NEWQUESTIONCODE = 'question/GET_NEWQUESTIONCODE';
+export const GET_CLAIM = 'question/GET_CLAIM';
 
 const actions = createActions({
     [POST_QUESTION]: () => {},
@@ -21,8 +22,10 @@ const actions = createActions({
     [GET_ALLQUESTIONS]: () => {},
     [PUT_ANSWER]: () => {},
     [GET_QUESTIONADMIN]: () => {},
-    [GET_NEWQUESTIONCODE]: () => {}
-    
+    [GET_NEWQUESTIONCODE]: () => {},
+    [PUT_QUESTION]: () => {},
+    [GET_CLAIM]: () => {}
+
 });
 
 /* 리듀서 */
@@ -58,6 +61,8 @@ const questionReducer = handleActions(
             return payload;
         },
         [GET_NEWQUESTIONCODE]: (state, { payload }) => {
+        },    
+        [GET_CLAIM]: (state, { payload }) => {
 
             return payload;
         }

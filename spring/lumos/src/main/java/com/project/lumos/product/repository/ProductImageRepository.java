@@ -10,4 +10,7 @@ public interface ProductImageRepository extends JpaRepository<ProductImage , Int
 
 	List<ProductImage> findByPdCode(int pdCode);
 
+	/* [구도연] */
+	ProductImage findByPdCodeAndMainImgLike(int pdCode, String string);
+
 }

@@ -16,13 +16,31 @@ import ProfileUpdate from './pages/member/ProfileUpdate';
 import OrderDashBoard from './pages/order/OrderDashBoard';                  // 주문대시보드
 import OrderManagement from './pages/order/OrderManagement';                // 주문목록
 import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세                      
+import OrderSearch from './pages/order/OrderDetail';                        // 주문내역검색
+import Cart from './pages/cart/Cart';                                       // 장바구니
+
+import ProductDetail from './pages/products/ProductDetail';
+import ProductManagement from './pages/admin/ProductManagement'
+import ProductRegistration from './pages/admin/ProductRegistration';
+import ProductUpdate from './pages/admin/ProductUpdate';
+import LED from './pages/products/LED';
+
+import {useState, createContext} from 'react';
+
+export const OrderContext = createContext(null);
 
 function App() {
+
+  const [ckeckCode, setCheckCode] = useState(new Set());
+
   return (
+    <OrderContext.Provider value={{ckeckCode, setCheckCode}}>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={ <Layout/> }>
             <Route index element={ <Main/> }/>   
+            <Route path="product/LED" element={<LED />} />
+            <Route path="product/:productCode" element={<ProductDetail />} />
             <Route path="mypage" element={ <MyPageLayout/> } >
                 <Route index element={ <ProfileUpdate /> } />
                 <Route path="profileUpdate" element={ <ProfileUpdate /> } />
@@ -30,12 +48,21 @@ function App() {
                 <Route path="question" element={<QuestionList />} />
                 <Route path="question/detail/:questionCode" element={<QuestionDetail />} />
             </Route>
+            <Route path="product-management" element={ <ProductManagement/> } />
+            <Route path="product-registration" element={ <ProductRegistration/> } />
+            <Route path="product-update/:productCode" element={ <ProductUpdate/> } />
             <Route path="order-dashboard" element={<OrderDashBoard/>}/>
             <Route path="order-management" element={<OrderManagement/>}/>
             <Route path="order-management/:orderCode" element={<OrderDetail />} />
+
             <Route path="question-management" element={<AdminQuestionList />} />
             <Route path="questionAnswer/:questionCode" element={<QuestionAnswer />} />
             <Route path="member-management" element={<MemberList />} />
+
+            <Route path="order-management/search" element={<OrderSearch/>}/>
+            <Route path="order-management/:orderCode" element={<OrderDetail/>}/>
+            <Route path="cart/:memberId" element={<Cart/>}/>
+
             <Route path="/login" element={ <Login/> } />
             <Route path="/register" element={ <Register/> } />  
         </Route>
@@ -47,6 +74,7 @@ function App() {
         
       </Routes>
     </BrowserRouter>
+    </OrderContext.Provider>
   );
 }
 
