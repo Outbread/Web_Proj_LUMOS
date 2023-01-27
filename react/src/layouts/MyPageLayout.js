@@ -1,20 +1,8 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import MyPageLayoutCSS from "./MyPageLayout.module.css";
 import MyPageNavbar from "../components/common/MyPageNavbar";
-import { Navigate } from 'react-router-dom';
-import { useEffect } from "react";
 
 function MyPageLayout() {
-
-    const navigate = useNavigate();
-
-
-    useEffect(() => {
-        navigate("/mypage/profileUpdate", { replace: false });
-
-    }, 
-    []);
-
 
     return (
         <>

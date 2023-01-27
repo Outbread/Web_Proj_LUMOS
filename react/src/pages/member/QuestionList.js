@@ -9,12 +9,11 @@ import {
 
 function QuestionList() {
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    // const params = useParams();
     const question = useSelector(state => state.questionReducer);  
     const questionList = question.data;
     const token = decodeJwt(window.localStorage.getItem("accessToken"));   
-
     const [currentPage, setCurrentPage] = useState(1);
     const pageInfo = question.pageInfo;
 
@@ -37,16 +36,12 @@ function QuestionList() {
         ,[currentPage]
     );
 
-    // useEffect(
-    //     () => {
-    //         dispatch(callQuestionListAPI({	
-    //             currentPage: currentPage
-    //         }));            
-    //     }
-    //     ,[currentPage]
-    // );
-    console.log(currentPage);
+    const onClickTableTr = (questionCode) => {
+        navigate(`/mypage/question/detail/${questionCode}`, { replace: false });
+    }
 
+
+    console.log(currentPage);
     return (
         <>
             <div>
@@ -54,15 +49,16 @@ function QuestionList() {
                     <colgroup>
                         <col width="10%" />
                         <col width="10%" />
-                        <col width="20%" />
                         <col width="10%" />
+                        <col width="20%" />
                         <col width="50%" />
                     </colgroup>
                     <thead>
                         <tr>
                             <th>문의 번호</th>
-                            <th>문의 일시</th>
+                            <th>작성자</th>
                             <th>문의 유형</th>
+                            <th>문의 일시</th>
                             <th>문의 제목</th>
                         </tr>
                     </thead>
@@ -70,13 +66,15 @@ function QuestionList() {
                         { Array.isArray(questionList) && questionList.map(
                             (question, index) => (
                                 <tr
-                                    key={ question.questionCode }
+                                    key={question.questionCode}
+                                    onClick={ () => onClickTableTr(question.questionCode) }
                                 >
-                                    <td>{(currentPage - 1) * 10 +  (index + 1)}</td>
-                                    <td>{ question.questionCode }</td>
+                                    {/* <td>{(currentPage - 1) * 10 +  (index + 1)}</td> */}
+                                    <td>{question.questionCode}</td>
+                                    <td>{token.sub}</td>
+                                    <td>{ question.questionCategory }</td>
                                     <td>{ question.questionCreateDate }</td>                                
-                                    <td>{question.questionCategory}</td>
-                                    <td>{ question.questionTitle}</td>
+                                    <td>{ question.questionTitle }</td>
                                 </tr>
                             )
                         )}

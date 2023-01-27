@@ -1,27 +1,27 @@
 import {useSelector, useDispatch} from 'react-redux';
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-
-import {callCompanyInfoAPI, callShopInfolAPI} from '../../apis/FooterAPICalls';
-
 import FooterCSS from './Footer.module.css';
+import {callCompanyInfoAPI, callShopInfolAPI} from '../../apis/ShopManagementAPICalls';
 
 export default function Footer() {
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const footerData  = useSelector(state => state.orderReducer);  
-    const footerInfo = footerData.data;
+    // const dispatch = useDispatch();
+    // const navigate = useNavigate();
+    // const companyInfo  = useSelector(state => state.companyReducer);  
+    // const shopInfo  = useSelector(state => state.shopReducer);  
 
-    useEffect(
-        () => {
-            dispatch(callCompanyInfoAPI());            
-            dispatch(callShopInfolAPI());
-        }
-        ,[]
-    );
+    // console.log("companyInfo:::::::", companyInfo);
+    // console.log("shopInfo:::::::", shopInfo);
 
-    console.log();
+    // useEffect(
+    //     () => {
+    //         dispatch(callCompanyInfoAPI());            
+    //         dispatch(callShopInfolAPI());
+    //     }
+    //     ,[]
+    // );
+
     return (
         <>
             <div>

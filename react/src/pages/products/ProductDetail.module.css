@@ -1,0 +1,94 @@
+.DetailDiv{
+    display: flex;
+    flex-direction: row;
+    margin-top: 50px;
+}
+
+.DetailDiv div{
+    width: 500px;
+    height: 350px;
+}
+
+.imageView {
+    display: flex;
+}
+
+.imgDiv{
+    display: flex;    
+    justify-content: center;
+    align-items: center;
+}
+
+.thumbnail img{
+    transition: all 0.2s linear;
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    height: 100px;
+}
+
+.thumbnail img:nth-child(1):hover {
+    transform: scale(3);
+}
+
+.thumbnail img:nth-child(2):hover {
+    transform: scale(3);
+}
+
+.thumbnail img:nth-child(3):hover {
+    transform: scale(3);
+}
+
+.thumbnail img:nth-child(4):hover {
+    transform: scale(3);
+}
+
+/* .thumbnail:hover {
+    transform: scale(1.4);
+} */
+
+.imgDiv img {
+    margin: 5px;
+    width: 70%;
+    height: 80%;
+}
+
+.imgDiv button {
+    margin: 5px;
+    height: 8%;
+    width: 80%;
+}
+
+.descriptionDiv{
+    display: flex;    
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.descriptionTable{ 
+    width: 80%;
+    height: 80%;
+}
+
+.reviewBtn{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 30px;
+    width: 100%;
+    border-radius: 25px;
+    background-color: white;
+    font-weight: bold;
+}
+
+.productBuyBtn{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 30px;
+    width: 100%;
+    border-radius: 25px;
+    background-color: white;
+    font-weight: bold;
+}

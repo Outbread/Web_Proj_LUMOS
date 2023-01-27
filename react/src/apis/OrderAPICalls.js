@@ -5,11 +5,74 @@ import {
     PUT_DELEVERYNUM,
     PUT_STORDER,
     PUT_STCLAIM,
+    GET_MYORDER,
     // 추가
     PUT_DATE
 } from '../modules/OrderModule';
+import {GET_DASHBOARD} from '../modules/OrderDashBoardModule';
+import {GET_CLAIM} from '../modules/QuestionModules';
 
-/* ◎ [관리자] 주문 내역 조회 */
+/* [관리자] 주문 대시보드 */
+export const callOrderDashBoardAPI = () => {
+
+    console.log("[callOrderDashBoardAPI] START ◀ ");
+
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-dashboard`;
+
+    console.log("[callOrderDashBoardAPI] requestURL ▶ ", requestURL);
+
+    return async(dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+            } 
+        })
+        .then(response => response.json());
+
+        console.log("[callOrderDashBoardAPI] RESULT ▶ ", result);
+        
+        if(result.status === 200){
+            console.log("[callOrderDashBoardAPI] SUCCESS ◀ ");
+            dispatch({type: GET_DASHBOARD,  payload: result.data});
+        }
+    };
+};
+
+/* [관리자] 주문 대시보드 */
+export const callClaimDashBoardClaimAPI = () => {
+
+    console.log("[callClaimDashBoardClaimAPI] START ◀ ");
+
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question-dashboard`;
+
+    console.log("[callClaimDashBoardClaimAPI] requestURL ▶ ", requestURL);
+
+    return async(dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+            } 
+        })
+        .then(response => response.json());
+
+        console.log("[callClaimDashBoardClaimAPI] RESULT ▶ ", result);
+        
+        if(result.status === 200){
+            console.log("[callClaimDashBoardClaimAPI] SUCCESS ◀ ");
+            dispatch({type: GET_CLAIM,  payload: result.data});
+        }
+    };
+};
+
+/* [관리자] 주문 내역 조회 */
 export const callOrderListAPI = ({currentPage}) => {
 
     console.log("[callOrderListAPI] START ◀ ");
@@ -18,7 +81,7 @@ export const callOrderListAPI = ({currentPage}) => {
 
     if(currentPage !== undefined || currentPage !== null) {
         requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management?offset=${currentPage}`;
-    }else {
+    } else {
         requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management`;
     }
 
@@ -37,6 +100,7 @@ export const callOrderListAPI = ({currentPage}) => {
         .then(response => response.json());
 
         console.log("[callOrderListAPI] RESULT ▶ ", result);
+        
         if(result.status === 200){
             console.log("[callOrderListAPI] SUCCESS ◀ ");
             dispatch({type: GET_ORDER,  payload: result.data});
@@ -44,12 +108,15 @@ export const callOrderListAPI = ({currentPage}) => {
     };
 };
 
-/* ○◎ [관리자] 주문 내역 검색 결과 조회 */
-export const callOrderSearchAPI = ({search}) => {
+/* [관리자] 주문 내역 검색 결과 조회 */
+export const callOrderSearchAPI = ({searchDate, searchTitle, searchValue}) => {
 
     console.log("[callOrderSearchAPI] START ◀ ");
+    console.log("searchDate", searchDate);
+    console.log("searchTitle", searchTitle);
+    console.log("searchValue", searchValue);
 
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order/list/search?s=${search}`;
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/search?s1=${searchDate}&s2=${searchTitle}&s3=${searchValue}`;
 
     return async(dispatch, getState) => {
 
@@ -71,7 +138,7 @@ export const callOrderSearchAPI = ({search}) => {
     
 };
 
-/* ○◎ [관리자] 주문 내역 상세 조회 */
+/* [관리자] 주문 내역 상세 조회 */
 export const callOrderDetailAPI = ({orderCode}) => {
 
     console.log("[callOrderDetailAPI] START ◀ ");
@@ -98,14 +165,14 @@ export const callOrderDetailAPI = ({orderCode}) => {
     };
 };
 
-/* ○◎ [관리자] 주문 내역 택배사 및 송장번호 입력 */
+/* [관리자] 주문 내역 택배사 및 송장번호 입력 */
 export const callDeliveryCpUpdateAPI = ({orderCode, form}) => {
 
     console.log("[callDeliveryCpUpdateAPI] START ◀ ");
     console.log("orderCode", orderCode);
     console.log("form", form);
 
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/${orderCode}`;
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/${orderCode}/delivery-update`;
 
     return async(dispatch, getState) => {
 
@@ -125,31 +192,64 @@ export const callDeliveryCpUpdateAPI = ({orderCode, form}) => {
     };
 };
 
-// 추가 간다간다 뿅간다
-// 일단 시간 추가되는지만 보자...
-export const callHistoryUpdateAPI = ({orderCode, form}) => {
+/* [관리자] 발주확인, 배송완료처리, 주문취소처리, 반품접수, 반품완료처리 */
+export const callHistoryUpdateAPI = ({orderCode, updateKind}) => {
 
-    console.log(form);
-    console.log("asdasdas",form.updateKind);
     console.log("[callHistoryUpdateAPI] START ◀ ");
+    console.log("API orderCode", orderCode);
+    console.log("API updateKind", updateKind);
 
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/${orderCode}/history-update`;
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/${orderCode}/history-update/${updateKind}`;
 
     return async(dispatch, getState) => {
 
         const result = await fetch(requestURL, {
             method: "PUT",
             headers: {
-                // "Content-Type": "application/json",
                 "Accept": "*/*",
                 "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
-            },
-            body: form
+            }
         })
         .then(response => response.json());
 
         console.log("[callHistoryUpdateAPI] RESULT : ▶ ", result);
 
         dispatch({ type: PUT_DATE,  payload: result });
+    };
+};
+
+/* [회원] 주문 내역 조회 */
+export const callMyOrderListAPI = ({memberId, currentPage}) => {
+
+    console.log("[callMyOrderListAPI] START ◀ ");
+
+    let requestURL;
+
+    if(currentPage !== undefined || currentPage !== null) {
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/-management/${memberId}?offset=${currentPage}`;
+    } else {
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/${memberId}`;
+    }
+
+    console.log("[callMyOrderListAPI] requestURL ▶ ", requestURL);
+
+    return async(dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+            } 
+        })
+        .then(response => response.json());
+
+        console.log("[callMyOrderListAPI] RESULT ▶ ", result);
+        
+        if(result.status === 200){
+            console.log("[callMyOrderListAPI] SUCCESS ◀ ");
+            dispatch({type: GET_MYORDER,  payload: result.data});
+        }
     };
 };

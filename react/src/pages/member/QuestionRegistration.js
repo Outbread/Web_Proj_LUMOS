@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { decodeJwt } from '../../utils/tokenUtils';
 
 import {
-    callQuestionRegistAPI
+    callQuestionRegistAPI,
+    callNewQuestionCodeAPI
 } from '../../apis/QuestionAPICalls';
 
 function QuestionRegistration() {
@@ -17,16 +18,15 @@ function QuestionRegistration() {
     const imageInput = useRef();
     const navigate = useNavigate();
     const token = decodeJwt(window.localStorage.getItem("accessToken"));   
-
+    const newQuestion = useSelector(state => state.questionReducer); 
+    const questionCode = newQuestion.data;
     const [form, setForm] = useState({
         questionTitle : '',
         questionCategory : '',
         questionContent: '',
-        memberCode: '2'
-        // questionStatus: '',
-        // questionImgCode : '',
-        // originalName : '',
-        // newName: ''
+        memberCode: '',
+        questionStatus: '미해결',
+        memberId: token.sub
     });
 
     useEffect(() => {
@@ -44,18 +44,6 @@ function QuestionRegistration() {
         }
     },
     [image]);
-
-
-    useEffect(
-        () => {    
-            if(token !== null) {
-                dispatch(callQuestionRegistAPI({	
-                    memberId: token.sub
-                }));            
-            }
-        }
-        ,[]
-    );
 
     const onChangeImageUpload = (e) => {
 
@@ -84,22 +72,27 @@ function QuestionRegistration() {
         formData.append("questionTitle", form.questionTitle);
         formData.append("questionCategory", form.questionCategory);
         formData.append("questionContent", form.questionContent);
-        formData.append("memberCode", 2);
-        
-        console.log(form.memberCode);
+        formData.append("memberId", form.memberId);
+        formData.append("questionStatus", '미해결');
+        console.log(form.memberId);
         if(image){
             formData.append("questionImage", image);
         }
 
         dispatch(callQuestionRegistAPI({	// 문의 등록 
             form: formData
-        }));        
+        }));    
         
-        alert('문의 리스트로 이동합니다.');
-        // navigate('/mypage/questionregistration', { replace: true});
-        // window.location.reload();
+        dispatch(callNewQuestionCodeAPI({	// 새로 생성된 questionCode 조회
+             memberId: token.sub
+        })); 
     }
     
+    if ((newQuestion + 0) > 0) {
+        console.log(newQuestion);
+        navigate(`/mypage/question/detail/${newQuestion}`, { replace: true });
+        // window.location.reload();
+    }
 
     return (
         <div>
@@ -163,11 +156,13 @@ function QuestionRegistration() {
                             <tr>
                                 <td><label>문의 종류</label></td>
                                 <td>
-                                    {/* categoryCode = 1:배송, 2:교환, 3:상품, 4: 환불 */}
-                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="1"/> 배송</label> &nbsp;
-                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="2"/> 교환</label> &nbsp;
-                                    <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="3" /> 상품</label> &nbsp;
-                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="4"/> 환불</label>
+                                    {/* categoryCode = 1:배송, 2:교환, 3:상품, 4: 환불 5: 기타 */}
+                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="배송"/>배송</label> &nbsp;
+                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="주문취소"/>주문취소</label> &nbsp;
+                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="교환"/>교환</label> &nbsp;
+                                    <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="상품" />상품</label> &nbsp;
+                                    <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="환불" />환불</label>
+                                    <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="기타" />기타</label>
                                 </td>
                             </tr> 
                         </tbody>                        

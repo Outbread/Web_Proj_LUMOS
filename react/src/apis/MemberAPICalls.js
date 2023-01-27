@@ -3,6 +3,8 @@ import {
   , PUT_MEMBER
   , POST_LOGIN
   , POST_REGISTER
+  , GET_MEMBERLIST
+  
 } from '../modules/MemberModule';
 import axios from 'axios';
 
@@ -166,13 +168,43 @@ export const idCheckAPI = async(memberId) => {
 //         if(result.status === 200){
 //             // alert("사용 가능한 아이디 입니다.");
 //             console.log(result.status)
-//             dispatch({ type: GET_MEMBER,  payload: result.data });  
+//             dispatch({ type: GET_MEMBER,  payload: result.data });
 //             // dispatch({usable_id: true});
 //         } else if(result.status === 409){
-//             alert("이미 사용중인 아이디 입니다.") 
-//         }else{ 
+//             alert("이미 사용중인 아이디 입니다.")
+//         }else{
 //             alert("사용 불가한 아이디입니다.")
 //         }
 //     };
 // }
 
+export const callGetMemberListAPI = ({currentPage}) => {
+    let requestURL;
+
+    if (currentPage !== undefined || currentPage !== null) {
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/memberList?offset=${currentPage}`;
+    } else {
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/memberList`;
+    }
+    console.log(currentPage);
+    console.log('[MemberAPICalls] requestURL : ', requestURL);
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken"),
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+            .then(response => response.json());
+        if (result.status === 200) {
+            console.log('[QuestionAPICalls] callQuestionListAPI RESULT : ', result);
+            dispatch({ type: GET_MEMBERLIST, payload: result.data });
+        }
+        
+    };
+}

@@ -1,3 +1,24 @@
+/* 사업자 등록번호 */
+export function bsrNumFomatter(value) {
+    let str = value?.toString();
+    return str?.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{2})(\d{5})$/, `$1-$2-$3`);
+}
+
+/* 사업자 대표 번호 */
+export function cpTelFomatter(value) {
+    return value?.replace(/[^0-9]/g, '').replace(/^(\d{2})(\d{4})(\d{4})$/, `$1-$2-$3`);
+}
+
+/* 고객센터 번호 */
+export function picTelFomatter(value) {
+    return value?.replace(/[^0-9]/g, '').replace(/^(\d{2})(\d{4})(\d{4})$/, `$1-$2-$3`);
+}
+
+/* 주문자, 구매자, 개인정보보호책임자 휴대폰 번호 */
+export function phoneFomatter(value) {
+    return value?.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+}
+
 /* 날짜 형식 변환 (yyyy-MM-dd) */
 export function dateFomatterlight(value) {
     return value.substring(0, 10);
@@ -9,34 +30,65 @@ export function dateFomatter(value) {
     return value.replace('T', ' ').replace(/\..*/, '');
 }
 
-/* [작성 중] 날짜 생성기 */
-export function dateCreator(value) {
-    // Thu Jan 19 2023 03:48:51 GMT+0900 (한국 표준시)
-    // 2023-01-18T18:55:48.758Z
-    const now = new Date().toISOString();
-    const nowOracle = now.substring(0, 19);
-    // 'YYYY-MM-DD HH24:MI:SS'
+/* [날짜 생성기] 날짜 변환기 */
+function dateFomatterToSearch(newDay, today) {
+    let year = newDay.getFullYear();
+    let month = newDay.getMonth() + 1;
+    let date = newDay.getDate();
+
+    if(today) {
+        const todayDate = today.getDate();
+
+        if(date != todayDate) {
+            if(month == 0) {
+                year -= 1;
+                month = (month + 11) % 12;
+                date = new Date(year, month, 0).getDate();
+            }
+        }
+    }
+
+    month = ("0" + month).slice(-2);
+    date = ("0" + date).slice(-2);
+
+    return year + "-" + month + "-" + date;
 }
 
-/* 주문자 휴대폰 번호 & 구매자 휴대폰 번호 */
-export function phoneFomatter(value) {
-    return value.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+/* [날짜 생성기] 오늘 */
+export function dateCreatorToday() {
+    let newDay = new Date();
+    newDay = dateFomatterToSearch(newDay, new Date());
+    return newDay;
 }
 
-    // const {
-    //     orderNum, orderCode, orderDate, orderConf,
-    //     cgNm, cgPh, cgAdsNum, cgAds, cgAdsDetail,
-    //     deliveryMt, deliveryCp, deliveryNum, deliveryStart, deliveryEnd, deliveryMsg, 
-    //     paymentMt, orderPc, deliveryPc, totalPc,  
-    //     stOrder,  stClaim, stPayment, purchaseConf,
-    //     memberCode : memberInfo, orderProductList : orderProductListInfo
-    // } = order;
+/* [날짜 생성기] 1주일 */
+export function dateCreatorWeek() {
+    let newDay = new Date();
+    newDay.setDate(newDay.getDate() - 7);
+    newDay = dateFomatterToSearch(newDay, new Date());
+    return newDay;
+}
 
-    // const {
-    //     memberCode, memberId, memberName, memberBirth, memberGen, memberPhone, memberEmail,
-    //     memberAdsNum, memberAds, memberAdsDetail
-    // } = memberInfo;
+/* [날짜 생성기] 1개월 */
+export function dateCreator1Month() {
+    let newDay = new Date();
+    newDay.setMonth(newDay.getMonth() - 1);
+    newDay = dateFomatterToSearch(newDay, new Date());
+    return newDay;
+}
 
-    // const {
-    //     orderPdNum, orderNumCopy, pdCode, opCode, orderAmount, mainImgPath
-    // } = orderProductListInfo;
+/* [날짜 생성기] 3개월 */
+export function dateCreator3Months() {
+    let newDay = new Date();
+    newDay.setMonth(newDay.getMonth() - 3);
+    newDay = dateFomatterToSearch(newDay, new Date());
+    return newDay;
+}
+
+/* [날짜 생성기] 6개월 */
+export function dateCreator6Months() {
+    let newDay = new Date();
+    newDay.setMonth(newDay.getMonth() - 6);
+    newDay = dateFomatterToSearch(newDay, new Date());
+    return newDay;
+}

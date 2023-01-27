@@ -23,7 +23,7 @@ public class Question {
 		strategy = GenerationType.SEQUENCE,
 		generator = "QUESTION_SEQ_GENERATOR"
 	)
-	private int questionCode;
+	public int questionCode;
 	
 	@Column(name = "QUESTION_TITLE")
 	private String questionTitle;

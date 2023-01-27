@@ -27,7 +27,7 @@ function LoginModal({setLoginModal}) {
         console.log('[LoginModal] Login Process Start!!');        
         window.localStorage.removeItem('accessToken');
         
-        dispatch(callLoginAPI({	// 로그인
+        dispatch(callLoginAPI({   // 로그인
             form: form
         }));
 

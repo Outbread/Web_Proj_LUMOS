@@ -1,10 +1,13 @@
 package com.project.lumos.product.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,16 +21,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.lumos.common.Criteria;
+import com.project.lumos.product.dto.ImageAndProductAndOptionDTO;
 import com.project.lumos.product.dto.ImageAndProductDTO;
 import com.project.lumos.product.dto.OptionDTO;
+import com.project.lumos.product.dto.ProductAndImageDTO;
 import com.project.lumos.product.dto.ProductDTO;
 import com.project.lumos.product.dto.ProductImageDTO;
 import com.project.lumos.product.dto.ProductInsertDTO;
 import com.project.lumos.product.entity.ImageAndProduct;
+import com.project.lumos.product.entity.ImageAndProductAndOption;
 import com.project.lumos.product.entity.Option;
 import com.project.lumos.product.entity.Product;
 import com.project.lumos.product.entity.ProductAndImage;
 import com.project.lumos.product.entity.ProductImage;
+import com.project.lumos.product.entity.ProductInsert;
 import com.project.lumos.product.repository.ImageAndProductAndOptionRepository;
 import com.project.lumos.product.repository.ImageAndProductRepository;
 import com.project.lumos.product.repository.OptionRepository;
@@ -51,6 +58,7 @@ public class ProductService {
 	private final OptionRepository optionRepository;
 	private final ModelMapper modelMapper;
 
+	/* 이미지 저장 할 위치 및 응답 할 이미지 주소(WebConfig 설정파일 추가하기) */
     @Value("${image.image-dir}")
     private String IMAGE_DIR;
     
@@ -72,6 +80,7 @@ public class ProductService {
 	public int selectProductTotal() {
         log.info("[ProductService] selectProductTotal Start ===================================");
         
+        /* 페이징 처리 결과를 Page 타입으로 반환받음 */
         List<ImageAndProduct> productList = imageAndProductRepository.findByMainImg("Y");
         
         log.info("[ProductService] selectProductTotal End ===================================");
@@ -103,18 +112,10 @@ public class ProductService {
 	public Object selectProduct(int pdCode) {
 		log.info("[ProductService] selectProduct Start ===================================");
 		
-//		ImageAndProduct product = (ImageAndProduct) imageAndProductRepository.findByPdCode(pdCode);
-//		ImageAndProduct product = imageAndProductRepository.findByPdCodeAndMainImg(pdCode, "Y");
-		
-//		List<ProductAndImage> product = (List<ProductAndImage>) productAndImageRepository.findById(pdCode).get();
 		ProductAndImage productList = productAndImageRepository.findById(pdCode).get();
-//		List<ImageAndProductAndOption> product = imageAndProductAndOptionRepository.findByPdCode(pdCode);
 		
 		List<ProductImage> imageList = productImageRepository.findByPdCode(pdCode);
 		
-//		for(int i = 0; i < product.size(); i++) {
-//				product.get(i).setPdImgPath(IMAGE_URL + product.get(i).getPdImgPath());			
-//		}
 		
 		for(ProductImage image : imageList) {
 			image.setPdImgPath(IMAGE_URL + image.getPdImgPath());
@@ -125,6 +126,29 @@ public class ProductService {
 		log.info("[ProductService] selectProduct End ===================================");
 		
 		return modelMapper.map(productList, ProductAndImage.class);
+	}
+	
+	public Object selectSearchProductList(String search) {
+		log.info("[ProductService] selectSearchProductList Start ===================================");
+        log.info("[ProductService] searchValue : " + search);
+        
+        List<ProductAndImage> SearchValue = productAndImageRepository.findByPdNameContaining(search);
+        List<ProductImage> imageList = productImageRepository.findAll();
+        
+        log.info("SearchValue1" + SearchValue);
+        
+        for(ProductImage image : imageList) {
+        	for(int i = 0; i < SearchValue.size();i++) {
+        		if(image.getPdCode() == SearchValue.get(i).getPdCode()) {
+        			image.setPdImgPath(IMAGE_URL + image.getPdImgPath());
+        		}
+        	}
+        }            
+        log.info("SearchValue2" + SearchValue);
+        
+        log.info("[ProductService] selectSearchProductList End ===================================");
+
+        return SearchValue.stream().map(product -> modelMapper.map(product, ProductAndImageDTO.class)).collect(Collectors.toList());
 	}
 	
 	@Transactional
@@ -188,5 +212,198 @@ public class ProductService {
         
         return (result > 0) ? "상품 입력 성공" : "상품 입력 실패";
 	}
+	
+	public int selectProductTotalForAdmin() {
+		log.info("[ProductService] selectProductTotalForAdmin Start ===================================");
+		
+        int result = productRepository.findAll().size();
 
+        log.info("[ProductService] selectProductTotalForAdmin End ===================================");
+        
+        return result;
+	}
+
+	public Object selectProductListWithPagingForAdmin() {
+		log.info("[ProductService] selectProductListWithPagingForAdmin Start ===================================");
+//		int index = cri.getPageNum() - 1;
+//        int count = cri.getAmount(); 
+//        Pageable paging = PageRequest.of(index, count, Sort.by("pdCode").descending());
+
+//        Page<ImageAndProduct> result = imageAndProductRepository.findAll(paging);
+//        List<ImageAndProduct> productList = (List<ImageAndProduct>)result.getContent();
+		List<ImageAndProduct> productList = imageAndProductRepository.findAll(Sort.by("pdCode").descending());		
+		
+    	log.info("productList" + productList);
+        
+        for(int i = 0 ; i < productList.size() ; i++) {
+            productList.get(i).setPdImgPath(IMAGE_URL + productList.get(i).getPdImgPath());
+        }
+        
+        log.info("[ProductService] selectProductListWithPagingForAdmin End ===================================");
+        
+        return productList.stream().filter(r -> r.getMainImg().equals("Y")).map(product -> modelMapper.map(product, ImageAndProductDTO.class)).collect(Collectors.toList());
+	}
+	
+	public Object selectProductForAdmin(int imgNum) {
+		log.info("[ProductService] selectProductForAdmin Start ===================================");
+		
+		ImageAndProductAndOption productList = imageAndProductAndOptionRepository.findById(imgNum).get();
+		
+//		List<ProductImage> imageList = productImageRepository.findByPdCode(pdCode);
+//		
+//		
+//		for(ProductImage image : imageList) {
+//			image.setPdImgPath(IMAGE_URL + image.getPdImgPath());
+//			modelMapper.map(imageList, ProductImageDTO.class);
+//		}
+		
+		productList.setPdImgPath(IMAGE_URL + productList.getPdImgPath());
+		
+		log.info("selectProduct " + productList);
+		log.info("[ProductService] selectProductForAdmin End ===================================");
+		
+		return modelMapper.map(productList, ImageAndProductAndOptionDTO.class);
+	}
+	
+	@Transactional
+	public Object deleteProduct(int imgNum) {
+		log.info("[ProductService] deleteProduct Start ===================================");
+		ImageAndProductAndOption productList = imageAndProductAndOptionRepository.findById(imgNum).get();
+		
+		imageAndProductAndOptionRepository.deleteById(imgNum);	
+		FileUploadUtils.deleteFile(IMAGE_DIR, productList.getPdImgPath());
+		
+		
+		log.info("[ProductService] deleteProduct End ===================================");
+		return modelMapper.map(productList, ImageAndProductAndOptionDTO.class);
+	}
+	
+	@Transactional
+	public Object updateProduct(ProductInsertDTO productInsertDTO, MultipartFile productImage) {
+		log.info("[ProductService] updateProduct Start ===================================");
+        log.info("[ProductService] productDTO : " + productInsertDTO);
+        
+        String replaceFileName = null;
+        String oriImage = null;
+        int result = 0;
+
+        try {
+        	
+        	/* update 할 엔티티 조회 */
+        	
+        	ProductInsert product = productInsertRepository.findById(productInsertDTO.getPdCode()).get();
+        	
+        	List<ProductImage> imageList = productImageRepository.findByPdCode(productInsertDTO.getPdCode());    		
+    		
+    		for(ProductImage image : imageList) {
+    			oriImage = image.getPdImgPath();			
+    		}
+        	
+            log.info("[updateProduct] oriImage : " + oriImage);
+            
+            /* update를 위한 엔티티 값 수정 */
+            
+            for(ProductImage upimage : product.getProductImage()) {
+            	upimage.setPdImgPath(productInsertDTO.getPdImgPath());
+            	if(productImage != null){
+                    String imageName = UUID.randomUUID().toString().replace("-", "");
+                    replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, productImage);
+                    log.info("[updateProduct] InsertFileName : " + replaceFileName);
+                    
+                    upimage.setPdImgPath(replaceFileName);	// 새로운 파일 이름으로 update
+                    log.info("[updateProduct] deleteImage : " + oriImage);
+                    
+                    boolean isDelete = FileUploadUtils.deleteFile(IMAGE_DIR, oriImage);
+                    log.info("[update] isDelete : " + isDelete);
+                } else {
+                	
+                    /* 이미지 변경 없을 시 */
+                	upimage.setPdImgPath(oriImage);
+                }
+            }
+            
+            for(Option upoption : product.getProductOption()) {
+            	upoption.setOptionStock(productInsertDTO.getOptionStock());
+            	upoption.setOptionNm(productInsertDTO.getOptionNm());
+            }
+            
+            product.setPdName(productInsertDTO.getPdName());
+            product.setPdPrice(productInsertDTO.getPdPrice());
+            product.setCatMain(productInsertDTO.getCatMain());
+            product.setCatSub(productInsertDTO.getCatSub());
+            product.setPdDesc(productInsertDTO.getPdDesc());
+            
+            
+
+            result = 1;
+        } catch (IOException e) {
+            log.info("[updateProduct] Exception!!");
+            FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
+            throw new RuntimeException(e);
+        }
+        log.info("[ProductService] updateProduct End ===================================");
+        return (result > 0) ? "상품 업데이트 성공" : "상품 업데이트 실패";
+	}
+	
+	public Object selectProductListAboutLed() {
+        List<ImageAndProduct> productList = imageAndProductRepository.findByMainImg("Y");
+        
+        for(int i = 0 ; i < productList.size() ; i++) {
+            if(productList.get(i).getProduct().getCatMain().equals("가정용 LED")) {
+            	productList.get(i).setPdImgPath(IMAGE_URL + productList.get(i).getPdImgPath());
+            }
+        }
+        
+        return productList.stream().filter(res -> res.getProduct().getCatMain().equals("가정용 LED")).map(r->modelMapper.map(r, ImageAndProductDTO.class)).collect(Collectors.toList());
+	}
+	
+	public Object selectProductListAboutLamp() {
+		List<ImageAndProduct> productList = imageAndProductRepository.findByMainImg("Y");
+              
+        for(int i = 0 ; i < productList.size() ; i++) {
+            if(productList.get(i).getProduct().getCatMain().equals("램프")) {
+            	productList.get(i).setPdImgPath(IMAGE_URL + productList.get(i).getPdImgPath());
+            }
+        }
+        
+        return productList.stream().filter(res -> res.getProduct().getCatMain().equals("램프")).map(r->modelMapper.map(r, ImageAndProductDTO.class)).collect(Collectors.toList());
+	}
+	
+	public Object selectProductListAboutPendant() {
+		List<ImageAndProduct> productList = imageAndProductRepository.findByMainImg("Y");
+              
+        for(int i = 0 ; i < productList.size() ; i++) {
+            if(productList.get(i).getProduct().getCatMain().equals("식탁등")) {
+            	productList.get(i).setPdImgPath(IMAGE_URL + productList.get(i).getPdImgPath());
+            }
+        }
+        
+        return productList.stream().filter(res -> res.getProduct().getCatMain().equals("식탁등")).map(r->modelMapper.map(r, ImageAndProductDTO.class)).collect(Collectors.toList());
+	}
+	
+	public Object selectProductListAboutDownlight() {
+		List<ImageAndProduct> productList = imageAndProductRepository.findByMainImg("Y");
+              
+        for(int i = 0 ; i < productList.size() ; i++) {
+            if(productList.get(i).getProduct().getCatMain().equals("매입등")) {
+            	productList.get(i).setPdImgPath(IMAGE_URL + productList.get(i).getPdImgPath());
+            }
+        }
+        
+        return productList.stream().filter(res -> res.getProduct().getCatMain().equals("매입등")).map(r->modelMapper.map(r, ImageAndProductDTO.class)).collect(Collectors.toList());
+	}
+	
+	public Object selectProductListAboutSwitch() {
+		List<ImageAndProduct> productList = imageAndProductRepository.findByMainImg("Y");
+              
+        for(int i = 0 ; i < productList.size() ; i++) {
+            if(productList.get(i).getProduct().getCatMain().equals("스위치/콘센트")) {
+            	productList.get(i).setPdImgPath(IMAGE_URL + productList.get(i).getPdImgPath());
+            }
+        }
+        
+        return productList.stream().filter(res -> res.getProduct().getCatMain().equals("스위치/콘센트")).map(r->modelMapper.map(r, ImageAndProductDTO.class)).collect(Collectors.toList());
+	}
+
+	
 }

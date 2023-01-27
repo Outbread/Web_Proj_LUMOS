@@ -1,7 +1,7 @@
 .submitBtn {
     border: none;
     margin: 5px;
-    width: 40px;
+    width: 70px;
     line-height: 25px;
     border-radius: 25px;
     background-color: rgba(115, 206, 190, 0.7);
@@ -13,6 +13,25 @@
 }
 
 .submitBtn:hover {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.cartBtn {
+    border: none;
+    margin: 5px;
+    width: 350px;
+    line-height: 50px;
+    border-radius: 5px;
+    background-color: rgba(115, 206, 190, 0.7);
+    color: white;
+    /* background-color: white; */
+    /* color: #646464; */
+    font-weight: bold;
+    float: right;
+}
+
+.cartBtn:hover {
     cursor: pointer;
     opacity: 0.5;
 }

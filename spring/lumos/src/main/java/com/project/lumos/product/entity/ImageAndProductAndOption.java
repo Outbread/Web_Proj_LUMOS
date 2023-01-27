@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -26,22 +27,20 @@ public class ImageAndProductAndOption {
 	
 	@Column(name = "MAIN_IMG")
 	private String mainImg;
+		
+	@ManyToOne
+	@JoinColumn(name = "PD_CODE", insertable=false, updatable = false)
+	private Product product;
 	
-	@OneToMany
-	@JoinColumn(name = "PD_CODE")
-	private List<Product> product;
-	
-	@OneToMany
-	@JoinColumn(name = "PD_CODE")
-	private List<Option> option;
+	@ManyToOne
+	@JoinColumn(name = "PD_CODE", insertable=false, updatable = false)
+	private Option option;
 
 	public ImageAndProductAndOption() {
-		super();
 	}
 
-	public ImageAndProductAndOption(int imgNum, String pdImgPath, int pdCode, String mainImg, List<Product> product,
-			List<Option> option) {
-		super();
+	public ImageAndProductAndOption(int imgNum, String pdImgPath, int pdCode, String mainImg, Product product,
+			Option option) {
 		this.imgNum = imgNum;
 		this.pdImgPath = pdImgPath;
 		this.pdCode = pdCode;
@@ -82,19 +81,19 @@ public class ImageAndProductAndOption {
 		this.mainImg = mainImg;
 	}
 
-	public List<Product> getProduct() {
+	public Product getProduct() {
 		return product;
 	}
 
-	public void setProduct(List<Product> product) {
+	public void setProduct(Product product) {
 		this.product = product;
 	}
 
-	public List<Option> getOption() {
+	public Option getOption() {
 		return option;
 	}
 
-	public void setOption(List<Option> option) {
+	public void setOption(Option option) {
 		this.option = option;
 	}
 
@@ -103,6 +102,7 @@ public class ImageAndProductAndOption {
 		return "ImageAndProductAndOption [imgNum=" + imgNum + ", pdImgPath=" + pdImgPath + ", pdCode=" + pdCode
 				+ ", mainImg=" + mainImg + ", product=" + product + ", option=" + option + "]";
 	}
+
 	
 	
 }

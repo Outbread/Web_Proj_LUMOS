@@ -25,6 +25,7 @@ public class OrderAndOrderProductAndMember {
 	@Column(name = "ORDER_CODE")
 	private String orderCode;
 	
+//	@CreationTimestamp
 	@Column(name = "ORDER_DATE")
 	private Date orderDate;
 	

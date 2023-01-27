@@ -7,6 +7,8 @@ import com.project.lumos.product.entity.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Integer>{
 
+	Product findByCatMain(String string);
+
 //	List<Product> findByProductOrderable(String status);
 //	
 //	Page<Product> findByProductOrderable(String status, Pageable paging);
