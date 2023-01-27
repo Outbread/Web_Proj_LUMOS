@@ -160,7 +160,7 @@ function Register() {
                 });
             } else if(form.memberId === '' || form.memberPassword === '' || form.memberName === '' 
             || form.memberEmail === '' || form.memberBirth === '' || form.memberGen === '' 
-            || form.memberAdsNum === '' || form.memberAds === '' || form.memberAdsDetail){
+            || form.memberAdsNum === '' || form.memberAds === '' || form.memberAdsDetail === ''){
                 alert('정보를 모두 입력해주세요.');
             } else {
                 dispatch(callRegisterAPI({
@@ -260,9 +260,9 @@ function Register() {
                     <div className={ RGCSS.RGinput }>
                         <div className={ RGCSS.RGradioWrap }>
                             <label className={ RGCSS.RGradioLabel }><input className={ RGCSS.RGradio } type="radio" name="memberGen" onChange={ onChangeHandler } 
-                                        checked={  form.memberGen == "남자" ? true : false }  value={"남자"}/>남자 </label>
+                                        checked={  form.memberGen == "남성" ? true : false }  value={"남성"}/>남성 </label>
                             <label className={ RGCSS.RGradioLabel }><input className={ RGCSS.RGradio } type="radio" name="memberGen" onChange={ onChangeHandler }
-                                        checked={ form.memberGen == "여자" ? true : false }  value={"여자"}/>여자 </label>
+                                        checked={ form.memberGen == "여성" ? true : false }  value={"여성"}/>여성 </label>
                             <label className={ RGCSS.RGradioLabel }><input className={ RGCSS.RGradio } type="radio" name="memberGen" onChange={ onChangeHandler }
                                         checked={ form.memberGen == "선택안함" ? true : false }  value={"선택안함"}/>선택안함</label>
                         </div>
