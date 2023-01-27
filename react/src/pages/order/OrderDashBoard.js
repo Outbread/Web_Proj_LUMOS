@@ -15,10 +15,10 @@ export default function OrderDashBoard() {
         신규 주문 : 카카오페이+주문완료
         배송 준비 : 무통장입금+발주확인 & 카카오페이+발주확인
         배송 중 : 무통장입금+발주확인+배송출발날짜 & 카카오페이+발주확인+배송출발날짜
-        배송 완료 : 무통장입금+발주확인+배송완료날짜 & 카카오페이+발주확인+배송완료날짜
+        배송 완료 : 무통장입금+발주확인+배송완료날짜+구매확정X & 카카오페이+발주확인+배송완료날짜+구매확정X
 
-        취소 요청 : 문의 유형 취소요청 & 해결상태 미해결
-        반품 요청 : 문의 유형 반품요청 & 해결상태 미해결
+        취소 요청 : 문의 유형 주문취소 & 해결상태 미해결
+        반품 요청 : 문의 유형 환불 & 해결상태 미해결
     */
 
     const dispatch = useDispatch();
@@ -41,10 +41,10 @@ export default function OrderDashBoard() {
     const waitPayment = orderList.filter(order => (order.paymentMt == "무통장입금" && order.orderDate?.length > 0)).length;
     const newOrder = orderList.filter(order => (order.paymentMt == "카카오페이" && order.orderDate?.length > 0)).length;
     const preDelivery = orderList.filter(order => ((order.paymentMt == "무통장입금" || "카카오페이") && order.orderConf?.length > 0)).length;
-    const proDelivery = orderList.filter(order => (order.paymentMt == "무통장입금" && order.deliveryStart?.length > 0)).length;
-    const comDelivery = orderList.filter(order => (order.paymentMt == "무통장입금" && order.deliveryEnd?.length > 0)).length;
+    const proDelivery = orderList.filter(order => ((order.paymentMt == "무통장입금" || "카카오페이") && order.deliveryStart?.length > 0)).length;
+    const comDelivery = orderList.filter(order => ((order.paymentMt == "무통장입금" || "카카오페이") && (order.deliveryEnd?.length > 0 && order.purchaseConf?.length == 0))).length;
     const cancleReq = questionList.filter(question => (question.questionCategory == "주문취소" && question.questionStatus == "미해결")).length;
-    const returnReq = questionList.filter(question => (question.questionCategory == "반품요청" && question.questionStatus == "미해결")).length;
+    const returnReq = questionList.filter(question => (question.questionCategory == "환불" && question.questionStatus == "미해결")).length;
 
     const onClickHandler = () => {
         navigate(`/order-management/`, { replace: false });
