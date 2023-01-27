@@ -24,8 +24,8 @@ public interface QuestionRepository extends JpaRepository<Question, Integer>{
 	List<Question> findByQuestionCategoryAndQuestionStatusLikeOrQuestionCategoryAndQuestionStatusLike(String string,
 			String string2, String string3, String string4); 
 	
-
-
+	@Query(value = "SELECT MAX(QUESTION_CODE) FROM QUESTION WHERE MEMBER_CODE = :memberCode", nativeQuery = true)
+	public int findNewQuestionCode(int memberCode);
 
 
 	

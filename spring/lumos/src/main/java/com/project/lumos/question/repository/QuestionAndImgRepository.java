@@ -9,6 +9,8 @@ public interface QuestionAndImgRepository extends JpaRepository<QuestionAndImg, 
 
 	QuestionAndImg findByQuestionCode(Question questionCode);
 
+	QuestionAndImg findByQuestionCode(int questionCode);
+
 
 
 

@@ -2,9 +2,14 @@ import {
     POST_QUESTION,
     GET_QUESTION,
     GET_QUESTIONS,
-    PUT_QUESTION
+    PUT_QUESTION, 
+    GET_ALLQUESTIONS,
+    PUT_ANSWER,
+    GET_QUESTIONADMIN,
+    GET_NEWQUESTIONCODE
 } from '../modules/QuestionModules'
 
+/* 문의사항 등록 */ 
 export const callQuestionRegistAPI = ({ form }) => {
     console.log('[QuestionAPICalls] callQuestionRegistAPI Call');
 
@@ -30,6 +35,7 @@ export const callQuestionRegistAPI = ({ form }) => {
     };       
 }
 
+/* 회원별 문의사항 조회 */
   export const callQuestionListAPI = ({memberId, currentPage}) => {
     let requestURL;
 
@@ -81,7 +87,6 @@ export const callQuestionDetailAPI = ({questionCode}) => {
             }
         })
         .then(response => response.json());
-        console.log(result.data.questionTitle)
         if(result.status === 200){
             console.log('[QuestionAPICalls] callQuestionDetailAPI RESULT : ', result);
             dispatch({ type: GET_QUESTION,  payload: result.data });
@@ -90,10 +95,69 @@ export const callQuestionDetailAPI = ({questionCode}) => {
     };
 }
 
-export const callQuestionUpdateAPI = ({ questionCode, form }) => {
+/* 문의사항 수정 */
+export const callQuestionUpdateAPI = ({ form }) => {
     console.log('[QuestionAPICalls] callQuestionUpdateAPI Call');
        
-    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question/detail/${questionCode}`;
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question/detail/${form.questionCode}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "PUT",
+            headers: {
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken"),
+                "Access-Control-Allow-Origin": "*" 
+            },
+            body: form
+            })
+        .then();
+        
+        console.log('[QuestionAPICalls] callQuestionUpdateAPI RESULT : ', result);
+        
+        dispatch({ type: PUT_QUESTION,  payload: result });
+        
+    }
+};    
+
+/* 관리자 문의사항 전체 조회  */
+export const callAdminQuestionListAPI = ({currentPage}) => {
+    let requestURL;
+
+    if(currentPage !== undefined || currentPage !== null){
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question/list?offset=${currentPage}`;
+    }else {
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question/list`;
+    }
+    console.log(currentPage);
+    console.log('[QuestionAPICalls] requestURL : ', requestURL);
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken"),
+                "Access-Control-Allow-Origin": "*"                
+            }
+        })
+        .then(response => response.json());
+        if(result.status === 200){
+            console.log('[QuestionAPICalls] callQuestionListAPI RESULT : ', result);
+            dispatch({ type: GET_ALLQUESTIONS,  payload: result.data });
+        }
+        
+    };
+}
+
+/* 관리자 문의사항 답변 등록 */
+export const callAnswerUpdateAPI = ({ form }) => {
+    console.log('[QuestionAPICalls] callAnswerUpdateAPI Call');
+       
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/questionAnswer/${form.questionCode}`;
 
     return async (dispatch, getState) => {
 
@@ -106,16 +170,75 @@ export const callQuestionUpdateAPI = ({ questionCode, form }) => {
                 "Access-Control-Allow-Origin": "*" 
             },
             body: JSON.stringify({
+                questionStatus: '해결',
+                answerContent: form.answerContent,
                 questionCode: form.questionCode,
                 questionTitle: form.questionTitle,
-                questionContent: form.questionContent
+                questionContent: form.questionContent, 
+                newName: form.newName,
+                answerContent: form.answerContent,
+                questionCategory: form.questionCategory,
             })
+            })
+        .then();
+        
+        console.log('[QuestionAPICalls] callAnswerUpdateAPI RESULT : ', result);
+        
+        dispatch({ type: PUT_ANSWER,  payload: result });
+        
+    }
+};    
+
+/* 관리자 문의 사항 상세 조회 */ 
+export const callQuestionDetailAdminAPI = ({questionCode}) => {
+    
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question/detail/admin/${questionCode}`;
+    
+    console.log('[QuestionAPICalls] callQuestionDetailAdminAPI requestURL : ', requestURL);
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken"),
+                "Access-Control-Allow-Origin": "*"                
+            }
         })
         .then(response => response.json());
-
-        console.log('[QuestionAPICalls] callQuestionUpdateAPI RESULT : ', result);
-
-        dispatch({ type: PUT_QUESTION,  payload: result });
+        if(result.status === 200){
+            console.log('[QuestionAPICalls] callQuestionDetailAdminAPI RESULT : ', result);
+            dispatch({ type: GET_QUESTIONADMIN,  payload: result.data });
+        }
         
-    };    
+    };
+}
+
+export const callNewQuestionCodeAPI = ({memberId}) => {
+    
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/newQuestionCode/${memberId}`;
+    
+    console.log('[QuestionAPICalls] callNewQuestionCodeAPI requestURL : ', requestURL);
+    console.log(memberId)
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken"),
+                "Access-Control-Allow-Origin": "*"                
+            }
+        })
+        .then(response => response.json());
+        if(result.status === 200){
+            console.log('[QuestionAPICalls] callNewQuestionCodeAPI RESULT : ', result);
+            console.log(result.data)
+            dispatch({ type: GET_NEWQUESTIONCODE,  payload: result.data });
+        }
+        
+    };
 }
