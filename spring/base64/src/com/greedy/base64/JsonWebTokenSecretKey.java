@@ -1,13 +1,9 @@
 package com.greedy.base64;
 
 import java.security.Key;
-import java.util.Base64;
-
-import javax.crypto.spec.SecretKeySpec;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 
