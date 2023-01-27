@@ -18,7 +18,7 @@ import OrderManagement from './pages/order/OrderManagement';                // �
 import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세                      
 import OrderSearch from './pages/order/OrderDetail';                        // 주문내역검색
 import Cart from './pages/cart/Cart';                                       // 장바구니
-
+import OrderList from './pages/order/OrderList';                            // 회원주문목록
 import ProductDetail from './pages/products/ProductDetail';
 import ProductManagement from './pages/admin/ProductManagement'
 import ProductRegistration from './pages/admin/ProductRegistration';
@@ -47,6 +47,7 @@ function App() {
                 <Route path="questionregistration" element={ <QuestionRegistration /> } />
                 <Route path="question" element={<QuestionList />} />
                 <Route path="question/detail/:questionCode" element={<QuestionDetail />} />
+                <Route path="myOrderList" element={<OrderList/>}/>
             </Route>
             <Route path="product-management" element={ <ProductManagement/> } />
             <Route path="product-registration" element={ <ProductRegistration/> } />
@@ -58,7 +59,6 @@ function App() {
             <Route path="question-management" element={<AdminQuestionList />} />
             <Route path="questionAnswer/:questionCode" element={<QuestionAnswer />} />
             <Route path="member-management" element={<MemberList />} />
-
             <Route path="order-management/search" element={<OrderSearch/>}/>
             <Route path="order-management/:orderCode" element={<OrderDetail/>}/>
             <Route path="cart/:memberId" element={<Cart/>}/>

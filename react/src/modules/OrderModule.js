@@ -21,7 +21,10 @@ export const PUT_STORDER        = 'order/PUT_STORDER';
 export const PUT_STCLAIM        = 'order/PUT_STCLAIM';
 
 // 추가
-export const PUT_DATE           = 'order/PUT_DATE';
+export const PUT_DATE = 'order/PUT_DATE';
+
+// 추가
+export const GET_MYORDER = 'order/GET_MYORDER';
 
 const actions = createActions({
     [GET_ORDER] : () => {},
@@ -31,7 +34,8 @@ const actions = createActions({
     [PUT_STORDER] : () => {},
     [PUT_STCLAIM] : () => {},
     // 추가
-    [PUT_DATE] : () => {}
+    [PUT_DATE]: () => { },
+    [GET_MYORDER]: () => { }
 });
 
 const orderReducer = handleActions(
@@ -57,7 +61,11 @@ const orderReducer = handleActions(
         // 추가
         [PUT_DATE] : (state, { payload }) => {
             return payload;
+        },
+        [GET_MYORDER]: (state, { payload }) => {
+            return payload;
         }
+
     },
     initialState
 );

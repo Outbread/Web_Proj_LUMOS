@@ -108,4 +108,25 @@ public class OrderController {
 		
 	}
 	
+	/* [주문내역 리스트 조회] 주문 상태 여부 확인 */
+	@Operation(summary = "[회원] 주문 내역 조회", description = "회원 주문내역 조회 및 페이징 처리", tags = {"OrderController"})
+	@GetMapping("/order-management/{memberid}")
+	public ResponseEntity<ResponseDTO> orderListWithPaging(@PathVariable String memberId, @RequestParam(name = "offset", defaultValue = "1") String offset) {
+		log.info("[OrderController] orderListWithPaging : " + offset);
+		log.info("[OrderController] memberId : " + memberId);
+		int memberCode = orderService.findMemberCode(memberId);
+		
+		log.info("[QuestionController] memberCode : " + memberCode);
+		
+		Criteria cri = new Criteria(Integer.valueOf(offset), 10);
+		cri.setSearchValue(String.valueOf(memberCode));	
+		PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
+		
+		int total = (int)orderService.orderListTotal(Integer.valueOf(cri.getSearchValue()));
+		pagingResponseDTO.setData(orderService.selectOrderListWithPaging(cri));
+		pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
+		
+		log.info("[QuestionController] pagingResponseDTO : " + pagingResponseDTO);
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
+	}
 }

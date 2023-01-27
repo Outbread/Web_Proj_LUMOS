@@ -312,4 +312,25 @@ public class OrderService {
         
 	}
 
+	/* [회원] memberId로 memberCode 추출 */
+	public int findMemberCode(String memberId) {
+		
+		int memberCode = memberRepository.findMemberCodeByMemberId(memberId);
+		return memberCode;
+	}
+
+	/* 회원별 주문 내역 리스트 조회 */
+	public long orderListTotal(int memberCode) {
+		log.info("[OrderService] orderListTotal Start ===================================");
+		
+		long result = orderRepository.countByMemberCode(memberCode);
+
+        log.info("[OrderService] orderListTotal End ===================================");
+        
+        return result;
+	}
+
+
+	
+
 }
