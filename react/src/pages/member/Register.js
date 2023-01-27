@@ -184,7 +184,7 @@ function Register() {
                             name="memberId"
                             value={memberId}
                             maxLength='15'
-                            placeholder="최소 5자 이상의 영소문자나 영소문자와 숫자를 적어주세요"
+                            placeholder="최소 5자 이상의 영소문자와 숫자 입력"
                             autoComplete='off'
                             ref={(el) => (inputRef.current[0] = el)} 
                             onChange={ onChangeHandler }
@@ -205,7 +205,7 @@ function Register() {
                             type="password"
                             name="memberPassword"
                             value={memberPassword}
-                            placeholder="문자, 숫자, 특수 문자를 최소 1개 이상 조합해 8자 이상 적어주세요"
+                            placeholder="최소 8자 이상 문자, 숫자, 특수문자 조합"
                             autoComplete='off'
                             ref={(el) => (inputRef.current[1] = el)}
                             onChange={ onChangeHandler }
