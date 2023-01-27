@@ -12,7 +12,6 @@ public class QuestionAndMemberDTO {
 	private String QuestionCreateDate;
 	private MemberDTO member;
 	
-	
 	public QuestionAndMemberDTO(int questionCode, String questionTitle, String questionCategory, String questionContent,
 			String answerContent, String questionStatus, String questionCreateDate, MemberDTO member) {
 		super();
@@ -22,19 +21,18 @@ public class QuestionAndMemberDTO {
 		this.questionContent = questionContent;
 		this.answerContent = answerContent;
 		this.questionStatus = questionStatus;
-		QuestionCreateDate = questionCreateDate;
+		this.QuestionCreateDate = questionCreateDate;
 		this.member = member;
 	}
 	public QuestionAndMemberDTO() {
 		super();
 	}
-	
 	@Override
 	public String toString() {
 		return "QuestionAndMemberDTO [questionCode=" + questionCode + ", questionTitle=" + questionTitle
 				+ ", questionCategory=" + questionCategory + ", questionContent=" + questionContent + ", answerContent="
 				+ answerContent + ", questionStatus=" + questionStatus + ", QuestionCreateDate=" + QuestionCreateDate
-				+ ", memberCode=" + member + "]";
+				+ ", member=" + member + "]";
 	}
 	public int getQuestionCode() {
 		return questionCode;
@@ -76,7 +74,7 @@ public class QuestionAndMemberDTO {
 		return QuestionCreateDate;
 	}
 	public void setQuestionCreateDate(String questionCreateDate) {
-		QuestionCreateDate = questionCreateDate;
+		this.QuestionCreateDate = questionCreateDate;
 	}
 	public MemberDTO getMember() {
 		return member;
@@ -84,6 +82,8 @@ public class QuestionAndMemberDTO {
 	public void setMember(MemberDTO member) {
 		this.member = member;
 	}
+
 	
 	
+
 }

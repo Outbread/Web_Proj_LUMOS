@@ -70,7 +70,25 @@ export default function Header() {
 
     // 관리자 메뉴 네비게이션
     const onClickMoveHandler = (e) => {
+        if (token.exp * 1000 < Date.now()) {
+            alert("로그인이 만료되었습니다. 다시 로그인해 주세요.");
+            setLoginModal(true);
+            return ;
+        }
         navigate(`/${e.target.id}`, {replace: true});
+        window.location.reload();
+    }
+
+    // 장바구니 이동
+    const token = decodeJwt(window.localStorage.getItem("accessToken"));  
+    const onCartHandler = () => {
+        if (token.exp * 1000 < Date.now()) {
+            alert("로그인이 만료되었습니다. 다시 로그인해 주세요.");
+            setLoginModal(true);
+            return ;
+        }
+        // 주소창이 같아 앞으로가기가 무한으로 생성되는 버그 수정을 위해 replace: false로 작성
+        navigate(`/cart/${token.sub}`, {replace: false});
         window.location.reload();
     }
 
@@ -87,9 +105,9 @@ export default function Header() {
     function MemberMode() {   // 회원 로그인
         return (
             <div className={HeaderCSS.linkbox}>
-                <button onClick={ onClickLogoutHandler } className={HeaderCSS.headerbutton}>로그아웃</button>
-                <button onClick={ onClickMypageHandler } className={HeaderCSS.headerbutton}>마이페이지</button>
-                <NavLink to="/sample" className={HeaderCSS.headerNavLink}>장바구니</NavLink>
+                <button onClick={onClickLogoutHandler} className={HeaderCSS.headerbutton}>로그아웃</button>
+                <button onClick={onClickMypageHandler} className={HeaderCSS.headerbutton}>마이페이지</button>
+                <button onClick={onCartHandler} className={HeaderCSS.headerNavLink}>장바구니</button>
             </div>
         );
     }
@@ -100,10 +118,11 @@ export default function Header() {
             <>
                 <div>
                     <li onClick={onClickLogoutHandler}>로그아웃</li>
-                    <li onClick={onClickMoveHandler} id="order-management">상점관리</li>
+                    <li onClick={onClickMoveHandler} id="shop-management">상점관리</li>
                     <li onClick={onClickMoveHandler} id="product-management">상품관리</li>
                     <li onClick={onClickMoveHandler} id="order-dashboard">주문관리</li>
                     <li onClick={onClickMoveHandler} id="member-management">회원관리</li>
+                    <li onClick={onClickMoveHandler} id="question-management">문의관리</li>
                 </div>
             </>
         );
@@ -113,6 +132,7 @@ export default function Header() {
         <>
             { loginModal ? <LoginModal setLoginModal={ setLoginModal }/> : null}
             <div className={HeaderCSS.Boxing}>
+
                 <div><img src= {logo} className={HeaderCSS.Logo} onClick={onClickMainPageHandler}/></div>
                 <div className={HeaderCSS.Menu}>
                     { (isLogin == null || isLogin === undefined) ? <AnonymousMode /> : (isAdmin ? <AdminMode/> : <MemberMode/>)}

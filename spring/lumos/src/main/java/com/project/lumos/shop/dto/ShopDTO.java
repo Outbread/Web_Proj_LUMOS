@@ -19,14 +19,14 @@ public class ShopDTO {
 	private String shopWebAds;
 	private String shopEmail;
 	private String shopDesc;
-	private String OmSt;
-	private String OmNum;
-	private String CsTel;
-	private String CsEmail;
-	private String CsHour;
-	private String PicNm;
-	private String PicTel;
-	private String PicEmail;
+	private String omSt;
+	private String omNum;
+	private String csTel;
+	private String csEmail;
+	private String csHour;
+	private String picNm;
+	private String picTel;
+	private String picEmail;
 	
 	public ShopDTO() {
 	}
@@ -37,14 +37,14 @@ public class ShopDTO {
 		this.shopWebAds = shopWebAds;
 		this.shopEmail = shopEmail;
 		this.shopDesc = shopDesc;
-		OmSt = omSt;
-		OmNum = omNum;
-		CsTel = csTel;
-		CsEmail = csEmail;
-		CsHour = csHour;
-		PicNm = picNm;
-		PicTel = picTel;
-		PicEmail = picEmail;
+		this.omSt = omSt;
+		this.omNum = omNum;
+		this.csTel = csTel;
+		this.csEmail = csEmail;
+		this.csHour = csHour;
+		this.picNm = picNm;
+		this.picTel = picTel;
+		this.picEmail = picEmail;
 	}
 
 	public String getShopNm() {
@@ -80,74 +80,74 @@ public class ShopDTO {
 	}
 
 	public String getOmSt() {
-		return OmSt;
+		return omSt;
 	}
 
 	public void setOmSt(String omSt) {
-		OmSt = omSt;
+		this.omSt = omSt;
 	}
 
 	public String getOmNum() {
-		return OmNum;
+		return omNum;
 	}
 
 	public void setOmNum(String omNum) {
-		OmNum = omNum;
+		this.omNum = omNum;
 	}
 
 	public String getCsTel() {
-		return CsTel;
+		return csTel;
 	}
 
 	public void setCsTel(String csTel) {
-		CsTel = csTel;
+		this.csTel = csTel;
 	}
 
 	public String getCsEmail() {
-		return CsEmail;
+		return csEmail;
 	}
 
 	public void setCsEmail(String csEmail) {
-		CsEmail = csEmail;
+		this.csEmail = csEmail;
 	}
 
 	public String getCsHour() {
-		return CsHour;
+		return csHour;
 	}
 
 	public void setCsHour(String csHour) {
-		CsHour = csHour;
+		this.csHour = csHour;
 	}
 
 	public String getPicNm() {
-		return PicNm;
+		return picNm;
 	}
 
 	public void setPicNm(String picNm) {
-		PicNm = picNm;
+		this.picNm = picNm;
 	}
 
 	public String getPicTel() {
-		return PicTel;
+		return picTel;
 	}
 
 	public void setPicTel(String picTel) {
-		PicTel = picTel;
+		this.picTel = picTel;
 	}
 
 	public String getPicEmail() {
-		return PicEmail;
+		return picEmail;
 	}
 
 	public void setPicEmail(String picEmail) {
-		PicEmail = picEmail;
+		this.picEmail = picEmail;
 	}
 
 	@Override
 	public String toString() {
 		return "ShopDTO [shopNm=" + shopNm + ", shopWebAds=" + shopWebAds + ", shopEmail=" + shopEmail + ", shopDesc="
-				+ shopDesc + ", OmSt=" + OmSt + ", OmNum=" + OmNum + ", CsTel=" + CsTel + ", CsEmail=" + CsEmail
-				+ ", CsHour=" + CsHour + ", PicNm=" + PicNm + ", PicTel=" + PicTel + ", PicEmail=" + PicEmail + "]";
+				+ shopDesc + ", omSt=" + omSt + ", omNum=" + omNum + ", csTel=" + csTel + ", csEmail=" + csEmail
+				+ ", csHour=" + csHour + ", picNm=" + picNm + ", picTel=" + picTel + ", picEmail=" + picEmail + "]";
 	}
-	
+
 }

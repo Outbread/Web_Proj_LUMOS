@@ -11,14 +11,12 @@ public class ImageAndProductAndOptionDTO {
 	private String pdImgPath;
 	private int pdCode;
 	private String mainImg;
-	private List<Product> product;
-	private List<Option> option;
+	private Product product;
+	private Option option;
 	public ImageAndProductAndOptionDTO() {
-		super();
 	}
-	public ImageAndProductAndOptionDTO(int imgNum, String pdImgPath, int pdCode, String mainImg, List<Product> product,
-			List<Option> option) {
-		super();
+	public ImageAndProductAndOptionDTO(int imgNum, String pdImgPath, int pdCode, String mainImg, Product product,
+			Option option) {
 		this.imgNum = imgNum;
 		this.pdImgPath = pdImgPath;
 		this.pdCode = pdCode;
@@ -50,16 +48,16 @@ public class ImageAndProductAndOptionDTO {
 	public void setMainImg(String mainImg) {
 		this.mainImg = mainImg;
 	}
-	public List<Product> getProduct() {
+	public Product getProduct() {
 		return product;
 	}
-	public void setProduct(List<Product> product) {
+	public void setProduct(Product product) {
 		this.product = product;
 	}
-	public List<Option> getOption() {
+	public Option getOption() {
 		return option;
 	}
-	public void setOption(List<Option> option) {
+	public void setOption(Option option) {
 		this.option = option;
 	}
 	@Override
@@ -67,6 +65,5 @@ public class ImageAndProductAndOptionDTO {
 		return "ImageAndProductAndOptionDTO [imgNum=" + imgNum + ", pdImgPath=" + pdImgPath + ", pdCode=" + pdCode
 				+ ", mainImg=" + mainImg + ", product=" + product + ", option=" + option + "]";
 	}
-	
 	
 }
