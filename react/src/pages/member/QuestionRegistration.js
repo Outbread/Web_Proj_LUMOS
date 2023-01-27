@@ -158,6 +158,7 @@ function QuestionRegistration() {
                                 <td>
                                     {/* categoryCode = 1:배송, 2:교환, 3:상품, 4: 환불 5: 기타 */}
                                     <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="배송"/>배송</label> &nbsp;
+                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="주문취소"/>주문취소</label> &nbsp;
                                     <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="교환"/>교환</label> &nbsp;
                                     <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="상품" />상품</label> &nbsp;
                                     <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="환불" />환불</label>

@@ -140,7 +140,8 @@ function QuestionAnswer() {
                             <th>문의유형</th>
                             <td>
                                 <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } readOnly={ true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '배송' ? true : false } value="배송"/>배송</label> &nbsp;
-                                <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } readOnly={true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '교환' ? true : false } value="교환"/>교환</label> &nbsp;
+                                <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } readOnly={ true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '주문취소' ? true : false } value="주문취소"/>주문취소</label> &nbsp;
+                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={true} checked={(!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '교환' ? true : false} value="교환" />교환</label> &nbsp;
                                 <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '상품' ? true : false } value="상품" />상품</label> &nbsp;
                                 <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '환불' ? true : false } value="환불" />환불</label>
                                 <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '기타' ? true : false } value="기타" />기타</label>
