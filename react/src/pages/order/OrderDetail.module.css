@@ -21,6 +21,10 @@ body {
     border-bottom: 2px solid black;
 }
 
+.boxing table thead th {
+    font-size: 1.3em;
+}
+
 .boxing table th {
     line-height: 50px;
     text-align: left;
@@ -74,10 +78,6 @@ body {
 .right {
     width: 350px;
     text-align: right;
-}
-
-.right td {
-    /* padding-right: 10px; */
 }
 
 .orderProduct td {

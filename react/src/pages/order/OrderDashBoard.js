@@ -47,7 +47,7 @@ export default function OrderDashBoard() {
     const returnReq = questionList.filter(question => (question.questionCategory == "환불" && question.questionStatus == "미해결")).length;
 
     const onClickHandler = () => {
-        navigate(`/order-management/`, { replace: false });
+        navigate(`/order-management`, { replace: false });
     }
 
     // 오류 방지를 위한 props-drilling

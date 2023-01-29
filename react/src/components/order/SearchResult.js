@@ -4,7 +4,6 @@ import {useNavigate, useLocation} from 'react-router-dom';
 import {dateFomatter} from '../../modules/Fommater';
 
 import {callOrderListAPI} from '../../apis/OrderAPICalls';
-import {callOrderSearchAPI} from '../../apis/OrderAPICalls';
 
 import SearchResultCSS from './SearchResult.module.css';
 
@@ -247,7 +246,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                         <tr>
                             {
                                 // pathname == "/order-dashboard" 
-                                pathname == "/order-management/" 
+                                pathname == "/order-management" 
                                 ? <th><input type={'checkbox'} id="parentCheck" disabled></input></th>
                                 // ▶ 전체 주문 출력 시 활성화할 태그
                                 // : <th><input type={'checkbox'} onClick={selectAllHandler} id="parentCheck"></input></th>
@@ -272,7 +271,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                             <tr key={order.orderNum}>
                                 {
                                     // pathname == "/order-dashboard"
-                                    pathname == "/order-management/" 
+                                    pathname == "/order-management" 
                                     ? <td><input type={'checkbox'} id="childCheck" disabled></input></td>
                                     // ▶ 전체 주문 출력 시 활성화할 태그
                                     // : <td><input type={'checkbox'} onClick={selectHandler} id="childCheck"></input></td>

@@ -13,7 +13,8 @@ export const callCompanyInfoAPI = () => {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "*/*",
-                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+                // 푸터 정보 열람 시 주석
+                // "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
             } 
         })
         .then(response => response.json());
@@ -33,7 +34,8 @@ export const callShopInfolAPI = () => {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "*/*",
-                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+                // 푸터 정보 열람 시 주석
+                // "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
             } 
         })
         .then(response => response.json());

@@ -10,7 +10,13 @@ import ShopManagementCSS from './ShopManagement.module.css';
 import {bsrNumFomatter, cpTelFomatter, picTelFomatter, phoneFomatter} from '../../modules/Fommater';
 import {useDaumPostcodePopup} from "react-daum-postcode";
 
+import {decodeJwt} from '../../utils/tokenUtils';
+import ErrorMindol from '../ErrorMindol';
+
 export default function ShopManagement() {
+
+    const token = decodeJwt(window.localStorage.getItem("accessToken")); 
+    const isAdmin = token.auth.includes("ROLE_ADMIN");
 
     const dispatch = useDispatch();
     const companyInfo  = useSelector(state => state.companyReducer);  
@@ -159,263 +165,271 @@ export default function ShopManagement() {
 
     return (
         <>
-            <div className={ShopManagementCSS.boxing}>
-            <div className={ShopManagementCSS.info}>
-            <table>
-                <thead>
-                    <tr>
-                        <th style={{backgroundColor: "white"}}>사업자 정보</th>
-                        <td style={{textAlign: "right"}}>
-                            <button onClick={submitHandler} id="company">저장</button>
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>사업자 등록 번호</th>
-                        <td>{companyInfo && bsrNumFomatter(companyInfo.bsrNum)}</td>
-                    </tr>
-                    <tr>
-                        <th>상호</th>
-                        <td>
-                            <input 
-                                type={'text'}
-                                name="cpNm" 
-                                defaultValue={company.cpNm} 
-                                onChange={companyInfoHandler}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>대표자 성명</th>
-                        <td>
-                            <input 
-                                type={'text'}
-                                name="rpNm" 
-                                defaultValue={company.rpNm} 
-                                onChange={companyInfoHandler}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>업태</th>
-                        <td>
-                            <input 
-                                type={'text'}
-                                name="bsType" 
-                                defaultValue={company.bsType} 
-                                onChange={companyInfoHandler}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>종목</th>
-                        <td>
-                            <input 
-                                type={'text'}
-                                name="bsItem"
-                                defaultValue={company.bsItem} 
-                                onChange={companyInfoHandler}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>사업장 주소</th>
-                        <td>
-                            <input 
-                                type={'text'}
-                                name="cpAdsNum" 
-                                id="cpAdsNum"
-                                onChange={companyInfoHandler}
-                                style={{width: "130px"}}
-                                defaultValue={company.cpAdsNum}
-                                placeholder="우편번호"
-                                disabled
-                            ></input>&nbsp;&nbsp;&nbsp;
-                            <button onClick={addressAPI}>검색</button>
-                            <br/>
-                            <input 
-                                type={'text'}
-                                name="cpAds" 
-                                id="cpAds"
-                                onChange={companyInfoHandler} 
-                                defaultValue={company.cpAds}
-                                placeholder="주소"
-                                disabled
-                            ></input>&nbsp;&nbsp;&nbsp;
-                            <input 
-                                type={'text'}
-                                name="cpAdsDetail" 
-                                id="cpAdsDetail"
-                                onChange={companyInfoHandler}
-                                defaultValue={company.cpAdsDetail}
-                                placeholder="상세주소"
-                            ></input>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>대표 전화</th>
-                        <td>
-                            <input 
-                                name="cpTel"
-                                type={'tel'} 
-                                // value로 작성 시 '-' 실시간 반영
-                                value={cpTelFomatter(company.cpTel) ?? ''}
-                                onChange={companyInfoHandler}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>이메일</th>
-                        <td>
-                            <input 
-                                name="cpEmail"
-                                type={'email'}
-                                value={company.cpEmail ?? ''} 
-                                onChange={companyInfoHandler}
-                            ></input>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-            <div className={ShopManagementCSS.info}>
-            <table>
-                <thead>
-                    <tr>
-                        <th style={{backgroundColor: "white"}}>쇼핑몰 정보</th>
-                        <td style={{textAlign: "right"}}>
-                            <button onClick={submitHandler} id="shop">저장</button>
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>쇼핑몰명</th>
-                        <td>{shopInfo.shopNm}</td>
-                    </tr>
-                    <tr>
-                        <th>쇼핑몰 주소</th>
-                        <td>
-                            <input 
-                                name="shopWebAds"
-                                type={'text'}
-                                defaultValue={shop.shopWebAds} 
-                                onChange={shopInfoHandler}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>쇼핑몰 이메일</th>
-                        <td>
-                            <input 
-                                name="shopEmail"
-                                type={'email'}
-                                defaultValue={shop.shopEmail} 
-                                onChange={shopInfoHandler}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>쇼핑몰 소개</th>
-                        <td>
-                            <input
-                                name="shopDesc"
-                                type={'text'}
-                                defaultValue={shop.shopDesc} 
-                                onChange={shopInfoHandler}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>고객센터 번호</th>
-                        <td>
-                            <input
-                                name="csTel"
-                                type={'tel'}
-                                // value로 작성 시 '-' 실시간 반영 
-                                value={picTelFomatter(shop.csTel) ?? ''} 
-                                onChange={shopInfoHandler}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>고객센터 이메일</th>
-                        <td>
-                            <input 
-                                name="csEmail"
-                                type={'email'}
-                                defaultValue={shop.csEmail} 
-                                onChange={shopInfoHandler}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>고객센터 운영시간</th>
-                        <td>
-                            <textarea
-                                name="csHour"
-                                defaultValue={shop.csHour} 
-                                onChange={shopInfoHandler}
-                                style={{display: "flex"}}
-                            ></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>개인정보보호 책임자</th>
-                        <td>
-                            <input 
-                                name="picNm"
-                                type={'text'}
-                                defaultValue={shop.picNm} 
-                                onChange={shopInfoHandler}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>개인정보보호 책임자 연락처</th>
-                        <td>
-                            <input 
-                                name="picTel"
-                                type={'text'}
-                                // value로 작성 시 '-' 실시간 반영
-                                value={phoneFomatter(shop.picTel) ?? ''}
-                                onChange={shopInfoHandler}/>                        
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>개인정보보호 책임자 이메일</th>
-                        <td>
-                            <input 
-                                name="picEmail"
-                                type={'email'}
-                                defaultValue={shop.picEmail} 
-                                onChange={shopInfoHandler}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>통신판매업 신고여부</th>
-                        <td>
-                            <select
-                                name="omSt"
-                                onChange={shopInfoHandler}
-                            >
-                                <option
-                                    type={'radio'}
-                                    defaultValue={shopInfo.omSt} 
-                                >{shopInfo.omSt}</option>
-                                <option
-                                    type={'radio'}
-                                    defaultValue={shopInfo.omSt == "신고함" ? "신고안함" : "신고함"}
-                                >{shopInfo.omSt == "신고함" ? "신고안함" : "신고함"}</option>
-                            </select>                               
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>통신판매신고 번호</th>
-                        <td>
-                            <input 
-                                name="omNum"
-                                type={'text'}
-                                defaultValue={shop.omNum} 
-                                onChange={shopInfoHandler}/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-            </div>
+        {
+            isAdmin
+            ?
+            <>
+                <div className={ShopManagementCSS.boxing}>
+                <div className={ShopManagementCSS.info}>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style={{backgroundColor: "white"}}>사업자 정보</th>
+                            <td style={{textAlign: "right"}}>
+                                <button onClick={submitHandler} id="company">저장</button>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>사업자 등록 번호</th>
+                            <td>{companyInfo && bsrNumFomatter(companyInfo.bsrNum)}</td>
+                        </tr>
+                        <tr>
+                            <th>상호</th>
+                            <td>
+                                <input 
+                                    type={'text'}
+                                    name="cpNm" 
+                                    defaultValue={company.cpNm} 
+                                    onChange={companyInfoHandler}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>대표자 성명</th>
+                            <td>
+                                <input 
+                                    type={'text'}
+                                    name="rpNm" 
+                                    defaultValue={company.rpNm} 
+                                    onChange={companyInfoHandler}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>업태</th>
+                            <td>
+                                <input 
+                                    type={'text'}
+                                    name="bsType" 
+                                    defaultValue={company.bsType} 
+                                    onChange={companyInfoHandler}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>종목</th>
+                            <td>
+                                <input 
+                                    type={'text'}
+                                    name="bsItem"
+                                    defaultValue={company.bsItem} 
+                                    onChange={companyInfoHandler}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>사업장 주소</th>
+                            <td>
+                                <input 
+                                    type={'text'}
+                                    name="cpAdsNum" 
+                                    id="cpAdsNum"
+                                    onChange={companyInfoHandler}
+                                    style={{width: "130px"}}
+                                    defaultValue={company.cpAdsNum}
+                                    placeholder="우편번호"
+                                    disabled
+                                ></input>&nbsp;&nbsp;&nbsp;
+                                <button onClick={addressAPI}>검색</button>
+                                <br/>
+                                <input 
+                                    type={'text'}
+                                    name="cpAds" 
+                                    id="cpAds"
+                                    onChange={companyInfoHandler} 
+                                    defaultValue={company.cpAds}
+                                    placeholder="주소"
+                                    disabled
+                                ></input>&nbsp;&nbsp;&nbsp;
+                                <input 
+                                    type={'text'}
+                                    name="cpAdsDetail" 
+                                    id="cpAdsDetail"
+                                    onChange={companyInfoHandler}
+                                    defaultValue={company.cpAdsDetail}
+                                    placeholder="상세주소"
+                                ></input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>대표 전화</th>
+                            <td>
+                                <input 
+                                    name="cpTel"
+                                    type={'tel'} 
+                                    // value로 작성 시 '-' 실시간 반영
+                                    value={cpTelFomatter(company.cpTel) ?? ''}
+                                    onChange={companyInfoHandler}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>이메일</th>
+                            <td>
+                                <input 
+                                    name="cpEmail"
+                                    type={'email'}
+                                    value={company.cpEmail ?? ''} 
+                                    onChange={companyInfoHandler}
+                                ></input>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div className={ShopManagementCSS.info}>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style={{backgroundColor: "white"}}>쇼핑몰 정보</th>
+                            <td style={{textAlign: "right"}}>
+                                <button onClick={submitHandler} id="shop">저장</button>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>쇼핑몰명</th>
+                            <td>{shopInfo.shopNm}</td>
+                        </tr>
+                        <tr>
+                            <th>쇼핑몰 주소</th>
+                            <td>
+                                <input 
+                                    name="shopWebAds"
+                                    type={'text'}
+                                    defaultValue={shop.shopWebAds} 
+                                    onChange={shopInfoHandler}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>쇼핑몰 이메일</th>
+                            <td>
+                                <input 
+                                    name="shopEmail"
+                                    type={'email'}
+                                    defaultValue={shop.shopEmail} 
+                                    onChange={shopInfoHandler}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>쇼핑몰 소개</th>
+                            <td>
+                                <input
+                                    name="shopDesc"
+                                    type={'text'}
+                                    defaultValue={shop.shopDesc} 
+                                    onChange={shopInfoHandler}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>고객센터 번호</th>
+                            <td>
+                                <input
+                                    name="csTel"
+                                    type={'tel'}
+                                    // value로 작성 시 '-' 실시간 반영 
+                                    value={picTelFomatter(shop.csTel) ?? ''} 
+                                    onChange={shopInfoHandler}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>고객센터 이메일</th>
+                            <td>
+                                <input 
+                                    name="csEmail"
+                                    type={'email'}
+                                    defaultValue={shop.csEmail} 
+                                    onChange={shopInfoHandler}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>고객센터 운영시간</th>
+                            <td>
+                                <textarea
+                                    name="csHour"
+                                    defaultValue={shop.csHour} 
+                                    onChange={shopInfoHandler}
+                                    style={{display: "flex"}}
+                                ></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>개인정보보호 책임자</th>
+                            <td>
+                                <input 
+                                    name="picNm"
+                                    type={'text'}
+                                    defaultValue={shop.picNm} 
+                                    onChange={shopInfoHandler}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>개인정보보호 책임자 연락처</th>
+                            <td>
+                                <input 
+                                    name="picTel"
+                                    type={'text'}
+                                    // value로 작성 시 '-' 실시간 반영
+                                    value={phoneFomatter(shop.picTel) ?? ''}
+                                    onChange={shopInfoHandler}/>                        
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>개인정보보호 책임자 이메일</th>
+                            <td>
+                                <input 
+                                    name="picEmail"
+                                    type={'email'}
+                                    defaultValue={shop.picEmail} 
+                                    onChange={shopInfoHandler}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>통신판매업 신고여부</th>
+                            <td>
+                                <select
+                                    name="omSt"
+                                    onChange={shopInfoHandler}
+                                >
+                                    <option
+                                        type={'radio'}
+                                        defaultValue={shopInfo.omSt} 
+                                    >{shopInfo.omSt}</option>
+                                    <option
+                                        type={'radio'}
+                                        defaultValue={shopInfo.omSt == "신고함" ? "신고안함" : "신고함"}
+                                    >{shopInfo.omSt == "신고함" ? "신고안함" : "신고함"}</option>
+                                </select>                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>통신판매신고 번호</th>
+                            <td>
+                                <input 
+                                    name="omNum"
+                                    type={'text'}
+                                    defaultValue={shop.omNum} 
+                                    onChange={shopInfoHandler}/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                </div>
+            </>
+            :
+            <ErrorMindol/>
+        }
         </>
     )
 }

@@ -116,7 +116,7 @@ export default function Header() {
 
         return (            
             <>
-                <div>
+                <div style={{marginRight: "90px"}}>
                     <li onClick={onClickLogoutHandler} className={HeaderCSS.headerbutton}>로그아웃</li>
                     <li onClick={onClickMoveHandler} id="shop-management" className={HeaderCSS.headerbutton}>상점관리</li>
                     <li onClick={onClickMoveHandler} id="product-management" className={HeaderCSS.headerbutton}>상품관리</li>
