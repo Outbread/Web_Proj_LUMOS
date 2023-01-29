@@ -1,8 +1,3 @@
-.Boxing {
-    display: flex;
-    justify-content: space-between;
-}
-
 .outer {
     width: 100%;
     margin: 0 auto;
@@ -18,4 +13,12 @@
     border: none;
     background-color: rgba(100, 100, 100, 0);
     color: #646464;
+}
+
+.productDiv {
+    display: flex;
+    flex-wrap: wrap;
+    width: 850px;
+    height: 100%;
+    margin: 10px;
 }
