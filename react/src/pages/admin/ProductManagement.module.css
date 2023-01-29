@@ -1,8 +1,10 @@
 .bodyDiv{
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
     margin-top: 15px;
     height: 100%;    
+    width: 100%;
 }
 table {
     border-collapse: collapse;
@@ -12,7 +14,6 @@ table {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    float: right;
 }
 .buttonDiv button {
     width: 100px;
@@ -47,7 +48,11 @@ table {
     padding: 100px;
 }
 
-.productTable th, td {
+.productTable td {
+    padding: 14px 0;
+}
+
+.productTable th {
     padding: 14px 0;
 }
 
@@ -65,4 +70,8 @@ table {
 
 .productTable tbody th p {
     display: none;
+}
+
+.productInfoDiv {
+    margin: 30px;
 }
