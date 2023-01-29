@@ -46,6 +46,8 @@ export default function OrderDashBoard() {
     const cancleReq = questionList.filter(question => (question.questionCategory == "주문취소" && question.questionStatus == "미해결")).length;
     const returnReq = questionList.filter(question => (question.questionCategory == "환불" && question.questionStatus == "미해결")).length;
 
+    // console.log("신규주문", orderList.filter(order => (order.paymentMt == "카카오페이" && order.orderDate?.length > 0 && order.deliveryStart == null)));
+
     const onClickHandler = () => {
         navigate(`/order-management`, { replace: false });
     }
