@@ -84,10 +84,8 @@ function App() {
             <Route path="question-management" element={<AdminQuestionList />} />
             <Route path="questionAnswer/:questionCode" element={<QuestionAnswer />} />
             <Route path="member-management" element={<MemberList />} />
-            <Route path="order-management/search" element={<OrderSearch/>}/>
-            <Route path="order-management/:orderCode" element={<OrderDetail/>}/>
-            <Route path="cart/:memberId" element={<Cart/>}/>
 
+            <Route path="cart/:memberId" element={<Cart/>}/>
             <Route path="shop-management" element={<ShopManagement/>}/>
 
             <Route path="/login" element={ <Login/> } />

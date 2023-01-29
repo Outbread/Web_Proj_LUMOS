@@ -152,7 +152,7 @@ function ProductUpdate() {
                     <button       
                         onClick={ onClickProductUpdateHandler }             
                     >
-                        상품 수정 저장하기
+                        상품 수정 저장
                     </button>
                 }
                 <button       

@@ -17,7 +17,11 @@ function Product({ product : { pdCode, pdName, pdPrice , productImage, pdImgPath
             onClick={ () => onClickProductHandler(pdCode) }
         >
             <div>                            
-                <img src={productImage?.filter(r => r.mainImg == 'Y')[0].pdImgPath}/>
+                { 
+                    productImage?.map(pd => (pd.mainImg === 'Y') ? 
+                    <img src={pd.pdImgPath} alt='mainImage' key={pd.imgNum}/> : 
+                    null)
+                }
             </div>                        
             <h5>{ pdName }</h5>
             <h5>{ pdPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 원</h5>
