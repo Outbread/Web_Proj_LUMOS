@@ -74,6 +74,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 )
                 if(alertMsg.length == 0) {
                     alert("발주확인 처리할 주문건이 없습니다.");
+                    window.location.reload();
                 } else {
                     setIsAbled(!isAbled);
                     alert("발주확인 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
@@ -96,6 +97,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 )
                 if(alertMsg.length == 0) {
                     alert("배송출발 처리할 주문건이 없습니다.");
+                    window.location.reload();
                 } else {
                     setIsAbled(!isAbled);
                     alert("배송출발 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
@@ -115,6 +117,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 )
                 if(alertMsg.length == 0) {
                     alert("배송완료 처리할 주문건이 없습니다.");
+                    window.location.reload();
                 } else {
                     setIsAbled(!isAbled);
                     alert("배송완료 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
@@ -135,6 +138,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 )
                 if(alertMsg.length == 0) {
                     alert("주문취소 처리할 주문건이 없습니다.");
+                    window.location.reload();
                 } else {
                     setIsAbled(!isAbled);
                     alert("주문취소 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
@@ -154,6 +158,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 )
                 if(alertMsg.length == 0) {
                     alert("반품접수 처리할 주문건이 없습니다.");
+                    window.location.reload();
                 } else {
                     setIsAbled(!isAbled);
                     alert("반품접수 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
@@ -173,6 +178,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 )
                 if(alertMsg.length == 0) {
                     alert("반품완료 처리할 주문건이 없습니다.");
+                    window.location.reload();
                 } else {
                     setIsAbled(!isAbled);
                     alert("반품완료 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");

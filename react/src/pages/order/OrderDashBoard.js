@@ -1,5 +1,5 @@
 import {useNavigate} from 'react-router-dom';
-import {useEffect, useState, useContext} from 'react';
+import {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import OrderDashBoardCSS from './OrderDashBoard.module.css';
@@ -36,11 +36,11 @@ export default function OrderDashBoard() {
         ,[]
     );
 
-    const waitPayment = orderList.filter(order => (order.paymentMt == "무통장입금" && order.orderDate?.length > 0)).length;
-    const newOrder = orderList.filter(order => (order.paymentMt == "카카오페이" && order.orderDate?.length > 0)).length;
-    const preDelivery = orderList.filter(order => ((order.paymentMt == "무통장입금" || "카카오페이") && order.orderConf?.length > 0)).length;
-    const proDelivery = orderList.filter(order => ((order.paymentMt == "무통장입금" || "카카오페이") && order.deliveryStart?.length > 0)).length;
-    const comDelivery = orderList.filter(order => ((order.paymentMt == "무통장입금" || "카카오페이") && (order.deliveryEnd?.length > 0 && order.purchaseConf?.length == 0))).length;
+    const waitPayment = orderList.filter(order => (order.paymentMt == "무통장입금" && order.orderDate?.length > 0 && order.orderConf == null)).length;
+    const newOrder = orderList.filter(order => (order.paymentMt == "카카오페이" && order.orderDate?.length > 0 && order.deliveryStart == null)).length;
+    const preDelivery = orderList.filter(order => ((order.paymentMt == "무통장입금" || "카카오페이") && order.orderConf?.length > 0 && order.deliveryStart == null)).length;
+    const proDelivery = orderList.filter(order => ((order.paymentMt == "무통장입금" || "카카오페이") && order.deliveryStart?.length > 0 && order.deliveryEnd == null)).length;
+    const comDelivery = orderList.filter(order => ((order.paymentMt == "무통장입금" || "카카오페이") && order.deliveryEnd?.length > 0 && order.purchaseConf == null)).length;
     const cancleReq = questionList.filter(question => (question.questionCategory == "주문취소" && question.questionStatus == "미해결")).length;
     const returnReq = questionList.filter(question => (question.questionCategory == "환불" && question.questionStatus == "미해결")).length;
 

@@ -44,6 +44,26 @@ export default function ShopManagement() {
         ,[companyInfo]
     );
 
+    useEffect(
+        () => {
+            setShop({
+                shopNm: shopInfo.shopNm,
+                shopWebAds: shopInfo.shopWebAds,
+                shopEmail: shopInfo.shopEmail,
+                shopDesc: shopInfo.shopDesc,
+                omSt: shopInfo.omSt,
+                omNum: shopInfo.omNum,
+                csTel: shopInfo.csTel,
+                csEmail: shopInfo.csEmail,
+                csHour: shopInfo.csHour,
+                picNm: shopInfo.picNm,
+                picTel: shopInfo.picTel,
+                picEmail: shopInfo.picEmail
+             })
+        }
+        ,[shopInfo]
+    );
+
     const companyInfoHandler = (e) => {
         setCompany({
             ...company,
@@ -51,8 +71,11 @@ export default function ShopManagement() {
         })
     };
 
-    const shopInfoHandler = () => {
-
+    const shopInfoHandler = (e) => {
+        setShop({
+            ...shop,
+            [e.target.name]: e.target.value
+        })
     }
 
     const addressAPI = () => {
@@ -85,23 +108,53 @@ export default function ShopManagement() {
 
     const submitHandler = (e) => {
         if(e.target.id == "company") {
-            console.log("변경된 사업자 정보", company);
-            const companyFormData = new FormData();
-            companyFormData.append("bsrNum", company.bsrNum);
-            companyFormData.append("cpNm", company.cpNm);
-            companyFormData.append("rpNm", company.rpNm);
-            companyFormData.append("cpTel", company.cpTel);
-            companyFormData.append("bsType", company.bsType);
-            companyFormData.append("bsItem", company.bsItem);
-            companyFormData.append("cpAdsNum", company.cpAdsNum);
-            companyFormData.append("cpAds", company.cpAds);
-            companyFormData.append("cpAdsDetail", company.cpAdsDetail);
-            companyFormData.append("cpEmail", company.cpEmail);
-            dispatch(callCompanyInfoUpdateAPI({form: companyFormData}));
-            alert("사업자 정보가 변경되었습니다.");
-            window.location.reload();
+            const isSure = window.confirm("사업자 정보를 변경하시겠습니까?");
+            if(isSure == true) {
+                // console.log("변경된 사업자 정보", company);
+                const companyFormData = new FormData();
+                companyFormData.append("bsrNum", company.bsrNum);
+                companyFormData.append("cpNm", company.cpNm);
+                companyFormData.append("rpNm", company.rpNm);
+                companyFormData.append("cpTel", company.cpTel);
+                companyFormData.append("bsType", company.bsType);
+                companyFormData.append("bsItem", company.bsItem);
+                companyFormData.append("cpAdsNum", company.cpAdsNum);
+                companyFormData.append("cpAds", company.cpAds);
+                companyFormData.append("cpAdsDetail", company.cpAdsDetail);
+                companyFormData.append("cpEmail", company.cpEmail);
+                dispatch(callCompanyInfoUpdateAPI({form: companyFormData}));
+                alert("사업자 정보가 변경되었습니다.");
+                window.location.reload();
+            } else {
+                alert("사업자 정보가 변경이 취소되었습니다.");
+                window.location.reload();
+            }
         }
-        // if(e.target.id == "shop")
+        if(e.target.id == "shop") {
+            const isSure = window.confirm("쇼핑몰 정보를 변경하시겠습니까?");
+            if(isSure == true) {
+                // console.log("변경된 쇼핑몰 정보", shop);
+                const shopFormData = new FormData();
+                shopFormData.append("shopNm", shop.shopNm);
+                shopFormData.append("shopWebAds", shop.shopWebAds);
+                shopFormData.append("shopEmail", shop.shopEmail);
+                shopFormData.append("shopDesc", shop.shopDesc);
+                shopFormData.append("omSt", shop.omSt);
+                shopFormData.append("omNum", shop.omNum);
+                shopFormData.append("csTel", shop.csTel);
+                shopFormData.append("csEmail", shop.csEmail);
+                shopFormData.append("csHour", shop.csHour);
+                shopFormData.append("picNm", shop.picNm);
+                shopFormData.append("picTel", shop.picTel);
+                shopFormData.append("picEmail", shop.picEmail);
+                dispatch(callShopInfoUpdateAPI({form: shopFormData}));
+                alert("쇼핑몰 정보가 변경되었습니다.");
+                window.location.reload();
+            } else {
+                alert("쇼핑몰 정보가 변경이 취소되었습니다.");
+                window.location.reload();
+            }
+        }
     }
 
     return (
@@ -127,6 +180,7 @@ export default function ShopManagement() {
                         <td>
                             <input 
                                 type={'text'}
+                                name="cpNm" 
                                 defaultValue={company.cpNm} 
                                 onChange={companyInfoHandler}/>
                         </td>
@@ -136,6 +190,7 @@ export default function ShopManagement() {
                         <td>
                             <input 
                                 type={'text'}
+                                name="rpNm" 
                                 defaultValue={company.rpNm} 
                                 onChange={companyInfoHandler}/>
                         </td>
@@ -145,6 +200,7 @@ export default function ShopManagement() {
                         <td>
                             <input 
                                 type={'text'}
+                                name="bsType" 
                                 defaultValue={company.bsType} 
                                 onChange={companyInfoHandler}/>
                         </td>
@@ -241,7 +297,7 @@ export default function ShopManagement() {
                             <input 
                                 name="shopWebAds"
                                 type={'text'}
-                                defaultValue={shopInfo.shopWebAds} 
+                                defaultValue={shop.shopWebAds} 
                                 onChange={shopInfoHandler}/>
                         </td>
                     </tr>
@@ -251,7 +307,7 @@ export default function ShopManagement() {
                             <input 
                                 name="shopEmail"
                                 type={'email'}
-                                defaultValue={shopInfo.shopEmail} 
+                                defaultValue={shop.shopEmail} 
                                 onChange={shopInfoHandler}/>
                         </td>
                     </tr>
@@ -261,7 +317,7 @@ export default function ShopManagement() {
                             <input
                                 name="shopDesc"
                                 type={'text'}
-                                defaultValue={shopInfo.shopDesc} 
+                                defaultValue={shop.shopDesc} 
                                 onChange={shopInfoHandler}/>
                         </td>
                     </tr>
@@ -270,8 +326,9 @@ export default function ShopManagement() {
                         <td>
                             <input
                                 name="csTel"
-                                type={'tel'} 
-                                value={picTelFomatter(shopInfo.csTel) ?? ''} 
+                                type={'tel'}
+                                // value로 작성 시 '-' 실시간 반영 
+                                value={picTelFomatter(shop.csTel) ?? ''} 
                                 onChange={shopInfoHandler}/>
                         </td>
                     </tr>
@@ -279,9 +336,9 @@ export default function ShopManagement() {
                         <th>고객센터 이메일</th>
                         <td>
                             <input 
-                                name="shopNm"
+                                name="csEmail"
                                 type={'email'}
-                                defaultValue={shopInfo.shopNm} 
+                                defaultValue={shop.csEmail} 
                                 onChange={shopInfoHandler}/>
                         </td>
                     </tr>
@@ -290,7 +347,7 @@ export default function ShopManagement() {
                         <td>
                             <textarea
                                 name="csHour"
-                                defaultValue={shopInfo.csHour} 
+                                defaultValue={shop.csHour} 
                                 onChange={shopInfoHandler}
                                 style={{display: "flex"}}
                             ></textarea>
@@ -302,7 +359,7 @@ export default function ShopManagement() {
                             <input 
                                 name="picNm"
                                 type={'text'}
-                                defaultValue={shopInfo.picNm} 
+                                defaultValue={shop.picNm} 
                                 onChange={shopInfoHandler}/>
                         </td>
                     </tr>
@@ -312,7 +369,8 @@ export default function ShopManagement() {
                             <input 
                                 name="picTel"
                                 type={'text'}
-                                defaultValue={phoneFomatter(shopInfo.picTel)}
+                                // value로 작성 시 '-' 실시간 반영
+                                value={phoneFomatter(shop.picTel) ?? ''}
                                 onChange={shopInfoHandler}/>                        
                         </td>
                     </tr>
@@ -322,7 +380,7 @@ export default function ShopManagement() {
                             <input 
                                 name="picEmail"
                                 type={'email'}
-                                defaultValue={shopInfo.picEmail} 
+                                defaultValue={shop.picEmail} 
                                 onChange={shopInfoHandler}/>
                         </td>
                     </tr>
@@ -350,7 +408,7 @@ export default function ShopManagement() {
                             <input 
                                 name="omNum"
                                 type={'text'}
-                                defaultValue={shopInfo.omNum} 
+                                defaultValue={shop.omNum} 
                                 onChange={shopInfoHandler}/>
                         </td>
                     </tr>

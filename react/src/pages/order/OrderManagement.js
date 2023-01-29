@@ -67,7 +67,7 @@ export default function OrderManagement() {
     })
 
     const dateHandler = (e) => {
-        console.log("e.target.innerText", e.target.innerText);
+        // console.log("e.target.innerText", e.target.innerText);
         let endDate = new Date();
 
         switch(e.target.innerText) {
@@ -92,6 +92,14 @@ export default function OrderManagement() {
             ['searchDate']: endDate
         })
     };
+
+    const dateChangehandler = (e) => {
+        // console.log("e.target.innerText", e.target.value);      // 2023-01-12
+        setSearch({
+            ...search,
+            ['searchDate']: e.target.value
+        })
+    }
 
     const searchHandler = (e) => {
         setSearch({
@@ -175,9 +183,9 @@ export default function OrderManagement() {
                                 <button onClick={dateHandler}><span>6개월</span></button>
                             </td>
                             <td>
-                                <input type="date" style={{width: "200px"}} defaultValue={search.searchDate}></input>
+                                <input type="date" style={{width: "200px"}} value={search.searchDate ?? ''} onChange={dateChangehandler}></input>
                                 <span>  ~  </span>
-                                <input type="date" style={{width: "200px"}} defaultValue={dateCreatorToday()}></input>
+                                <input type="date" disabled style={{width: "200px"}} defaultValue={dateCreatorToday()}></input>
                             </td>
                         </tr>
                         <tr>

@@ -107,7 +107,7 @@ export default function Header() {
             <div className={HeaderCSS.linkbox}>
                 <button onClick={onClickLogoutHandler} className={HeaderCSS.headerbutton}>로그아웃</button>
                 <button onClick={onClickMypageHandler} className={HeaderCSS.headerbutton}>마이페이지</button>
-                <button onClick={onCartHandler} className={HeaderCSS.headerNavLink}>장바구니</button>
+                <button onClick={onCartHandler} className={HeaderCSS.headerbutton}>장바구니</button>
             </div>
         );
     }
@@ -117,12 +117,12 @@ export default function Header() {
         return (            
             <>
                 <div>
-                    <li onClick={onClickLogoutHandler}>로그아웃</li>
-                    <li onClick={onClickMoveHandler} id="shop-management">상점관리</li>
-                    <li onClick={onClickMoveHandler} id="product-management">상품관리</li>
-                    <li onClick={onClickMoveHandler} id="order-dashboard">주문관리</li>
-                    <li onClick={onClickMoveHandler} id="member-management">회원관리</li>
-                    <li onClick={onClickMoveHandler} id="question-management">문의관리</li>
+                    <li onClick={onClickLogoutHandler} className={HeaderCSS.headerbutton}>로그아웃</li>
+                    <li onClick={onClickMoveHandler} id="shop-management" className={HeaderCSS.headerbutton}>상점관리</li>
+                    <li onClick={onClickMoveHandler} id="product-management" className={HeaderCSS.headerbutton}>상품관리</li>
+                    <li onClick={onClickMoveHandler} id="order-dashboard" className={HeaderCSS.headerbutton}>주문관리</li>
+                    <li onClick={onClickMoveHandler} id="member-management" className={HeaderCSS.headerbutton}>회원관리</li>
+                    <li onClick={onClickMoveHandler} id="question-management" className={HeaderCSS.headerbutton}>문의관리</li>
                 </div>
             </>
         );

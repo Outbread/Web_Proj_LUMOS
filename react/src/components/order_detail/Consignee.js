@@ -74,8 +74,6 @@ export default function Consignee({order, orderInfo, setOrderInfo}) {
             }
             fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
         }
-        // console.log("data", data);
-        // console.log("fullAddress", fullAddress);
         setOrderInfo({
             ...orderInfo,
             cgAdsNum: data.zonecode,

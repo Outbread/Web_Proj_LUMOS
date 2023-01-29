@@ -57,7 +57,16 @@ public class CartController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "장바구니 조회 성공", cartService.selectCart(memberId)));
 		
 	}
-
+	
+	/* [장바구니 상품 수량 수정] */
+	@Operation(summary = "[회원] 장바구니 조회", description = "옵션 정보 조회", tags = {"CartController"})
+	@GetMapping(value = {"/cart/option-info"})
+	public ResponseEntity<ResponseDTO> selectOption() {
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "장바구니 옵션 정보 조회 성공",  cartService.selectOption()));
+		
+	}
+	
 	/* [장바구니 상품 수량 수정] */
 	@Operation(summary = "[회원] 주문 수량 수정", description = "장바구니 주문 수량 수정", tags = {"CartController"})
 	@PutMapping(value = {"/cart/{memberId}/amount-update/{opCode}/{amount}"})

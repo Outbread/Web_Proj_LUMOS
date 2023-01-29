@@ -23,7 +23,7 @@ import ReviewRegist from './pages/reviews/ReviewRegist';                    // �
 
 import OrderSearch from './pages/order/OrderDetail';                        // 주문내역검색
 import Cart from './pages/cart/Cart';                                       // 장바구니
-import OrderList from './pages/order/OrderList';                            // 회원주문목록
+import OrderList from './pages/mypage/OrderList';                            // 회원주문목록
 import ProductDetail from './pages/products/ProductDetail';
 import ProductManagement from './pages/admin/ProductManagement'
 import ProductRegistration from './pages/admin/ProductRegistration';

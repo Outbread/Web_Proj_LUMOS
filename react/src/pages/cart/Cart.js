@@ -1,6 +1,6 @@
 import {useNavigate, useLocation} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import {useState, useContext, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import Delivery from '../../components/order_detail/Delivery';
 import Consignee from '../../components/order_detail/Consignee';
 import OrderProduct from '../../components/order_detail/OrderProduct';
@@ -248,7 +248,10 @@ export default function Cart() {
                 </div>
             </div>
             : 
-            <h1 style={{textAlign: "center"}}>장바구니에 상품이 없습니다.</h1>
+            <div style={{textAlign: "center"}}>
+                <img src="https://lightin9.speedgabia.com/90_koodoyeon/team_project_lumos/emptycart.png" border="0" width={"800px"}></img>
+            </div>
+            // <h1 style={{textAlign: "center"}}>장바구니에 상품이 없습니다.</h1>
             }
         </>
     )

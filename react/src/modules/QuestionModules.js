@@ -12,7 +12,7 @@ export const GET_ALLQUESTIONS = 'question/GET_ALLQUESTIONS';
 export const PUT_ANSWER = 'question/PUT_ANSWER';
 export const GET_QUESTIONADMIN = 'question/GET_QUESTIONADMIN';
 export const GET_NEWQUESTIONCODE = 'question/GET_NEWQUESTIONCODE';
-export const GET_CLAIM = 'question/GET_CLAIM';
+/* [구도연] */ export const GET_CLAIM = 'question/GET_CLAIM';
 
 const actions = createActions({
     [POST_QUESTION]: () => {},
