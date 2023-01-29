@@ -13,6 +13,7 @@ export const callCompanyInfoAPI = () => {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
             } 
         })
         .then(response => response.json());
@@ -32,6 +33,7 @@ export const callShopInfolAPI = () => {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
             } 
         })
         .then(response => response.json());
