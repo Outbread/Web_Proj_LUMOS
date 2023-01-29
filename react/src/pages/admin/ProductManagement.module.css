@@ -47,7 +47,11 @@ table {
     padding: 100px;
 }
 
-.productTable th, td {
+.productTable th {
+    padding: 14px 0;
+}
+
+.productTable td {
     padding: 14px 0;
 }
 

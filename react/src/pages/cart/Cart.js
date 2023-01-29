@@ -14,6 +14,7 @@ import {callCartDetailAPI} from '../../apis/CartAPICalls';
 
 import LoginModal from '../../components/common/LoginModal';
 import {decodeJwt} from '../../utils/tokenUtils';
+import ErrorMindol from '../ErrorMindol';
 
 export default function Cart() {
 
@@ -255,8 +256,7 @@ export default function Cart() {
             (
                 roleAdmin == 1
                 ?
-                // {!alert("잘못된 접근입니다") && navigate('/')}
-                navigate('/')
+                <ErrorMindol/>
                 :
                 <div style={{textAlign: "center"}}>
                     <img src="https://lightin9.speedgabia.com/90_koodoyeon/team_project_lumos/emptycart.png" border="0" width={"800px"}></img>

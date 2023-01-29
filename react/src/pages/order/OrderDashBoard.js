@@ -6,6 +6,9 @@ import OrderDashBoardCSS from './OrderDashBoard.module.css';
 import SearchResult from '../../components/order/SearchResult';
 import {callOrderDashBoardAPI, callClaimDashBoardClaimAPI} from '../../apis/OrderAPICalls';
 
+import {decodeJwt} from '../../utils/tokenUtils';
+import Error from '../ErrorMindol';
+
 export default function OrderDashBoard() {
 
     const navigate = useNavigate();
@@ -25,6 +28,7 @@ export default function OrderDashBoard() {
     // pageinfo가 없어서 .data 할 필요 X
     const orderList  = useSelector(state => state.dashBoardReducer);  
     const questionList  = useSelector(state => state.questionReducer);  
+    const isAdmin = decodeJwt(window.localStorage.getItem("accessToken")).auth.includes("ROLE_ADMIN");
 
     useEffect(
         () => {
@@ -53,68 +57,76 @@ export default function OrderDashBoard() {
 
     return (
         <>
-            <div className={OrderDashBoardCSS.boxing}>
-                <table className={OrderDashBoardCSS.left}>
-                    <thead>
-                        <tr>
-                            <th colSpan={9}>주문 / 배송</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className={OrderDashBoardCSS.info}>결제 대기</td>
-                            <td rowSpan={2} className={OrderDashBoardCSS.guide}>▶</td>
-                            <td className={OrderDashBoardCSS.info}>신규 주문</td>
-                            <td rowSpan={2} className={OrderDashBoardCSS.guide}>▶</td>
-                            <td className={OrderDashBoardCSS.info}>배송 준비</td>
-                            <td rowSpan={2} className={OrderDashBoardCSS.guide}>▶</td>
-                            <td className={OrderDashBoardCSS.info}>배송 중</td>
-                            <td rowSpan={2} className={OrderDashBoardCSS.guide}>▶</td>
-                            <td className={OrderDashBoardCSS.info}>배송 완료</td>
-                        </tr>
-                        <tr>
-                            <td>{waitPayment} 건</td>
-                            <td>{newOrder} 건</td>
-                            <td>{preDelivery} 건</td>
-                            <td>{proDelivery} 건</td>
-                            <td>{comDelivery} 건</td>
-                        </tr>
-                    </tbody>
-                </table>
-               
-                <table className={OrderDashBoardCSS.right}>
-                    <thead>
-                        <tr>
-                            <th colSpan={2}>클레임</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className={OrderDashBoardCSS.info}>취소 요청</td>
-                            <td style={{textAlign: "right"}}>{cancleReq} 건</td>
-                        </tr>
-                        <tr>
-                            <td className={OrderDashBoardCSS.info}>반품 요청</td>
-                            <td style={{textAlign: "right"}}>{returnReq} 건</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div>
-                <div className={OrderDashBoardCSS.bottom}>
-                    <table>
+            {
+                isAdmin
+                ?
+                <>
+                <div className={OrderDashBoardCSS.boxing}>
+                    <table className={OrderDashBoardCSS.left}>
                         <thead>
                             <tr>
-                                <th>최근 주문 내역</th>
-                                <td>
-                                    <button onClick={onClickHandler}>전체 주문 조회</button>
-                                </td>
+                                <th colSpan={9}>주문 / 배송</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            <tr>
+                                <td className={OrderDashBoardCSS.info}>결제 대기</td>
+                                <td rowSpan={2} className={OrderDashBoardCSS.guide}>▶</td>
+                                <td className={OrderDashBoardCSS.info}>신규 주문</td>
+                                <td rowSpan={2} className={OrderDashBoardCSS.guide}>▶</td>
+                                <td className={OrderDashBoardCSS.info}>배송 준비</td>
+                                <td rowSpan={2} className={OrderDashBoardCSS.guide}>▶</td>
+                                <td className={OrderDashBoardCSS.info}>배송 중</td>
+                                <td rowSpan={2} className={OrderDashBoardCSS.guide}>▶</td>
+                                <td className={OrderDashBoardCSS.info}>배송 완료</td>
+                            </tr>
+                            <tr>
+                                <td>{waitPayment} 건</td>
+                                <td>{newOrder} 건</td>
+                                <td>{preDelivery} 건</td>
+                                <td>{proDelivery} 건</td>
+                                <td>{comDelivery} 건</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                
+                    <table className={OrderDashBoardCSS.right}>
+                        <thead>
+                            <tr>
+                                <th colSpan={2}>클레임</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className={OrderDashBoardCSS.info}>취소 요청</td>
+                                <td style={{textAlign: "right"}}>{cancleReq} 건</td>
+                            </tr>
+                            <tr>
+                                <td className={OrderDashBoardCSS.info}>반품 요청</td>
+                                <td style={{textAlign: "right"}}>{returnReq} 건</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
-                <SearchResult updateKind={updateKind}/>
-            </div>
+                <div>
+                    <div className={OrderDashBoardCSS.bottom}>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>최근 주문 내역</th>
+                                    <td>
+                                        <button onClick={onClickHandler}>전체 주문 조회</button>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <SearchResult updateKind={updateKind}/>
+                </div>
+                </>
+                :
+                <Error/>
+            }
         </>
     )
 }
