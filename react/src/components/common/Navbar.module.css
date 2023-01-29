@@ -11,6 +11,7 @@
     justify-content: space-around;
     min-width: 800px;
     list-style:none;
+    border-bottom: 3px solid #73CEBE;
 }
 
 .boxing li {

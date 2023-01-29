@@ -3,10 +3,11 @@
     flex-wrap: wrap;
     width: 850px;
     height: 100%;
-    margin: 10px;
+    margin: 30px;
 }
 
 .product {
+    margin: 30px;
     display: flex;
     text-align: center;
     align-items: center;

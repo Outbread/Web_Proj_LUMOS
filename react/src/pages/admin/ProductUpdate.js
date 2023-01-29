@@ -165,16 +165,7 @@ function ProductUpdate() {
 
             <div className={ ProductRegistrationCSS.productSection }>
                 <div className={ ProductRegistrationCSS.productInfoDiv }>
-                    <div className={ ProductRegistrationCSS.productImageDiv }>
-                        {/* {
-                            productImage?.map(res => (res.mainImg === 'Y') ? 
-                            <img 
-                                className={ ProductRegistrationCSS.productImage } 
-                                src={res.pdImgPath} 
-                                alt='preview'/> : 
-                            <img src = { imageUrl }/>)
-                        } */}
-                        
+                    <div className={ ProductRegistrationCSS.productImageDiv }>                        
                         { productDetail && <img 
                             className={ ProductRegistrationCSS.productImage } 
                             src={ (imageUrl == null) ? productDetail.pdImgPath : imageUrl } 

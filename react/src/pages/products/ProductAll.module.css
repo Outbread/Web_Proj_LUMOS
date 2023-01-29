@@ -3,11 +3,12 @@
     flex-wrap: wrap;
     width: 850px;
     height: 100%;
-    margin: 10px;
+    margin: 30px;
 }
 
 .pagingBtn{
-    margin: 5px;
+    margin: 10px;
+    margin-bottom: 30px;
     border-radius: 25px;
     background-color: white;
     font-weight: bold;
