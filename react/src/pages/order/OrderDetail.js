@@ -27,13 +27,7 @@ export default function OrderDetail() {
     const navigate = useNavigate();
     const params = useParams();
     const order  = useSelector(state => state.orderReducer); 
-    
-    console.log("▶ OrderDetail ◀ order", order);
-    console.log("▶ OrderDetail ◀ order type", typeof(order));
-    console.log("▶ OrderDetail ◀ params", params);
-
-    /* 로그인 상태 관련 로직 */
-    // const [loginModal, setLoginModal] = useState(false);
+    // console.log("▶ OrderDetail ◀ order type", typeof(order));
 
     useEffect(
         () => {
@@ -42,8 +36,6 @@ export default function OrderDetail() {
                 setLoginModal(true);
                 return;
             }
-
-            console.log("▶ OrderDetail ◀ useEffect")
             dispatch(callOrderDetailAPI({	
                 orderCode: params.orderCode
             }));

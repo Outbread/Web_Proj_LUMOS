@@ -1,19 +1,21 @@
-.productDiv {
+.Boxing {
     display: flex;
-    flex-wrap: wrap;
-    width: 850px;
-    height: 100%;
-    margin: 10px;
+    justify-content: space-between;
 }
 
-.pagingBtn{
-    margin: 5px;
-    border-radius: 25px;
-    background-color: white;
-    font-weight: bold;
+.outer {
+    width: 100%;
+    margin: 0 auto;
+    overflow-x: hidden;
 }
 
-.pagingBtn:hover{
-    cursor: pointer;
-    background-color: burlywood;
+.slider {
+    display: flex;
+    transition: .3s ease-out;
+}
+
+.slideBtn {
+    border: none;
+    background-color: rgba(100, 100, 100, 0);
+    color: #646464;
 }

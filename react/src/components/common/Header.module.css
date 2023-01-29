@@ -51,11 +51,11 @@
     font-size: 22px;
     border-radius: 50px;
 }
+
 .headerbutton:hover {
     font-weight: bolder;
     color: #73CEBE;
     background-color: #FCFF6A;
-    
 }
 
 li {

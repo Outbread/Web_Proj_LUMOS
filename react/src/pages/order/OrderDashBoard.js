@@ -25,8 +25,6 @@ export default function OrderDashBoard() {
     // pageinfo가 없어서 .data 할 필요 X
     const orderList  = useSelector(state => state.dashBoardReducer);  
     const questionList  = useSelector(state => state.questionReducer);  
-    console.log("orderList 대시보드", orderList);
-    console.log("questionList 대시보드", questionList);
 
     useEffect(
         () => {
