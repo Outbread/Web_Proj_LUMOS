@@ -22,7 +22,11 @@ export default function Cart() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const order = useSelector(state => state.cartReducer);
-    console.log("order", order);
+
+    const roleAdmin = token.auth.filter(role => {return role == "ROLE_ADMIN"}).length;
+    // const isAdmin = decodeJwt(window.localStorage.getItem("accessToken")).auth.includes("ROLE_ADMIN");
+    // console.log("관리자 권한 확인 (roleAdmin)", roleAdmin); // 1
+    // console.log("관리자 권한 확인 (isAdmin)", isAdmin);     // true
 
     const [isOrdered, setIsOrdered] = useState(false);
     
@@ -38,7 +42,7 @@ export default function Cart() {
 
             dispatch(callCartDetailAPI({	
                 memberId: token.sub
-            }));            
+            }));  
         }
         ,[]
     );
@@ -248,10 +252,17 @@ export default function Cart() {
                 </div>
             </div>
             : 
-            <div style={{textAlign: "center"}}>
-                <img src="https://lightin9.speedgabia.com/90_koodoyeon/team_project_lumos/emptycart.png" border="0" width={"800px"}></img>
-            </div>
-            // <h1 style={{textAlign: "center"}}>장바구니에 상품이 없습니다.</h1>
+            (
+                roleAdmin == 1
+                ?
+                // {!alert("잘못된 접근입니다") && navigate('/')}
+                navigate('/')
+                :
+                <div style={{textAlign: "center"}}>
+                    <img src="https://lightin9.speedgabia.com/90_koodoyeon/team_project_lumos/emptycart.png" border="0" width={"800px"}></img>
+                </div>
+                // <h1 style={{textAlign: "center"}}>장바구니에 상품이 없습니다.</h1>
+            )
             }
         </>
     )
