@@ -1,8 +1,11 @@
 package com.project.lumos.review.service;
 
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -22,16 +25,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.lumos.common.Criteria;
 import com.project.lumos.member.entity.Member;
+import com.project.lumos.member.repository.MemberRepository;
 import com.project.lumos.review.dto.ImageDTO;
 import com.project.lumos.review.dto.ReviewAndMemberDTO;
 import com.project.lumos.review.dto.ReviewDTO;
+import com.project.lumos.review.dto.ReviewImageMemberDTO;
 import com.project.lumos.review.entity.Image;
 import com.project.lumos.review.entity.Review;
 import com.project.lumos.review.entity.ReviewAndMember;
-import com.project.lumos.review.repository.ReviewAndMemberRepository;
-import com.project.lumos.review.repository.ReviewRepository;
+import com.project.lumos.review.entity.ReviewImageMember;
 import com.project.lumos.review.repository.ImageRepository;
 import com.project.lumos.review.repository.ReviewAndImageRepository;
+import com.project.lumos.review.repository.ReviewAndMemberRepository;
+import com.project.lumos.review.repository.ReviewImageMemberRepository;
+import com.project.lumos.review.repository.ReviewRepository;
 import com.project.lumos.util.FileUploadUtils;
 
 @Service
@@ -43,6 +50,8 @@ public class ReviewService {
 	private final ReviewAndMemberRepository reviewAndMemberRepository;
 	private final ReviewAndImageRepository reviewAndImageRepository;
 	private final ImageRepository imageRepository;
+	private final MemberRepository memberRepository;
+	private final ReviewImageMemberRepository reviewImageMemberRepository;
 	
 	@Value("${image.image-dir}")
 	private String IMAGE_DIR;
@@ -50,17 +59,19 @@ public class ReviewService {
 	private String IMAGE_URL;
 	
 	@Autowired
-	public ReviewService(ModelMapper modelMapper, ReviewRepository reviewRepository, ReviewAndMemberRepository reviewAndMemberRepository, ReviewAndImageRepository reviewAndImageRepository, ImageRepository imageRepository) {
+	public ReviewService(ModelMapper modelMapper, ReviewRepository reviewRepository, ReviewAndMemberRepository reviewAndMemberRepository, ReviewAndImageRepository reviewAndImageRepository, ImageRepository imageRepository, MemberRepository memberRepository, ReviewImageMemberRepository reviewImageMemberRepository) {
 		this.modelMapper = modelMapper;
 		this.reviewRepository = reviewRepository;
 		this.reviewAndMemberRepository = reviewAndMemberRepository;
 		this.reviewAndImageRepository = reviewAndImageRepository;
 		this.imageRepository = imageRepository;
+		this.memberRepository = memberRepository;
+		this.reviewImageMemberRepository = reviewImageMemberRepository;
 		
 	}
 	
 	@Transactional
-	public Object insertProductReview(ReviewDTO reviewDTO, ImageDTO imageDTO, MultipartFile reviewImage) {
+	public Object insertProductReview(int memberCode, ReviewDTO reviewDTO, ImageDTO imageDTO, MultipartFile reviewImage) {
 		log.info("[ReviewService] insertProductReview Start ====================");
 		log.info("[ReviewService] ImageDTO: " + imageDTO);
 		log.info("[ReviewService] MultipartFile: " + reviewImage);
@@ -69,38 +80,41 @@ public class ReviewService {
 		String replaceFileName = null;
 		int result = 0;
 		
-		int maxReviewCode = imageRepository.findMaxReviewCode();
+		int maxReviewCode = reviewRepository.findMaxReviewCode();
 		
 		java.util.Date now = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
 		String uploadDate = sdf.format(now);
 		reviewDTO.setUploadDate(uploadDate);
+//		reviewDTO.setPdCode(pdCode);
+		reviewDTO.setMemberCode(memberCode);
 		
 		log.info("[ProductService] insert Image Name: ", imageName);
 		
 		try {
-			replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, reviewImage);
-			
-			imageDTO.setNewNm(replaceFileName);
-			
 			log.info("[ProductService] insert Image Name: ", imageDTO);
 			
 			Review review = modelMapper.map(reviewDTO, Review.class);
 			
-			int reviewCode = maxReviewCode + 1;
-			imageDTO.setOriginNm((reviewImage).getResource().getFilename());
-			imageDTO.setReviewCode(reviewCode);
-			Image image = modelMapper.map(imageDTO, Image.class);
-			
-			
-			log.info("[ProductService] image: ", image);
 			log.info("[ProductService] review: ", review);
-			
-			imageRepository.save(image);
 			
 			reviewRepository.save(review);
 			
-
+			int reviewCode = maxReviewCode + 1;
+			
+			if(reviewImage != null) {
+				replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, reviewImage);
+				
+				imageDTO.setNewNm(replaceFileName);
+				imageDTO.setOriginNm((reviewImage).getResource().getFilename());
+				imageDTO.setReviewCode(reviewCode);
+				Image image = modelMapper.map(imageDTO, Image.class);
+				imageRepository.save(image);
+			
+				log.info("[ProductService] image: ", reviewImage);
+				log.info("[ProductService] image: ", replaceFileName);
+				
+			}
 			
 			log.info("[ReviewService] insertProductReview End =======================");
 			
@@ -110,8 +124,6 @@ public class ReviewService {
 			throw new RuntimeException(e);
 //			log.info("[review insert] Exception!!");
 		}
-		
-		
 		
 		return (result > 0) ? "리뷰 입력 성공" : "리뷰 입력 실패";
 		
@@ -154,34 +166,177 @@ public class ReviewService {
 	public Object selectReviewDetail(int reviewCode) {
 		log.info("[ReviewService] geteReviewDetail Start ==========================");
 		
-		ReviewAndMember review = reviewAndMemberRepository.findById(reviewCode).get();
+//		Review review = reviewRepository.findById(reviewCode).get();
+//		
+//		log.info("[ReviewService] review: " + review);
+//		
+//		String image = imageRepository.findByReviewCode(reviewCode).getNewNm();
+//		
+//		log.info("[ReviewService] image: " + image);
 		
-		log.info("[ReviewService] review: " + review);
+		ReviewImageMember reviewImageMember = reviewImageMemberRepository.findById(reviewCode).get();
+		log.info("[ReviewService] reviewImageMember: " + reviewImageMember);
+		
+		ReviewImageMemberDTO reviewImageMemberDTO = modelMapper.map(reviewImageMember, ReviewImageMemberDTO.class);
+		log.info("[ReviewService] reviewImageMemberDTO: " + reviewImageMemberDTO);
+		
+		Image reviewImage = imageRepository.findByReviewCode(reviewCode); 
+		log.info("[ReviewService] reviewImage: " + reviewImage);
+		
+		
+//		if(reviewImage != null) {
+		
+//		reviewImage.setNewNm(IMAGE_URL + image); 
+		
+//		log.info("[ReviewService] reviewImageMember: " + reviewImageMember);
+//		ReviewAndMember review = reviewAndMemberRepository.findById(reviewCode).get();
+//		
+//		log.info("[ReviewService] review: " + review);
+//		
+//		Image image = imageRepository.findByReviewCode(reviewCode);
+//		
+//		log.info("[ReviewService] image: " + image);
+//		
+//		reviewAndImage.setNewNm(IMAGE_URL + reviewAndImage.getNewNm());
+//		image.setNewNm(IMAGE_URL + image.getNewNm()); 
+//		review.setReviewCode(image.getReviewCode());
+//		review.setReviewCode = image.setReviewCode(reviewCode);
+//		
+//		log.info("[ReviewService] image: " + image);
+//		log.info("[ReviewService] review: " + review);
+		Map<String, Object> reviewMap = new HashMap<>();
+		
+		if(reviewImage != null) {
+		ImageDTO imageDTO = modelMapper.map(reviewImage, ImageDTO.class);
+		imageDTO.setNewNm(IMAGE_URL + reviewImage.getNewNm());
+		log.info("[ReviewService] imageDTO: " + imageDTO);
+		reviewMap.put("imageDTO", imageDTO);
+		log.info("[ReviewService] imageDTOreviewMap: " + reviewMap);
+		}
+		
+//		reviewImageMemberDTO.setImage(imageDTO);
+		
+//		}
+		reviewMap.put("reviewImageMemberDTO", reviewImageMemberDTO);
+		log.info("[ReviewService] reviewImageMemberDTOreviewMap: " + reviewMap);
+		
 		log.info("[ReviewService] getReviewDetail End ==============================");
-		
-		return modelMapper.map(review, ReviewAndMemberDTO.class);
+		return reviewMap;
 	}
 
 	@Transactional
-	public Object updateProductReview(ReviewDTO reviewDTO) {
-		log.info("[ReviewService] updateProductReview Start ===============================");
+	public Object updateProductReview(ReviewDTO reviewDTO, MultipartFile reviewImage, ImageDTO imageDTO) {
 		
+		log.info("[ReviewService] reviewUpdate start ====================================");
+		log.info("[ReviewService] reviewDTO:" + reviewDTO);
+		log.info("[ReviewService] reviewImage:" + reviewImage);
+		Review review = reviewRepository.findByReviewCode(reviewDTO.getReviewCode());
+		log.info("[ReviewService] review : {}", review);
+		
+		log.info("[ReviewService] imageDTO:" + imageDTO);
+		Image image = imageRepository.findByReviewCode(imageDTO.getReviewCode());
+		log.info("[ReviewService] image : {}", image);
+		
+		reviewDTO.setPdCode(review.getPdCode());
+		reviewDTO.setUploadDate(review.getUploadDate());
+		reviewDTO.setReviewComment(review.getReviewComment());
+		reviewDTO.setMemberCode(review.getMemberCode());
+		
+		
+		
+		String oriImage = "";
+		if( image != null) { 
+			oriImage = image.getNewNm();
+		}
+		log.info("[ReviewService] oriImage: " + oriImage);
+		log.info("[ReviewService] updateReview Start ===============================");
+		log.info("[ReviewService] reviewDTO: " + reviewDTO);
+		
+		String replaceFileName = null;
 		int result = 0;
 		
 		try {
-			Review review = reviewRepository.findById(reviewDTO.getReviewCode()).get();
+			
+			Review updateReview = modelMapper.map(reviewDTO, Review.class);
+			
+			reviewRepository.save(updateReview);
+			
+			
 			review.setReviewTitle(reviewDTO.getReviewTitle());
 			review.setPdGrade(reviewDTO.getPdGrade());
 			review.setReviewContent(reviewDTO.getReviewContent());
 			log.info("ReviewService] update review: " + review);
+			
+			if(reviewImage != null) {
+				
+				
+				String imageName = UUID.randomUUID().toString().replace("-", "");
+				replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, reviewImage);
+				log.info("[updateReview] InsertFileName : " + replaceFileName);
+				
+				imageDTO.setNewNm(replaceFileName);
+				imageDTO.setOriginNm((reviewImage).getResource().getFilename());
+				imageDTO.setReviewCode(review.getReviewCode());
+				
+				
+				Image updateImage = modelMapper.map(imageDTO, Image.class);
+				
+				if ( image == null) {
+				imageRepository.save(updateImage);
+				}
+				
+				if( image != null) { 
+				image.setNewNm(replaceFileName);
+				log.info("[update] image:" + image);
+				log.info("[updateReview] deleteImage : " + oriImage);
+				
+				boolean isDelete = FileUploadUtils.deleteFile(IMAGE_DIR, oriImage);
+				log.info("[update] isDelete : " + isDelete);
+
+				}
+				
+			} else if(image != null) {
+				image.setNewNm(oriImage);
+			}
+			
 			result = 1;
-		} catch (Exception e) {
+		} catch (IOException e) {
 			log.info("[review update] Exception");
-		}
-		
+			FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
+			throw new RuntimeException(e);
+		}		
 		log.info("{ReviewService] updateProductReview End ======================");
 		
 		return (result > 0) ? "리뷰 수정 성공" : "리뷰 수정 실패";
+	}
+
+	/* memberCode 찾기 */
+	public int findMemberCode(String memberId) {
+		int memberCode = memberRepository.findMemberCodeByMemberId(memberId);
+		return memberCode;
+	}
+
+	/* 리뷰 삭제 */
+	@Transactional
+	public Object deleteReview(int reviewCode) {
+		log.info("ReviewService] deleteReview Start =======================");
+		
+		int result = 0;
+		
+		try {
+			if(imageRepository.findByReviewCode(reviewCode).getClass() != null) {
+				String replaceFileName = imageRepository.findByReviewCode(reviewCode).getNewNm();
+				FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
+			}
+			reviewRepository.deleteById(reviewCode);
+			result = 1;
+		} catch (Exception e) {
+			log.info("[review delete] Exception");
+		}
+		
+		log.info("ReviewService] deleteReview End =======================");
+		
+		return (result > 0) ? "리뷰 삭제 성공" : "리뷰 삭제 실패";
 	}
 	
 }

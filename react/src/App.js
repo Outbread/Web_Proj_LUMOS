@@ -16,12 +16,14 @@ import ProfileUpdate from './pages/member/ProfileUpdate';
 import OrderDashBoard from './pages/order/OrderDashBoard';                  // 주문대시보드
 import OrderManagement from './pages/order/OrderManagement';                // 주문목록
 
-import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세
 import Review from './pages/reviews/Review';                                // 리뷰 조회
-import ReviewDetail from './pages/reviews/ReviewDetail';                    // 리뷰 상세
+import ReviewDetail from './pages/reviews/ReviewDetail'                    // 리뷰 상세
 import ReviewRegist from './pages/reviews/ReviewRegist';                    // 리뷰 등록
 
+import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세                      
+import OrderSearch from './pages/order/OrderDetail';                        // 주문내역검색
 import Cart from './pages/cart/Cart';                                       // 장바구니
+
 import OrderList from './pages/mypage/OrderList';                            // 회원주문목록
 import ProductDetail from './pages/products/ProductDetail';
 import ProductManagement from './pages/admin/ProductManagement'
@@ -65,7 +67,6 @@ function App() {
             <Route path="product/downlight" element={<Downlight />} />
             <Route path="product/switch" element={<Switch />} />
             <Route path="product/:productCode" element={<ProductDetail />} />
-
             <Route path="mypage" element={ <MyPageLayout/> } >
                 <Route index element={ <ProfileUpdate /> } />
                 <Route path="profileUpdate" element={ <ProfileUpdate /> } />

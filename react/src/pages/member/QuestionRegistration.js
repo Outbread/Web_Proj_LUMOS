@@ -91,7 +91,7 @@ function QuestionRegistration() {
     if ((newQuestion + 0) > 0) {
         console.log(newQuestion);
         navigate(`/mypage/question/detail/${newQuestion}`, { replace: true });
-        // window.location.reload();
+        window.location.reload();
     }
 
     return (

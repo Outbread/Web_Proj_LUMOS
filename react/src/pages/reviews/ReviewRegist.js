@@ -17,11 +17,12 @@ function ReviewRegist() {
     const token = decodeJwt(window.localStorage.getItem("accessToken"));
 
     const [form, setForm] = useState({
-        pdCode: 1,
-        memberCode: 2,
+        pdCode: '1',
+        memberCode: '',
         reviewTitle: '',
         pdGrade: '',
-        reviewContent: ''
+        reviewContent: '',
+        memberId: token.sub
     });
 
     useEffect(() => {
@@ -75,10 +76,10 @@ function ReviewRegist() {
         const formData = new FormData();
 
         formData.append("pdCode", 1);
-        formData.append("memberCode", 2);
         formData.append("reviewTitle", form.reviewTitle);
         formData.append("pdGrade", form.pdGrade);
         formData.append("reviewContent", form.reviewContent);
+        formData.append("memberId", form.memberId);
 
         if(image) {
             formData.append("reviewImage", image);

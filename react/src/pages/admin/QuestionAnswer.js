@@ -37,14 +37,14 @@ function QuestionAnswer() {
     const onClickModifyModeHandler = () => {
         setModifyMode(true);
         setForm({
-            questionCode: questionDetail.questionCode,
-            questionTitle: questionDetail.questionTitle,
-            questionContent: questionDetail.questionContent, 
-            newName: questionDetail.questionImg.newName,
-            answerContent: questionDetail.answerContent,
-            questionCategory: questionDetail.questionCategory,
-            questionStatus: questionDetail.questionStatus, 
-            memberId: questionDetail.member.memberId
+            questionCode: questionDetail.questionDTO.questionCode,
+            questionTitle: questionDetail.questionDTO.questionTitle,
+            questionContent: questionDetail.questionDTO.questionContent, 
+            newName: questionDetail.questionImgDTO?.newName,
+            answerContent: questionDetail.questionDTO.answerContent,
+            questionCategory: questionDetail.questionDTO.questionCategory,
+            questionStatus: questionDetail.questionDTO.questionStatus, 
+            memberId: questionDetail.memberDTO?.memberId
         });
     }
     
@@ -62,7 +62,7 @@ function QuestionAnswer() {
             form: form
         }));         
         console.log(image)
-        navigate(`/questionAnswer/${questionDetail.questionCode}`, { replace: true});
+        navigate(`/questionAnswer/${questionDetail.questionDTO.questionCode}`, { replace: true});
         window.location.reload();
     }   
 
@@ -86,7 +86,7 @@ function QuestionAnswer() {
                                     readOnly={true}
                                     style={ { backgroundColor: 'gray'} }
                                     onChange={ onChangeHandler }
-                                    defaultValue={ (!modifyMode ? questionDetail.questionTitle : form.questionTitle) || ''}
+                                    defaultValue={ (!modifyMode ? questionDetail.questionDTO?.questionTitle : form.questionTitle) || ''}
                                 />
                             </td>
                         </tr>
@@ -97,7 +97,7 @@ function QuestionAnswer() {
                                     placeholder='작성자'
                                     readOnly={true}
                                     style={ { backgroundColor: 'gray'} }
-                                    defaultValue={ questionDetail && questionDetail?.member?.memberId }
+                                    defaultValue={ questionDetail && questionDetail?.memberDTO?.memberId }
                                 />
                             </td>
                         </tr>
@@ -105,7 +105,7 @@ function QuestionAnswer() {
                             <th>사진</th>
                             <td>
                                 {questionDetail && <img
-                                    src={((imageUrl == null) ? questionDetail?.questionImg?.newName : imageUrl)}
+                                    src={((imageUrl == null) ? questionDetail?.questionImgDTO?.newName : imageUrl)}
                                     alt="사진없음"
                                 />}
                                 <input     
@@ -132,19 +132,19 @@ function QuestionAnswer() {
                                     placeholder='작성일'
                                     readOnly={true}
                                     style={ { backgroundColor: 'gray'} }
-                                    value={ questionDetail && questionDetail.questionCreateDate || ''}
+                                    value={ questionDetail && questionDetail.questionDTO?.questionCreateDate || ''}
                                 />
                             </td>
                         </tr>
                         <tr>
                             <th>문의유형</th>
                             <td>
-                                <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } readOnly={ true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '배송' ? true : false } value="배송"/>배송</label> &nbsp;
-                                <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } readOnly={ true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '주문취소' ? true : false } value="주문취소"/>주문취소</label> &nbsp;
-                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={true} checked={(!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '교환' ? true : false} value="교환" />교환</label> &nbsp;
-                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '상품' ? true : false } value="상품" />상품</label> &nbsp;
-                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '환불' ? true : false } value="환불" />환불</label>
-                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '기타' ? true : false } value="기타" />기타</label>
+                                <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } readOnly={ true } checked={ (!modifyMode ? questionDetail.questionDTO?.questionCategory : form.questionCategory) === '배송' ? true : false } value="배송"/>배송</label> &nbsp;
+                                <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } readOnly={ true } checked={ (!modifyMode ? questionDetail.questionDTO?.questionCategory : form.questionCategory) === '주문취소' ? true : false } value="주문취소"/>주문취소</label> &nbsp;
+                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={true} checked={(!modifyMode ? questionDetail.questionDTO?.questionCategory : form.questionCategory) === '교환' ? true : false} value="교환" />교환</label> &nbsp;
+                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ true } checked={ (!modifyMode ? questionDetail.questionDTO?.questionCategory : form.questionCategory) === '상품' ? true : false } value="상품" />상품</label> &nbsp;
+                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ true } checked={ (!modifyMode ? questionDetail.questionDTO?.questionCategory : form.questionCategory) === '환불' ? true : false } value="환불" />환불</label>
+                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ true } checked={ (!modifyMode ? questionDetail.questionDTO?.questionCategory : form.questionCategory) === '기타' ? true : false } value="기타" />기타</label>
                             </td>
                         </tr>
                         <tr>
@@ -155,7 +155,7 @@ function QuestionAnswer() {
                                     readOnly={true}
                                     style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                     onChange={ onChangeHandler }
-                                    value={ (!modifyMode ? questionDetail.questionContent : form.questionContent) || ''}
+                                    value={ (!modifyMode ? questionDetail.questionDTO?.questionContent : form.questionContent) || ''}
                                 >                                    
                                 </textarea>
                             </td>
@@ -168,7 +168,7 @@ function QuestionAnswer() {
                                     readOnly={modifyMode ? false : true}
                                     style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                     onChange={ onChangeHandler }
-                                    value={ (!modifyMode ? questionDetail.answerContent : form.answerContent) || ''}
+                                    value={ (!modifyMode ? questionDetail.questionDTO?.answerContent : form.answerContent) || ''}
                                 >                                    
                                 </textarea>
                             </td>
