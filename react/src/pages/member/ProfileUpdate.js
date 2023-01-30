@@ -43,8 +43,9 @@ function ProfileUpdate() {
     const onClickBackHandler = () => {
         
         /* 돌아가기 클릭시 메인 페이지로 이동 */
-        navigate(-1);
+        navigate("/");
     }
+
 
     useEffect(
         () => {    
@@ -57,16 +58,6 @@ function ProfileUpdate() {
         }
         ,[]
     );
-
-    useEffect(        
-        () => {
-            console.log('[ProfileUpdate] memberId : ', params.memberId);
-
-            dispatch(callGetMemberAPI({	
-                memberId: params.memberId
-            }));                     
-        }
-    ,[]);
 
     // 프로필수정버튼
     const onClickModifyModeHandler = () => {    
@@ -134,29 +125,6 @@ function ProfileUpdate() {
         navigate('/', { replace: true});
     }
 
-    //탈퇴하기 버튼
-    // const handleDeleteProfile = (e) => {
-    //     e.preventDefault();
-    //     if (window.confirm('정말로 탈퇴하시겠습니까?')) {
-    //       axios
-    //         .delete(
-    //           `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/profileUpdate/${form.memberId}`,
-    //           {
-    //             headers: {
-    //               Authorization: 'Bearer ' + localStorage.getItem('ACCESS_TOKEN'),
-    //             },
-    //           }
-    //         )
-    //         .then(() => {
-    //           localStorage.clear();
-    //           alert('그동안 이용해주셔서 감사합니다.');
-    //           navigate('/');
-    //         })
-    //         .catch((err) => alert(err.response.data.message));
-    //     } else {
-    //       return;
-    //     }
-    //   };
 
     return (
         
@@ -254,11 +222,11 @@ function ProfileUpdate() {
                             수정완료
                             </button>
                         }
-                        <button
+                        <button       
                             className={ProfileUpdateCSS.PUbutton}
-                            // onClick = { handleDeleteProfile }
-                            >
-                        탈퇴하기
+                            onClick={ onClickBackHandler }             
+                        >
+                            돌아가기
                         </button>
                     </div>
             </div>
