@@ -1,7 +1,9 @@
 package com.project.lumos.question.service;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -21,18 +23,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.lumos.common.Criteria;
 import com.project.lumos.member.repository.MemberRepository;
-import com.project.lumos.question.dto.QuestionAndImageDTO;
 import com.project.lumos.question.dto.QuestionAndMemberDTO;
 import com.project.lumos.question.dto.QuestionDTO;
 import com.project.lumos.question.dto.QuestionImgDTO;
 import com.project.lumos.question.dto.QuestionMemberAndImgDTO;
 import com.project.lumos.question.entity.Question;
-import com.project.lumos.question.entity.QuestionAndImage;
 import com.project.lumos.question.entity.QuestionAndMember;
 import com.project.lumos.question.entity.QuestionImg;
 import com.project.lumos.question.entity.QuestionMemberAndImg;
 import com.project.lumos.question.repository.QuestionAndImageRepository;
-import com.project.lumos.question.repository.QuestionAndImgRepository;
 import com.project.lumos.question.repository.QuestionAndMemberRepository;
 import com.project.lumos.question.repository.QuestionImgRepository;
 import com.project.lumos.question.repository.QuestionMemberAndImgRepository;
@@ -48,7 +47,6 @@ public class QuestionService {
 	private final ModelMapper modelMapper;
 	private final QuestionImgRepository questionImgRepository;
 	private final MemberRepository memberRepository;
-	private final QuestionAndImgRepository questionAndImgRepository;
 	private final QuestionMemberAndImgRepository questionMemberAndImgRepository;
 	private final QuestionAndImageRepository questionAndImageRepository;
 	
@@ -59,13 +57,12 @@ public class QuestionService {
     private String IMAGE_URL;
 	
 	@Autowired
-	public QuestionService(QuestionAndImageRepository questionAndImageRepository, QuestionMemberAndImgRepository questionMemberAndImgRepository, QuestionAndMemberRepository questionAndMemberRepository, QuestionAndImgRepository questionAndImgRepository, QuestionRepository questionRepository, ModelMapper modelMapper, QuestionImgRepository questionImgRepository, MemberRepository memberRepository) {
+	public QuestionService(QuestionAndImageRepository questionAndImageRepository, QuestionMemberAndImgRepository questionMemberAndImgRepository, QuestionAndMemberRepository questionAndMemberRepository, QuestionRepository questionRepository, ModelMapper modelMapper, QuestionImgRepository questionImgRepository, MemberRepository memberRepository) {
 		this.questionRepository = questionRepository;
 		this.questionAndMemberRepository = questionAndMemberRepository;
 		this.modelMapper = modelMapper;
 		this.questionImgRepository = questionImgRepository;
 		this.memberRepository = memberRepository;
-		this.questionAndImgRepository = questionAndImgRepository;
 		this.questionMemberAndImgRepository = questionMemberAndImgRepository;
 		this.questionAndImageRepository = questionAndImageRepository;
 	}
@@ -75,7 +72,7 @@ public class QuestionService {
 	@Transactional
 	public Object insertQuestion(int memberCode, QuestionDTO questionDTO, MultipartFile questionImage, QuestionImgDTO questionImgDTO) {
 		log.info("[QuestionService] insertQuestion Start ==============================");
-        log.info("QuestionService questionDTO" + questionImgDTO);
+        log.info("QuestionService questionImgDTO: " + questionImgDTO);
         String imageName = UUID.randomUUID().toString().replace("-", "");
         String replaceFileName = null;
         int result = 0;
@@ -103,9 +100,9 @@ public class QuestionService {
 	        	 questionImgDTO.setNewName(replaceFileName);
 	        	 QuestionImg questionimg = modelMapper.map(questionImgDTO, QuestionImg.class);
 	        	 questionImgRepository.save(questionimg);   
+	        	 log.info("[QuestionService] QuestionImgDTO : " + questionImgDTO);
 	         }
 	         result = 1;
-	         log.info("[QuestionService] QuestionImgDTO : " + questionImgDTO);
 		} catch (Exception e) {
 			 FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
 	         throw new RuntimeException(e);
@@ -182,34 +179,34 @@ public class QuestionService {
 
 	/* 회원 문의 상세 조회 */
 	public Object selectQuestionDetail(int questionCode) {
-		log.info("[QuestionService] getQuestionDetail Start ==============================");
-		
-		Question question = questionRepository.findById(questionCode).get();
-		Question questionCode1 = questionRepository.findByQuestionCode(questionCode);
-		log.info("[QuestionService] question: " + question);
-		
-		if(questionImgRepository.findByQuestionCode(questionCode) != null) {
-		QuestionImg questionImg = questionImgRepository.findByQuestionCode(questionCode);
-		log.info("[QuestionService] questionImg: " + questionImg);
-		String questionImgName = questionImg.getNewName();
-		log.info("[QuestionService] questionImgName: " + questionImgName);
-		questionImg.setNewName(IMAGE_URL + questionImgName);
-		log.info("[QuestionService] questionImg: " + questionImg);
-//백업		QuestionAndImg questionAndImg = questionAndImgRepository.findByQuestionCode(questionCode1);
-		QuestionAndImage questionAndImage = questionAndImageRepository.findByQuestionCode(questionCode);
-		log.info("[QuestionService] questionAndImg" + questionAndImage);
-		
-        log.info("[QuestionService] getQuestionDetail End ==============================");
-		}else {
-			QuestionAndImage questionAndImage = questionAndImageRepository.findByQuestionCode(questionCode);
-			log.info("[QuestionService]" + questionAndImage);
-		}
-		QuestionAndImage questionAndImage = questionAndImageRepository.findByQuestionCode(questionCode);
-		log.info("[QuestionService]" + questionAndImage);
-		
-        log.info("[QuestionService] getQuestionDetail End ==============================");
-		
-        return modelMapper.map(questionAndImage, QuestionAndImageDTO.class);
+//		log.info("[QuestionService] getQuestionDetail Start ==============================");
+//		
+//		Question question = questionRepository.findById(questionCode).get();
+////		Question questionCode1 = questionRepository.findByQuestionCode(questionCode);
+//		log.info("[QuestionService] question: " + question);
+//		
+//		if(questionImgRepository.findByQuestionCode(questionCode) != null) {
+//		QuestionImg questionImg = questionImgRepository.findByQuestionCode(questionCode);
+//		log.info("[QuestionService] questionImg: " + questionImg);
+//		String questionImgName = questionImg.getNewName();
+//		log.info("[QuestionService] questionImgName: " + questionImgName);
+//		questionImg.setNewName(IMAGE_URL + questionImgName);
+//		log.info("[QuestionService] questionImg: " + questionImg);
+////백업		QuestionAndImg questionAndImg = questionAndImgRepository.findByQuestionCode(questionCode1);
+//		QuestionAndImage questionAndImage = questionAndImageRepository.findByQuestionCode(questionCode);
+//		log.info("[QuestionService] questionAndImg" + questionAndImage);
+//		
+//        log.info("[QuestionService] getQuestionDetail End ==============================");
+//		}else {
+//			QuestionAndImage questionAndImage = questionAndImageRepository.findByQuestionCode(questionCode);
+//			log.info("[QuestionService]" + questionAndImage);
+//		}
+//		QuestionAndImage questionAndImage = questionAndImageRepository.findByQuestionCode(questionCode);
+//		log.info("[QuestionService]" + questionAndImage);
+//		
+//        log.info("[QuestionService] getQuestionDetail End ==============================");
+//		
+//        return modelMapper.map(questionAndImage, QuestionAndImageDTO.class);
         
         /* 백업 */
 //		String questionImg = questionImgRepository.findByQuestionCode(questionCode).getNewName();
@@ -221,6 +218,34 @@ public class QuestionService {
 //		
 //        log.info("[QuestionService] getQuestionDetail End ==============================");
 //        return modelMapper.map(questionAndImg, QuestionAndImgDTO.class);
+        
+		
+		
+
+//			QuestionImg questionImg = questionImgRepository.findByQuestionCode(questionCode);
+////			int questionImgCode = questionImgRepository.findByQuestionCode(questionCode).getQuestionCode();
+//			String questionImgName = questionImg.getNewName();
+//			questionImg.setNewName(IMAGE_URL + questionImgName);
+//		
+//		QuestionAndImage questionAndImage = questionAndImageRepository.findByQuestionCode(questionCode);
+//		
+//		
+//        return modelMapper.map(questionAndImage, QuestionAndImageDTO.class);
+		Question question = questionRepository.findById(questionCode).get();
+		QuestionImg questionImg = questionImgRepository.findByQuestionCode(questionCode);
+		QuestionDTO questionDTO = modelMapper.map(question, QuestionDTO.class);
+		
+		Map<String, Object> questionMap = new HashMap<>();
+		
+		if(questionImg != null) {
+			QuestionImgDTO questionImgDTO = modelMapper.map(questionImg, QuestionImgDTO.class);
+			questionImgDTO.setNewName(IMAGE_URL + questionImg.getNewName());
+			log.info(questionImgDTO.getNewName());
+			questionMap.put("questionImgDTO", questionImgDTO);
+		}
+		questionMap.put("questionDTO", questionDTO);
+		
+		return questionMap;
 	}
 
 	/* 회원 문의 수정 */
@@ -279,12 +304,12 @@ public class QuestionService {
 
 	/* 문의 삭제 */
 	@Transactional
-	public Object deleteQuestion(QuestionDTO questionDTO) {
+	public Object deleteQuestion(int questionCode) {
 		log.info("[QuestionService] updateQuestion Start ==============================");
 		
 		int result = 0;
 		try {
-			questionRepository.deleteById(questionDTO.getQuestionCode());
+			questionRepository.deleteById(questionCode);
 			result = 1;
 		} catch (Exception e) {
 			log.info("[question delete] Exception!!");

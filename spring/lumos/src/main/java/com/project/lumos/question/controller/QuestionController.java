@@ -111,10 +111,10 @@ public class QuestionController {
 	
 	/* 성공 */
 	@Operation(summary = "문의 삭제 요청", description = "문의 작성자의 문의 삭제가 진행됩니다.", tags = { "QuestionController" })
-    @DeleteMapping("/question/delete")
-	public ResponseEntity<ResponseDTO> deleteQuestion(@RequestBody QuestionDTO questionDTO) {
+    @DeleteMapping("/question/delete/{questionCode}")
+	public ResponseEntity<ResponseDTO> deleteQuestion(@PathVariable String questionCode) {
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "문의 수정 성공",  questionService.deleteQuestion(questionDTO)));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "문의 수정 성공",  questionService.deleteQuestion(Integer.valueOf(questionCode))));
     }
 	
 	/* 문의 상세 조회 */

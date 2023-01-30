@@ -13,6 +13,7 @@ export const PUT_ANSWER = 'question/PUT_ANSWER';
 export const GET_QUESTIONADMIN = 'question/GET_QUESTIONADMIN';
 export const GET_NEWQUESTIONCODE = 'question/GET_NEWQUESTIONCODE';
 export const GET_CLAIM = 'question/GET_CLAIM';
+export const DELETE_QUESTION = 'question/DELETE_QUESTION';
 
 const actions = createActions({
     [POST_QUESTION]: () => {},
@@ -23,8 +24,8 @@ const actions = createActions({
     [PUT_ANSWER]: () => {},
     [GET_QUESTIONADMIN]: () => {},
     [GET_NEWQUESTIONCODE]: () => {},
-    [PUT_QUESTION]: () => {},
-    [GET_CLAIM]: () => {}
+    [GET_CLAIM]: () => {},
+    [DELETE_QUESTION]: () => {}
 
 });
 
@@ -63,6 +64,10 @@ const questionReducer = handleActions(
         [GET_NEWQUESTIONCODE]: (state, { payload }) => {
         },    
         [GET_CLAIM]: (state, { payload }) => {
+
+            return payload;
+        },    
+        [DELETE_QUESTION]: (state, { payload }) => {
 
             return payload;
         }

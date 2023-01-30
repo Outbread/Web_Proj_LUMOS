@@ -9,7 +9,7 @@ public class QuestionDTO {
 	private String questionContent;
 	private String answerContent;
 	private String questionStatus;
-	private String QuestionCreateDate;
+	private String questionCreateDate;
 	private int memberCode;
 	
 	public QuestionDTO(int questionCode, String questionTitle, String questionCategory, String questionContent,
@@ -21,7 +21,7 @@ public class QuestionDTO {
 		this.questionContent = questionContent;
 		this.answerContent = answerContent;
 		this.questionStatus = questionStatus;
-		this.QuestionCreateDate = questionCreateDate;
+		this.questionCreateDate = questionCreateDate;
 		this.memberCode = memberCode;
 	}
 	
@@ -78,11 +78,11 @@ public class QuestionDTO {
 	}
 
 	public String getQuestionCreateDate() {
-		return QuestionCreateDate;
+		return questionCreateDate;
 	}
 
 	public void setQuestionCreateDate(String questionCreateDate) {
-		QuestionCreateDate = questionCreateDate;
+		this.questionCreateDate = questionCreateDate;
 	}
 
 	public int getMemberCode() {
@@ -97,7 +97,7 @@ public class QuestionDTO {
 	public String toString() {
 		return "QuestionDTO [questionCode=" + questionCode + ", questionTitle=" + questionTitle + ", questionCategory="
 				+ questionCategory + ", questionContent=" + questionContent + ", answerContent=" + answerContent
-				+ ", questionStatus=" + questionStatus + ", QuestionCreateDate=" + QuestionCreateDate + ", memberCode="
+				+ ", questionStatus=" + questionStatus + ", questionCreateDate=" + questionCreateDate + ", memberCode="
 				+ memberCode + "]";
 	}
 	

@@ -226,9 +226,9 @@ export const callMyOrderListAPI = ({memberId, currentPage}) => {
     let requestURL;
 
     if(currentPage !== undefined || currentPage !== null) {
-        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/-management/${memberId}?offset=${currentPage}`;
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/orderList/${memberId}?offset=${currentPage}`;
     } else {
-        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/order-management/${memberId}`;
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/orderList/${memberId}`;
     }
 
     console.log("[callMyOrderListAPI] requestURL ▶ ", requestURL);

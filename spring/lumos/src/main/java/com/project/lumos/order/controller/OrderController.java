@@ -110,7 +110,7 @@ public class OrderController {
 	
 	/* [주문내역 리스트 조회] 주문 상태 여부 확인 */
 	@Operation(summary = "[회원] 주문 내역 조회", description = "회원 주문내역 조회 및 페이징 처리", tags = {"OrderController"})
-	@GetMapping("/order-management/{memberid}")
+	@GetMapping("/orderList/{memberid}")
 	public ResponseEntity<ResponseDTO> orderListWithPaging(@PathVariable String memberId, @RequestParam(name = "offset", defaultValue = "1") String offset) {
 		log.info("[OrderController] orderListWithPaging : " + offset);
 		log.info("[OrderController] memberId : " + memberId);
