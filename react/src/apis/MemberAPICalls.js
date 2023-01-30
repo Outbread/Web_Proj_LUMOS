@@ -151,32 +151,7 @@ export const idCheckAPI = async(memberId) => {
     return return_value
 };
 
-// export const callGetMemberAPI = () => {
-//     const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/auth/check`;
 
-//     return async (dispatch, getState) => {
-
-//         const result = await fetch(requestURL, {
-//             method: "GET",
-//             headers: {
-//                 "Content-Type": "application/json",
-//                 "Accept": "*/*",
-//             }
-//         })
-//         .then(response => response.json());
-        
-//         if(result.status === 200){
-//             // alert("사용 가능한 아이디 입니다.");
-//             console.log(result.status)
-//             dispatch({ type: GET_MEMBER,  payload: result.data });
-//             // dispatch({usable_id: true});
-//         } else if(result.status === 409){
-//             alert("이미 사용중인 아이디 입니다.")
-//         }else{
-//             alert("사용 불가한 아이디입니다.")
-//         }
-//     };
-// }
 
 export const callGetMemberListAPI = ({currentPage}) => {
     let requestURL;
