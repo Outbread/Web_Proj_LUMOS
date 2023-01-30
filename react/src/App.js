@@ -21,10 +21,8 @@ import ReviewDetail from './pages/reviews/ReviewDetail'                    // �
 import ReviewRegist from './pages/reviews/ReviewRegist';                    // 리뷰 등록
 
 import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세                      
-import OrderSearch from './pages/order/OrderDetail';                        // 주문내역검색
 import Cart from './pages/cart/Cart';                                       // 장바구니
 
-import OrderList from './pages/mypage/OrderList';                            // 회원주문목록
 import ProductDetail from './pages/products/ProductDetail';
 import ProductManagement from './pages/admin/ProductManagement'
 import ProductRegistration from './pages/admin/ProductRegistration';
@@ -41,6 +39,7 @@ import ShopManagement from './pages/admin/ShopManagement';                  // �
 
 import {useState, createContext} from 'react';
 import ErrorDodol from './pages/ErrorDodol';
+import OrderList from './pages/mypage/OrderList';                           // 개인주문내역
 
 export const OrderContext = createContext(null);
 
@@ -73,7 +72,7 @@ function App() {
                 <Route path="questionregistration" element={ <QuestionRegistration /> } />
                 <Route path="question" element={<QuestionList />} />
                 <Route path="question/detail/:questionCode" element={<QuestionDetail />} />
-                <Route path="myOrderList" element={<OrderList/>}/>
+                <Route path="order" element={<OrderList/>}/>
             </Route>
             <Route path="product-management" element={ <ProductManagement/> } />
             <Route path="product-registration" element={ <ProductRegistration/> } />

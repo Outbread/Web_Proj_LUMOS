@@ -9,6 +9,7 @@ import productManagementReducer from './ProductManagementModule'; // 상품 관�
 import shopReducer from './ShopModule';             // 쇼핑몰 정보
 import companyReducer from './CompanyModule';       // 사업자 정보
 import cartoptionReducer from './CartOptionModule';
+import myOrderReducer from './MyOrderModule';       // 마이페이지 주문내역
 
 const rootReducer = combineReducers({
     questionReducer,       // 문의사항 
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
     productManagementReducer, // 상품 관리
     shopReducer,
     companyReducer,
-    cartoptionReducer
+    cartoptionReducer,
+    myOrderReducer
 });
 
 export default rootReducer;

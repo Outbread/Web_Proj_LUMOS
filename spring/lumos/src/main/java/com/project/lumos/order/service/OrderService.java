@@ -318,4 +318,19 @@ public class OrderService {
         
 	}
 
+	/* [주문내역 조회] */
+	public Object selectMyOrder(String memberId) {
+		
+		log.info("[OrderService] selectMyOrder Start ===================================");
+		
+		Member memberCode = memberRepository.findMemberByMemberId(memberId);
+		
+		List<OrderAndOrderProductAndMember> orderList = orderAndOrderProductAndMemberRepository.findByStOrderAndMemberCodeLike("Y", memberCode);
+        
+        log.info("[OrderService] selectMyOrder End ===================================");
+        
+        return orderList.stream().map(order -> modelMapper.map(order, OrderAndOrderProductAndMemberDTO.class)).collect(Collectors.toList());
+        
+	}
+
 }

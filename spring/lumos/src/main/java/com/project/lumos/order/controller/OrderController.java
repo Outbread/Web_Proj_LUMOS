@@ -108,4 +108,13 @@ public class OrderController {
 		
 	}
 	
+	/* [주문내역 조회] */
+	@Operation(summary = "[회원] 주문 내역 조회", description = "개인 주문내역 조회", tags = {"OrderController"})
+	@GetMapping(value = {"/mypage/order/{memberId}"})
+	public ResponseEntity<ResponseDTO> selectMyOrder(@PathVariable String memberId) {
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원 주문 내역 조회 성공",  orderService.selectMyOrder(memberId)));
+		
+	}
+	
 }
