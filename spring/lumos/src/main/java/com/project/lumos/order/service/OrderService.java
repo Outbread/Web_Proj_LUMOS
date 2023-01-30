@@ -95,7 +95,7 @@ public class OrderService {
 		
 		log.info("[OrderService] selectQuestionList Start ===================================");
 		
-        List<Question> questionList = questionRepository.findByQuestionCategoryAndQuestionStatusLikeOrQuestionCategoryAndQuestionStatusLike("주문취소", "미해결", "반품요청", "미해결");
+        List<Question> questionList = questionRepository.findByQuestionCategoryAndQuestionStatusLikeOrQuestionCategoryAndQuestionStatusLike("주문취소", "미해결", "환불", "미해결");
         
 //        log.info("[OrderService] No paging questionList ▶ {}", questionList);
         
@@ -315,6 +315,21 @@ public class OrderService {
         log.info("[OrderService] updateHistory End ===================================");
         
         return (result > 0) ? "날짜 수정(입력) 성공" : "날짜 수정(입력) 실패";
+        
+	}
+
+	/* [주문내역 조회] */
+	public Object selectMyOrder(String memberId) {
+		
+		log.info("[OrderService] selectMyOrder Start ===================================");
+		
+		Member memberCode = memberRepository.findMemberByMemberId(memberId);
+		
+		List<OrderAndOrderProductAndMember> orderList = orderAndOrderProductAndMemberRepository.findByStOrderAndMemberCodeLike("Y", memberCode, Sort.by("orderCode").descending());
+        
+        log.info("[OrderService] selectMyOrder End ===================================");
+        
+        return orderList.stream().map(order -> modelMapper.map(order, OrderAndOrderProductAndMemberDTO.class)).collect(Collectors.toList());
         
 	}
 

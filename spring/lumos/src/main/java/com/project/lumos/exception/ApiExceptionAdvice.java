@@ -18,10 +18,11 @@ public class ApiExceptionAdvice {
 				.body(new ApiExceptionDTO(HttpStatus.BAD_REQUEST, e.getMessage()));
 	}
 	
+	// TokenProvider에서 토큰 유효성 검사용 메소드 정의 시 사용된다. 유효성 검사 메소드는 JwtFilter에서  토큰 유효성 검사 시 발생하는 예외 상황을 처리한다.
 	@ExceptionHandler(TokenException.class)
 	public ResponseEntity<ApiExceptionDTO> exceptionHandler(TokenException e) {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-				.body(new ApiExceptionDTO(HttpStatus.UNAUTHORIZED, e.getMessage()));
+				.body(new ApiExceptionDTO(HttpStatus.UNAUTHORIZED, e.getMessage())); //reponseBody에 담아 응답을 보낸다.
 				
 	}
 	

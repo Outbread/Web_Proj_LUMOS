@@ -1,7 +1,6 @@
 package com.project.lumos.question.entity;
 
-import java.io.Serializable;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +20,7 @@ import com.project.lumos.member.entity.Member;
 	sequenceName = "SEQ_QUESTION_CODE",
 	initialValue = 1, allocationSize = 1
 )
-	public class QuestionMemberAndImg implements Serializable{
+	public class QuestionMemberAndImg{
 			
 	@Id
 	@Column(name = "QUESTION_CODE")
@@ -57,7 +56,7 @@ import com.project.lumos.member.entity.Member;
 	private Member member;
 	
 	@OneToOne
-	@JoinColumn(name = "QUESTION_CODE")
+	@JoinColumn(name = "QUESTION_CODE", referencedColumnName = "QUESTION_CODE", insertable = false, updatable = false)
 	private QuestionImg questionImg;
 
 	public QuestionMemberAndImg(int questionCode, String questionTitle, String questionCategory, String questionContent,

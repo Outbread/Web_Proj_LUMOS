@@ -48,17 +48,19 @@ function MemberList() {
                     <colgroup>
                         <col width="10%" />
                         <col width="10%" />
+                        <col width="20%" />
                         <col width="10%" />
                         <col width="20%" />
-                        <col width="50%" />
+                        <col width="30%" />
                     </colgroup>
                     <thead>
                         <tr>
-                            <th>문의 번호</th>
-                            <th>작성자</th>
-                            <th>문의 유형</th>
-                            <th>문의 일시</th>
-                            <th>문의 제목</th>
+                            <th>회원 번호</th>
+                            <th>id</th>
+                            <th>이름</th>
+                            <th>성별</th>
+                            <th>생년월일</th>
+                            <th>연락처</th>
                         </tr>
                     </thead>
                     <tbody>

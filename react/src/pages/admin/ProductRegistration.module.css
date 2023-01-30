@@ -19,9 +19,14 @@
     text-indent: 0.5em;
 }
 
-.productInfoDiv table {
+.productInfoDiv {
     width: 100%;
 }
+
+.productInfoDiv tr{
+    line-height: 30px;
+}
+
 
 .textAreaStyle {
     width: 100%;
@@ -58,8 +63,8 @@
 
 .productImage{
     margin-top: 5px;
-    width: 80%;
-    height: 90%;    
+    width: 400px;
+    height: 400px;    
 }
 
 .productImageButton{

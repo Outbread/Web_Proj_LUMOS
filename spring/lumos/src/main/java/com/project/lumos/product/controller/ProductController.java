@@ -20,7 +20,6 @@ import com.project.lumos.common.Criteria;
 import com.project.lumos.common.PageDTO;
 import com.project.lumos.common.PagingResponseDTO;
 import com.project.lumos.common.ResponseDTO;
-import com.project.lumos.product.dto.ProductDTO;
 import com.project.lumos.product.dto.ProductInsertDTO;
 import com.project.lumos.product.service.ProductService;
 
@@ -44,7 +43,6 @@ public class ProductController {
 	public ResponseEntity<ResponseDTO> selectProductListWithPaging(
 			@RequestParam(name = "offset", defaultValue = "1") String offset) {
  
-		/* common 패키지에 Criteria, PageDTO, PagingResponseDTO 추가 */
 		log.info("[ProductController] selectProductListWithPaging : " + offset);
 
 		int total = productService.selectProductTotal();
@@ -52,10 +50,8 @@ public class ProductController {
 		Criteria cri = new Criteria(Integer.valueOf(offset), 10);
 		PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
 		
-		/* 1. offset의 번호에 맞는 페이지에 뿌릴 Product들 */
 		pagingResponseDTO.setData(productService.selectProductListWithPaging(cri));
 		
-		/* 2. PageDTO(Criteria(보고싶은 페이지, 한페이지에 뿌릴 개수), 전체 상품 수) : 화면에서 페이징 처리에 필요한 개념들을 더 계산해서 추출함 */
 		pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
@@ -78,16 +74,7 @@ public class ProductController {
 	
 	@Operation(summary = "관리자 페이지 상품 리스트 조회 요청", description = "관리자 페이지에서 상품 리스트 조회가 진행됩니다.", tags = { "ProductController" })
     @GetMapping("/products-management")
-    public ResponseEntity<ResponseDTO> selectProductListWithPagingForAdmin(
-//    		@RequestParam(name="offset", defaultValue="1") String offset
-    		) {
-//        log.info("[ProductController] selectProductListWithPagingForAdmin : " + offset);
-//        int total = productService.selectProductTotalForAdmin();
-//        
-//        Criteria cri = new Criteria(Integer.valueOf(offset), 10);
-//        PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
-//        pagingResponseDTO.setData(productService.selectProductListWithPagingForAdmin());
-//        pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
+    public ResponseEntity<ResponseDTO> selectProductListWithPagingForAdmin() {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", productService.selectProductListWithPagingForAdmin()));
     }

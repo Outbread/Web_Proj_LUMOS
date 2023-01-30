@@ -22,7 +22,6 @@ import ReviewRegist from './pages/reviews/ReviewRegist';                    // �
 import MyReview from './pages/reviews/MyReview';                            // 내 리뷰
 
 import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세                      
-import OrderSearch from './pages/order/OrderDetail';                        // 주문내역검색
 import Cart from './pages/cart/Cart';                                       // 장바구니
 
 import OrderList from './pages/mypage/OrderList';                            // 회원주문목록
@@ -76,6 +75,7 @@ function App() {
                 <Route path="question/detail/:questionCode" element={<QuestionDetail />} />
                 <Route path="myOrderList" element={<OrderList/>}/>
                 <Route path="myReviewList" element={<MyReview/>}/>
+                <Route path="order" element={<OrderList/>}/>
             </Route>
             <Route path="product-management" element={ <ProductManagement/> } />
             <Route path="product-registration" element={ <ProductRegistration/> } />

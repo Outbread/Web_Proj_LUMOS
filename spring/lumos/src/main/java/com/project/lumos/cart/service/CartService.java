@@ -332,25 +332,31 @@ public class CartService {
 			SimpleDateFormat sdfNew = new SimpleDateFormat("yyyyMMdd");
 			String orderCode1New = sdfNew.format(nowNew);
 			
-			/* 주문코드 뒷쪽 생성을 위한 로직 */
+			/* 주문코드 뒷쪽 생성을 위한 로직 (10, 20 등을 처리하지 못함) */
+//			String orderCode2New = orderRepository.todayMaxOrderNum();
+//			String replaceOrderCode2New = "";
+//			log.info("[CartService] replaceOrderCode2 is return ? ▶ {}", replaceOrderCode2New);
+//			if(orderCode2New == null) {
+//				replaceOrderCode2New = "0";
+//			} else {
+//				// ex : 000001 -> 1
+//				replaceOrderCode2New = orderCode2New.replaceAll("[0]", "");
+//			}
+			
+			/* 주문코드 뒷쪽 생성을 위한 로직 (10, 20 등을 처리 가능) */
 			String orderCode2New = orderRepository.todayMaxOrderNum();
-			String replaceOrderCode2New = "";
+			int replaceOrderCode2New = 0;
+			log.info("[CartService] orderCode2New is return ? ▶ {}", orderCode2New);
 			
-			log.info("[CartService] replaceOrderCode2 is return ? ▶ {}", replaceOrderCode2New);
-			
-			if(orderCode2New == null) {
-				replaceOrderCode2New = "0";
-			} else {
-				// ex : 000001 -> 1
-				replaceOrderCode2New = orderCode2New.replaceAll("[0]", "");
+			if(orderCode2New != null) {
+				// int로 형변환하여 앞쪽 0을 날림
+				replaceOrderCode2New = Integer.valueOf(orderCode2New);
+				log.info("[CartService] replaceOrderCode2 ▶ {}", replaceOrderCode2New);
 			}
 			
-			log.info("[CartService] replaceOrderCode2 ▶ {}", replaceOrderCode2New);
-			
 			/* 6자리 숫자를 만드는 로직 */
-			int diffNew = 6 - replaceOrderCode2New.length();
-			int sumOrderCode2New = Integer.valueOf(replaceOrderCode2New) + 1;
-			String newOrderCode2New = String.valueOf(sumOrderCode2New);
+			int diffNew = 6 - String.valueOf(replaceOrderCode2New + 1).length();
+			String newOrderCode2New = String.valueOf(replaceOrderCode2New + 1);
 			StringBuffer bufOrderCode2New = new StringBuffer(newOrderCode2New);
 			for(int i = 0; i < diffNew; i++) {
 				bufOrderCode2New.insert(i, "0");

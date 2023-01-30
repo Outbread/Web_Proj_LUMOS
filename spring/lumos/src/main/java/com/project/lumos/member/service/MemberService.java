@@ -1,8 +1,6 @@
 package com.project.lumos.member.service;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -16,16 +14,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.project.lumos.common.Criteria;
 import com.project.lumos.member.dto.MemberDTO;
 import com.project.lumos.member.entity.Member;
 import com.project.lumos.member.repository.MemberRepository;
-import com.project.lumos.product.dto.ProductDTO;
-import com.project.lumos.product.entity.Product;
-import com.project.lumos.question.dto.QuestionAndMemberDTO;
-import com.project.lumos.question.entity.QuestionAndMember;
 
 @Service
 public class MemberService {
@@ -42,6 +35,7 @@ public class MemberService {
 	//============================마이페이지 프로필 조회[전진이]==========================//
 	public MemberDTO selectMyInfo(String memberId) {
 		log.info("[MemberService] getMyInfo Start =======================");
+		log.info("[MemberService] 마이페이지 프로필 조회 : " + memberId);
 		
 		Member member = memberRepository.findByMemberId(memberId);
 		log.info("[MemberService] {}", member);
@@ -79,6 +73,8 @@ public class MemberService {
         log.info("[MemberService] updateProfile End ===================================");
         return (result > 0) ? "프로필 업데이트 성공" : "프로필 업데이트 실패";
 	}
+	
+	
 	
 	public int memberTotal() {
 		log.info("[MemberService] memberTotal Start ===================================");

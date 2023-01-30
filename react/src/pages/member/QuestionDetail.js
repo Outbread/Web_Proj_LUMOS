@@ -6,44 +6,45 @@ import { decodeJwt } from '../../utils/tokenUtils';
 
 import{
     callQuestionDetailAPI,
-    callQuestionUpdateAPI
+    callQuestionUpdateAPI,
+    callQuestionDeleteAPI
 } from '../../apis/QuestionAPICalls'
 
 function QuestionDetail() {
 
     const dispatch = useDispatch();
     const params = useParams();
-    const questionDetail  = useSelector(state => state.questionReducer);  
+    const questionDetail = useSelector(state => state.questionReducer);
     
     const [image, setImage] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
-    const [modifyMode, setModifyMode] = useState(false);    
+    const [modifyMode, setModifyMode] = useState(false);
     const imageInput = useRef();
     const navigate = useNavigate();
     
     const [form, setForm] = useState({});
-    const token = decodeJwt(window.localStorage.getItem("accessToken"));   
+    const token = decodeJwt(window.localStorage.getItem("accessToken"));
  
 
-    useEffect(        
+    useEffect(
         () => {
             console.log('[QuestionDetail] QuestionCode : ', params.questionCode);
             
             dispatch(callQuestionDetailAPI({	// 리뷰코드로 리뷰 조회 API 실행
-                questionCode: params.questionCode, 
+                questionCode: params.questionCode,
                 memberId: token.sub
-            }));            
+            }));
         }
-    ,[]);
+        , []);
 
     useEffect(() => {
         
         /* 이미지 업로드시 미리보기 세팅 */
-        if(image){
+        if (image) {
             const fileReader = new FileReader();
             fileReader.onload = (e) => {
                 const { result } = e.target;
-                if( result ){
+                if (result) {
                     setImageUrl(result);
                 }
             }
@@ -51,7 +52,7 @@ function QuestionDetail() {
             // window.location.reload();               // 사진 파일 수정후 조회용 리로드
         }
     },
-    [image]);
+        [image]);
 
     const onChangeImageUpload = (e) => {
         console.log(e.target.files[0]);
@@ -62,7 +63,7 @@ function QuestionDetail() {
     };
     
     const onClickImageUpload = () => {
-        if(modifyMode){
+        if (modifyMode) {
             imageInput.current.click();
         }
     }
@@ -70,13 +71,13 @@ function QuestionDetail() {
     const onClickModifyModeHandler = () => {
         setModifyMode(true);
         setForm({
-            questionCode: questionDetail.questionCode,
-            questionTitle: questionDetail.questionTitle,
-            questionContent: questionDetail.questionContent, 
-            newName: questionDetail.questionImg.newName,
-            questionCategory: questionDetail.questionCategory,
-            questionStatus: questionDetail.questionStatus,
-            // questionCreateDate: questionDetail.questionCreateDate
+            questionCode: questionDetail.questionDTO.questionCode,
+            questionTitle: questionDetail.questionDTO.questionTitle,
+            questionContent: questionDetail.questionDTO.questionContent,
+            newName: questionDetail.questionImg?.newName,
+            questionCategory: questionDetail.questionDTO.questionCategory,
+            questionStatus: questionDetail.questionDTO.questionStatus,
+            questionCreateDate: questionDetail.questionDTO.questionCreateDate
             
         });
     }
@@ -88,7 +89,7 @@ function QuestionDetail() {
         });
     };
 
-    const onClickQuestionUpdateHandler = () => {        
+    const onClickQuestionUpdateHandler = () => {
         console.log('[QuestionUpdate] onClickQuestionUpdateHandler');
 
         const formData = new FormData();
@@ -97,23 +98,30 @@ function QuestionDetail() {
         formData.append("questionCode", form.questionCode);
         formData.append("questionCategory", form.questionCategory);
         formData.append("questionCreateDate", form.questionCreateDate);
+        formData.append("questionStatus", questionDetail.questionDTO.questionStatus)
         
-        if(image){
+        if (image) {
             formData.append("questionImage", image);
         }
        
-        dispatch(callQuestionUpdateAPI({	
+        dispatch(callQuestionUpdateAPI({
             form: formData
-        }));         
+        }));
         console.log(image)
-        navigate(`/mypage/question/detail/${questionDetail.questionCode}`, { replace: true });
+        navigate(`/mypage/question/detail/${questionDetail.questionDTO.questionCode}`, { replace: true });
         setTimeout(() => {
             console.log("Delayed for 1 second.");
             window.location.reload();                             // 파일업로드 물리적 시간 강제 딜레이 
-          }, "1000")
-        
-    }   
+        }, "1000")
+        // window.location.reload();
+    }
 
+    const onClickQuestionDeleteHandler = (questionDetail) => {
+        dispatch(callQuestionDeleteAPI({questionCode: questionDetail.questionDTO.questionCode}))
+        
+        navigate(`/mypage/question`, { replace: true });
+        window.location.reload();
+    }
 
     return (
         <>
@@ -134,7 +142,7 @@ function QuestionDetail() {
                                     readOnly={modifyMode ? false : true}
                                     style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                     onChange={ onChangeHandler }
-                                    value={ (!modifyMode ? questionDetail.questionTitle : form.questionTitle) || ''}
+                                    value={ (!modifyMode ? questionDetail.questionDTO?.questionTitle : form.questionTitle) || ''}
                                 />
                             </td>
                         </tr>
@@ -152,12 +160,13 @@ function QuestionDetail() {
                         <tr>
                             <th>사진</th>
                             <td>
-                                {questionDetail.questionImg && <img
-                                    src={((imageUrl == null) ? questionDetail.questionImg.newName : imageUrl)}
+                                {questionDetail?.questionImgDTO && <img
+                                    src={((imageUrl == null) ? questionDetail.questionImgDTO.newName : imageUrl)}
                                     alt="preview"
                                 />}
                                 <input                
                                     style={ { display: 'none' }}
+                                    readOnly={modifyMode ? false : true}
                                     type="file"
                                     name='newImage' 
                                     accept='image/jpg,image/png,image/jpeg,image/gif'
@@ -179,19 +188,19 @@ function QuestionDetail() {
                                     placeholder='작성일'
                                     readOnly={true}
                                     style={ { backgroundColor: 'gray'} }
-                                    value={ questionDetail && questionDetail.questionCreateDate || ''}
+                                    value={ questionDetail && questionDetail.questionDTO?.questionCreateDate || ''}
                                 />
                             </td>
                         </tr>
                         <tr>
                             <th>문의유형</th>
                             <td>
-                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={modifyMode ? false : true} checked={(!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '배송' ? true : false} value="배송" />배송</label> &nbsp;
-                                <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } readOnly={ modifyMode ? false : true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '주문취소' ? true : false } value="주문취소"/>주문취소</label> &nbsp;
-                                <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } readOnly={ modifyMode ? false : true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '교환' ? true : false } value="교환"/>교환</label> &nbsp;
-                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ modifyMode ? false : true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '상품' ? true : false } value="상품" />상품</label> &nbsp;
-                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ modifyMode ? false : true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '환불' ? true : false } value="환불" />환불</label>
-                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ modifyMode ? false : true } checked={ (!modifyMode ? questionDetail.questionCategory : form.questionCategory) === '기타' ? true : false } value="기타" />기타</label>
+                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={modifyMode ? false : true} checked={(!modifyMode ? questionDetail.questionDTO?.questionCategory : form.questionCategory) === '배송' ? true : false} value="배송" />배송</label> &nbsp;
+                                <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } readOnly={ modifyMode ? false : true } checked={ (!modifyMode ? questionDetail.questionDTO?.questionCategory : form.questionCategory) === '주문취소' ? true : false } value="주문취소"/>주문취소</label> &nbsp;
+                                <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } readOnly={ modifyMode ? false : true } checked={ (!modifyMode ? questionDetail.questionDTO?.questionCategory : form.questionCategory) === '교환' ? true : false } value="교환"/>교환</label> &nbsp;
+                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ modifyMode ? false : true } checked={ (!modifyMode ? questionDetail.questionDTO?.questionCategory : form.questionCategory) === '상품' ? true : false } value="상품" />상품</label> &nbsp;
+                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ modifyMode ? false : true } checked={ (!modifyMode ? questionDetail.questionDTO?.questionCategory : form.questionCategory) === '환불' ? true : false } value="환불" />환불</label>
+                                <label><input type="radio" name="questionCategory" onChange={onChangeHandler} readOnly={ modifyMode ? false : true } checked={ (!modifyMode ? questionDetail.questionDTO?.questionCategory : form.questionCategory) === '기타' ? true : false } value="기타" />기타</label>
                             </td>
                         </tr>
                         <tr>
@@ -202,21 +211,21 @@ function QuestionDetail() {
                                     readOnly={modifyMode ? false : true}
                                     style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                     onChange={ onChangeHandler }
-                                    value={ (!modifyMode ? questionDetail.questionContent : form.questionContent) || ''}
+                                    value={ (!modifyMode ? questionDetail.questionDTO?.questionContent : form.questionContent) || ''}
                                 >                                    
                                 </textarea>
                             </td>
                         </tr>
-                            {questionDetail.answerContent !== null ?
+                            {questionDetail.questionDTO?.answerContent !== null ?
                                 <tr>
                                     <th>답변</th>
                                     <td colSpan={2}>
                                         <textarea
                                             name='answerContent'
-                                            readOnly={modifyMode ? false : true}
-                                            style={!modifyMode ? { backgroundColor: 'gray' } : null}
+                                            readOnly={true}
+                                            style={{ backgroundColor: 'gray' }}
                                             onChange={onChangeHandler}
-                                            value={(!modifyMode ? questionDetail.answerContent : form.answerContent) || ''}
+                                            value={(questionDetail.questionDTO?.answerContent) || ''}
                                         >
                                         </textarea>
                                     </td>
@@ -247,6 +256,11 @@ function QuestionDetail() {
                                     문의 수정 저장하기
                                 </button>
                             }
+                         <button     
+                                onClick={() => onClickQuestionDeleteHandler(questionDetail) }             
+                            >
+                                    문의 삭제하기
+                        </button>
                             </div>
 
                 </div>

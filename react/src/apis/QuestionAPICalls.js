@@ -6,14 +6,17 @@ import {
     GET_ALLQUESTIONS,
     PUT_ANSWER,
     GET_QUESTIONADMIN,
-    GET_NEWQUESTIONCODE
+    GET_NEWQUESTIONCODE,
+    DELETE_QUESTION
 } from '../modules/QuestionModules'
 
 /* 문의사항 등록 */ 
-export const callQuestionRegistAPI = ({ form }) => {
+export const callQuestionRegistAPI = ({ form, memberId }) => {
     console.log('[QuestionAPICalls] callQuestionRegistAPI Call');
 
     const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question`;
+    const requestURL2 = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/newQuestionCode/${memberId}`;
+    
 
     return async (dispatch, getState) => {
         // console.log(form.data.memberId);
@@ -30,8 +33,27 @@ export const callQuestionRegistAPI = ({ form }) => {
 
         console.log('[QuestionAPICalls] callQuestionRegistAPI RESULT : ', result);
 
-        dispatch({ type: POST_QUESTION,  payload: result });
-        
+        // dispatch({ type: POST_QUESTION,  payload: result });
+       
+        console.log('[QuestionAPICalls] callNewQuestionCodeAPI requestURL : ', requestURL2);
+        // console.log(memberId)
+    
+        const result2 = await fetch(requestURL2, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken"),
+                "Access-Control-Allow-Origin": "*"                
+            }
+        })
+        .then(response => response.json());
+        if(result2.status === 200){
+            console.log('[QuestionAPICalls] callNewQuestionCodeAPI RESULT : ', result2);
+            console.log(result2.data)
+            dispatch({ type: GET_NEWQUESTIONCODE,  payload: result2.data });
+        }
+            
     };       
 }
 
@@ -240,5 +262,28 @@ export const callNewQuestionCodeAPI = ({memberId}) => {
             dispatch({ type: GET_NEWQUESTIONCODE,  payload: result.data });
         }
         
+    };
+}
+
+export const callQuestionDeleteAPI = ({questionCode}) => {
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/api/v1/question/delete/${questionCode}`;
+
+    return async(dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+            } 
+        })
+        .then(response => response.json());
+
+        console.log("[callQuestionDeleteAPI] RESULT : ▶ ", result);
+        if(result.status === 200) {
+            console.log("[callQuestionDeleteAPI] SUCCESS ◀ ");
+            dispatch({type: DELETE_QUESTION,  payload: result.data});
+        }
     };
 }
