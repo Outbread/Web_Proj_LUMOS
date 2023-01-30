@@ -280,7 +280,7 @@ function ProductUpdate() {
                             </tr>
                             <tr>
                                 <td><label>상품 옵션</label></td>
-                                <select 
+                                <td><select 
                                     onChange={ onChangeHandler }  
                                     name = 'optionNm'            
                                 >
@@ -294,6 +294,7 @@ function ProductUpdate() {
                                         {option?.optionNm}
                                     </option>
                                 </select>
+                                </td>
                             </tr>
                             <tr>
                                 <td><label>상품 재고</label></td>

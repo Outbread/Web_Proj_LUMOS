@@ -18,8 +18,6 @@ function Navbar() {
 
     const [search, setSearch] = useState('');
 
-    const [loginModal, setLoginModal] = useState(false);
-
     const onSearchChangeHandler = (e) => {
         setSearch(e.target.value);
     }
@@ -33,6 +31,12 @@ function Navbar() {
             window.location.reload();
         }
     }
+
+    const onClickSearch = e => {
+        navigate(`/search?value=${search}`, { replace: false });
+        window.location.reload()
+    }
+
     
 
     return (
@@ -52,7 +56,12 @@ function Navbar() {
                         onKeyUp={ onEnterkeyHandler }
                         onChange={ onSearchChangeHandler }
                     />
-                    <button className={NavbarCSS.searchBtn}>검색</button>
+                    <button 
+                        className={NavbarCSS.searchBtn}
+                        onClick={onClickSearch}
+                    >
+                        검색
+                    </button>
                 </ul>
         </div>
     )

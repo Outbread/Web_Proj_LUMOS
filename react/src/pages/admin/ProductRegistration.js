@@ -194,7 +194,7 @@ function ProductRegistration() {
                                 <td><label>대분류 카테고리</label></td>
                                 <td>
                                     <select name ='catMain' onChange={onChangeHandler}>
-                                        <option value="" selected disabled hidden>선택해주세요</option>
+                                        <option defaultValue disabled hidden>선택해주세요</option>
                                         <option value='가정용 LED'>가정용 LED</option>
                                         <option value='매입등'>매입등</option>
                                         <option value='램프'>램프</option>

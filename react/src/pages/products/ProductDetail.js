@@ -214,7 +214,7 @@ function ProductDetail() {
                                 <td>{ pdDesc || '' }</td>
                             </tr>    
                             <tr>
-                                <th>옵션 별 구매 가능 수량</th>
+                                <th>옵션</th>
                                 <td>
                                 { 
                                     <select onChange={optionSelectHandler} id="seletTag">

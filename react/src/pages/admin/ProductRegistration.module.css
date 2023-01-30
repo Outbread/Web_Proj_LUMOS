@@ -7,6 +7,7 @@
 .productInfoDiv{
     display: flex;
     width: 350px;
+    height: 100%;
 }
 
 .productInfoInput {    
@@ -19,9 +20,14 @@
     text-indent: 0.5em;
 }
 
-.productInfoDiv table {
+.productInfoDiv {
     width: 100%;
 }
+
+.productInfoDiv tr{
+    line-height: 50px;
+}
+
 
 .textAreaStyle {
     width: 100%;
