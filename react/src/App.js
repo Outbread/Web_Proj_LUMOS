@@ -15,12 +15,9 @@ import Register from './pages/member/Register';                             // �
 import ProfileUpdate from './pages/member/ProfileUpdate';
 import OrderDashBoard from './pages/order/OrderDashBoard';                  // 주문대시보드
 import OrderManagement from './pages/order/OrderManagement';                // 주문목록
-<<<<<<< HEAD
-import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세
 import Review from './pages/reviews/Review';                                // 리뷰 조회
-import ReviewDetail from './pages/reviews/ReviewDetail';                    // 리뷰 상세
+import ReviewDetail from './pages/reviews/ReviewDetail'                    // 리뷰 상세
 import ReviewRegist from './pages/reviews/ReviewRegist';                    // 리뷰 등록
-=======
 import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세                      
 import OrderSearch from './pages/order/OrderDetail';                        // 주문내역검색
 import Cart from './pages/cart/Cart';                                       // 장바구니
@@ -43,7 +40,6 @@ import {useState, createContext} from 'react';
 
 export const OrderContext = createContext(null);
 
->>>>>>> origin/master
 function App() {
 
   const [ckeckCode, setCheckCode] = useState(new Set());
@@ -53,13 +49,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={ <Layout/> }>
-<<<<<<< HEAD
             <Route index element={ <Main/> }/> 
             <Route path="review/:pdCode" element={ <Review/> } /> 
-            <Route path='reviewDetail/:reviewCode' element={ <ReviewDetail/> } />
-            <Route path='/reviewRegist' element={ <ReviewRegist/> } />  
-=======
-            <Route index element={ <Main/> }/>   
+            <Route path="reviewDetail/:reviewCode" element={ <ReviewDetail/> } />
+            <Route path="reviewRegist" element={ <ReviewRegist/> } />  
             <Route path="productall" element={ <ProductAll /> }/>
             <Route path="search" element={ <Search /> }/>
             <Route path="product/led" element={<Led />} />
@@ -68,7 +61,6 @@ function App() {
             <Route path="product/downlight" element={<Downlight />} />
             <Route path="product/switch" element={<Switch />} />
             <Route path="product/:productCode" element={<ProductDetail />} />
->>>>>>> origin/master
             <Route path="mypage" element={ <MyPageLayout/> } >
                 <Route index element={ <ProfileUpdate /> } />
                 <Route path="profileUpdate" element={ <ProfileUpdate /> } />

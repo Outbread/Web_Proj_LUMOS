@@ -5,17 +5,18 @@ public class ReviewAndImageDTO {
 	private int imageCode;
 	private String originNm;
 	private String newNm;
+	private int reviewCode;
 	private ReviewDTO review;
 	
 	public ReviewAndImageDTO() {
 		super();
 	}
 
-	public ReviewAndImageDTO(int imageCode, String originNm, String newNm, ReviewDTO review) {
-		super();
+	public ReviewAndImageDTO(int imageCode, String originNm, String newNm, int reviewCode, ReviewDTO review) {
 		this.imageCode = imageCode;
 		this.originNm = originNm;
 		this.newNm = newNm;
+		this.reviewCode = reviewCode;
 		this.review = review;
 	}
 
@@ -43,6 +44,14 @@ public class ReviewAndImageDTO {
 		this.newNm = newNm;
 	}
 
+	public int getReviewCode() {
+		return reviewCode;
+	}
+
+	public void setReviewCode(int reviewCode) {
+		this.reviewCode = reviewCode;
+	}
+
 	public ReviewDTO getReview() {
 		return review;
 	}
@@ -53,9 +62,11 @@ public class ReviewAndImageDTO {
 
 	@Override
 	public String toString() {
-		return "ReviewAndImageDTO [imageCode=" + imageCode + ", originNm=" + originNm + ", newNm=" + newNm + ", review="
-				+ review + "]";
+		return "ReviewAndImageDTO [imageCode=" + imageCode + ", originNm=" + originNm + ", newNm=" + newNm
+				+ ", reviewCode=" + reviewCode + ", review=" + review + "]";
 	}
+
+	
 	
 	
 }
