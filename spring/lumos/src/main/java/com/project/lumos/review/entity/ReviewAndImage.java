@@ -21,19 +21,22 @@ public class ReviewAndImage {
 	@Column(name = "NEW_NM")
 	private String newNm;
 	
+	@Column(name = "REVIEW_CODE")
+	private int reviewCode;
+	
 	@ManyToOne
-	@JoinColumn(name = "REVIEW_CODE")
+	@JoinColumn(name = "REVIEW_CODE", referencedColumnName = "MEMBER_CODE", insertable = false, updatable = false)
 	private Review review;
 
 	public ReviewAndImage() {
 		super();
 	}
 
-	public ReviewAndImage(int imageCode, String originNm, String newNm, Review review) {
-		super();
+	public ReviewAndImage(int imageCode, String originNm, String newNm, int reviewCode, Review review) {
 		this.imageCode = imageCode;
 		this.originNm = originNm;
 		this.newNm = newNm;
+		this.reviewCode = reviewCode;
 		this.review = review;
 	}
 
@@ -61,6 +64,14 @@ public class ReviewAndImage {
 		this.newNm = newNm;
 	}
 
+	public int getReviewCode() {
+		return reviewCode;
+	}
+
+	public void setReviewCode(int reviewCode) {
+		this.reviewCode = reviewCode;
+	}
+
 	public Review getReview() {
 		return review;
 	}
@@ -71,9 +82,11 @@ public class ReviewAndImage {
 
 	@Override
 	public String toString() {
-		return "ReviewAndImage [imageCode=" + imageCode + ", originNm=" + originNm + ", newNm=" + newNm + ", review="
-				+ review + "]";
+		return "ReviewAndImage [imageCode=" + imageCode + ", originNm=" + originNm + ", newNm=" + newNm
+				+ ", reviewCode=" + reviewCode + ", review=" + review + "]";
 	}
+
+	
 	
 	
 }

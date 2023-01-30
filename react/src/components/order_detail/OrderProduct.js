@@ -2,8 +2,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 
-import {callAmountUpdateAPI} from '../../apis/CartAPICalls';
-import {callItemDeleteAPI} from '../../apis/CartAPICalls';
+import {callProductOptionAPI, callAmountUpdateAPI, callItemDeleteAPI} from '../../apis/CartAPICalls';
 import OrderDetailCSS from '../../pages/order/OrderDetail.module.css';
 
 import {decodeJwt} from '../../utils/tokenUtils';
@@ -22,6 +21,8 @@ export default function OrderProduct({order : {orderProductList : product, ...et
     const location = useLocation();
     const pathname = location.pathname.substring(1, 5);
     const token = decodeJwt(window.localStorage.getItem("accessToken"));  
+    const optionList  = useSelector(state => state.cartoptionReducer);
+    useEffect(() => {dispatch(callProductOptionAPI({}))}, []);
 
     const [modifyMode, setModifyMode] = useState({
         modifyMode: false,
@@ -45,16 +46,24 @@ export default function OrderProduct({order : {orderProductList : product, ...et
         // console.log("해당 옵션 코드", e.target.parentNode.parentNode.parentNode.id);
         // console.log("변경 옵션 수량", e.target.parentNode.children[0].value);
         // console.log("변경 옵션 수량", e.target.value);
-        setChangeValue({
-            opCode: e.target.parentNode.parentNode.parentNode.id,
-            amount: e.target.value
-        })
+        // console.log("해당 옵션 재고 수량", optionList?.filter(op => op.opCode == e.target.parentNode.parentNode.parentNode.id)[0].optionStock);
+        const opStock = optionList?.filter(op => op.opCode == e.target.parentNode.parentNode.parentNode.id)[0].optionStock;
+        if(opStock >= e.target.value) {
+            setChangeValue({
+                opCode: e.target.parentNode.parentNode.parentNode.id,
+                amount: e.target.value
+            })
+        } else {
+            alert(`재고 수량보다 더 큰 수량은 불가합니다.\n현재 재고 수량 : ${opStock}`);
+            e.target.value = changeValue.amount;
+        }
     }
     // console.log("changeValue", changeValue);
 
     const amountSubmitHandler = (e) => {
         if(changeValue.amount < 1) {
             alert("1개 이상의 수량만 가능합니다.");
+            e.target.parentNode.children[0].value = changeValue.amount;
             e.target.parentNode.children[0].focus();
         } else {
             dispatch(callAmountUpdateAPI({

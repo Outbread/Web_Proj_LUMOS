@@ -98,6 +98,7 @@ function QuestionDetail() {
         formData.append("questionCode", form.questionCode);
         formData.append("questionCategory", form.questionCategory);
         formData.append("questionCreateDate", form.questionCreateDate);
+        formData.append("questionStatus", questionDetail.questionDTO.questionStatus)
         
         if (image) {
             formData.append("questionImage", image);
@@ -112,13 +113,14 @@ function QuestionDetail() {
             console.log("Delayed for 1 second.");
             window.location.reload();                             // 파일업로드 물리적 시간 강제 딜레이 
         }, "1000")
-        
+        // window.location.reload();
     }
 
     const onClickQuestionDeleteHandler = (questionDetail) => {
         dispatch(callQuestionDeleteAPI({questionCode: questionDetail.questionDTO.questionCode}))
         
         navigate(`/mypage/question`, { replace: true });
+        window.location.reload();
     }
 
     return (
@@ -164,6 +166,7 @@ function QuestionDetail() {
                                 />}
                                 <input                
                                     style={ { display: 'none' }}
+                                    readOnly={modifyMode ? false : true}
                                     type="file"
                                     name='newImage' 
                                     accept='image/jpg,image/png,image/jpeg,image/gif'

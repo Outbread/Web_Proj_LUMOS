@@ -89,7 +89,16 @@ public class ShopManagementService {
 			Shop newShop = shopRepository.findById(shopDTO.getShopNm()).get();
 			
 			newShop.setCsEmail(shopDTO.getCsEmail());
-
+			newShop.setCsHour(shopDTO.getCsHour());
+			newShop.setCsTel(shopDTO.getCsTel());
+			newShop.setOmNum(shopDTO.getOmNum());
+			newShop.setOmSt(shopDTO.getOmSt());
+			newShop.setPicEmail(shopDTO.getPicEmail());
+			newShop.setPicNm(shopDTO.getPicNm());
+			newShop.setPicTel(shopDTO.getPicTel());
+			newShop.setShopDesc(shopDTO.getShopDesc());
+			newShop.setShopEmail(shopDTO.getShopEmail());
+			newShop.setShopWebAds(shopDTO.getShopWebAds());
 			
 			shopRepository.save(newShop);
 			

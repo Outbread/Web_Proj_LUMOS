@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import {useState, useEffect} from 'react';
 
@@ -16,6 +16,7 @@ import OrderDetailCSS from './OrderDetail.module.css';
 
 import LoginModal from '../../components/common/LoginModal';
 import {decodeJwt} from '../../utils/tokenUtils';
+import ErrorMindol from '../ErrorMindol';
 
 export default function OrderDetail() {
 
@@ -23,17 +24,11 @@ export default function OrderDetail() {
 
     const [loginModal, setLoginModal] = useState(false); 
     const token = decodeJwt(window.localStorage.getItem("accessToken")); 
+    const isAdmin = token.auth.includes("ROLE_ADMIN");
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const params = useParams();
     const order  = useSelector(state => state.orderReducer); 
-    
-    console.log("▶ OrderDetail ◀ order", order);
-    console.log("▶ OrderDetail ◀ order type", typeof(order));
-    console.log("▶ OrderDetail ◀ params", params);
-
-    /* 로그인 상태 관련 로직 */
-    // const [loginModal, setLoginModal] = useState(false);
+    // console.log("▶ OrderDetail ◀ order type", typeof(order));
 
     useEffect(
         () => {
@@ -42,8 +37,6 @@ export default function OrderDetail() {
                 setLoginModal(true);
                 return;
             }
-
-            console.log("▶ OrderDetail ◀ useEffect")
             dispatch(callOrderDetailAPI({	
                 orderCode: params.orderCode
             }));
@@ -71,37 +64,45 @@ export default function OrderDetail() {
     return (
         <>
             {loginModal ? <LoginModal setLoginModal={ setLoginModal }/> : null}
-            {order.orderCode &&
-            <div className={OrderDetailCSS.boxing}>
-                {console.log("▶ OrderDetail ◀ rendering component")}
-                <div className={OrderDetailCSS.header}>
-                    <HeadLine key={order.orderCode} order={order}/>
-                </div>
-                <div className={OrderDetailCSS.content}>
-                    <div className={OrderDetailCSS.left}>
-                        <div className={OrderDetailCSS.leftTh}>
-                            <Delivery key={order.orderCode} order={order}/>
+            {
+                isAdmin
+                ?
+                <>
+                    {order.orderCode &&
+                    <div className={OrderDetailCSS.boxing}>
+                        {console.log("▶ OrderDetail ◀ rendering component")}
+                        <div className={OrderDetailCSS.header}>
+                            <HeadLine key={order.orderCode} order={order}/>
                         </div>
-                        <div className={OrderDetailCSS.leftTh}>
-                            <Consignee key={order.orderCode} order={order}/>
-                        </div>
-                        <div>
-                            <OrderProduct key={order.orderCode} order={order}/>
+                        <div className={OrderDetailCSS.content}>
+                            <div className={OrderDetailCSS.left}>
+                                <div className={OrderDetailCSS.leftTh}>
+                                    <Delivery key={order.orderCode} order={order}/>
+                                </div>
+                                <div className={OrderDetailCSS.leftTh}>
+                                    <Consignee key={order.orderCode} order={order}/>
+                                </div>
+                                <div>
+                                    <OrderProduct key={order.orderCode} order={order}/>
+                                </div>
+                            </div>
+                            <div className={OrderDetailCSS.right}>
+                                <div>
+                                    <Payment key={order.orderCode} order={order}/>
+                                </div>
+                                <div>
+                                    <Orderer key={order.orderCode} order={order}/>
+                                </div>
+                                <div>
+                                    <OrderProcessingHistory key={order.orderCode} order={order}/>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className={OrderDetailCSS.right}>
-                        <div>
-                            <Payment key={order.orderCode} order={order}/>
-                        </div>
-                        <div>
-                            <Orderer key={order.orderCode} order={order}/>
-                        </div>
-                        <div>
-                            <OrderProcessingHistory key={order.orderCode} order={order}/>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    }
+                </>
+                :
+                <ErrorMindol/>
             }
         </>
     )

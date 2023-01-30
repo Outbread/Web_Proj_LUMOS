@@ -18,12 +18,16 @@ export default function Bill({order : {orderProductList : product, ...etc}, orde
             setOrderInfo({
                 ...orderInfo,
                 orderPc: orderPc,
-                deliveryPc: orderPc > deliveryGuidePc ? 0 : defaultDeliveryPc,
-                totalPc: orderPc > deliveryGuidePc ? orderPc + 0 : orderPc + defaultDeliveryPc
+                deliveryPc: orderInfo.deliveryMt == "일반택배" ? (orderPc > deliveryGuidePc ? 0 : defaultDeliveryPc) : 0,
+                totalPc: orderInfo.deliveryMt == "일반택배" ? (orderPc > deliveryGuidePc ? orderPc : orderPc + defaultDeliveryPc) : orderPc
             })
         },
-        []
+        [orderInfo.deliveryMt]
     )
+
+    console.log("delivery 컴포넌트 배송방법",orderInfo.deliveryMt);
+    console.log("배송방법에 따른 배송비", orderInfo.deliveryMt == "일반택배" ? (orderPc > deliveryGuidePc ? 0 : defaultDeliveryPc) : 0);
+    console.log("useEffect 실행 결과", orderInfo);
 
     return (
         <>
@@ -47,11 +51,17 @@ export default function Bill({order : {orderProductList : product, ...etc}, orde
                         <th>배송비</th>
                         <td id="deliveryPc">
                             {
-                                orderPc > deliveryGuidePc
+                                orderInfo.deliveryMt == "일반택배"
                                 ?
-                                "무료배송"
+                                (
+                                    orderPc > deliveryGuidePc
+                                    ?
+                                    "무료배송"
+                                    :
+                                    defaultDeliveryPc.toLocaleString('ko-KR') + " 원"
+                                )
                                 :
-                                defaultDeliveryPc.toLocaleString('ko-KR') + " 원"
+                                "0 원"
                             }
                         </td>
                     </tr>
@@ -59,11 +69,17 @@ export default function Bill({order : {orderProductList : product, ...etc}, orde
                         <th>합계</th>
                         <td id="totalPc">
                             {
-                                orderPc > deliveryGuidePc
+                                orderInfo.deliveryMt == "일반택배"
                                 ?
-                                (orderPc + 0).toLocaleString('ko-KR') + " 원"
+                                (
+                                    orderPc > deliveryGuidePc
+                                    ?
+                                    (orderPc + 0).toLocaleString('ko-KR') + " 원"
+                                    :
+                                    (orderPc + defaultDeliveryPc).toLocaleString('ko-KR') + " 원"
+                                )
                                 :
-                                (orderPc + defaultDeliveryPc).toLocaleString('ko-KR') + " 원"
+                                (orderPc + 0).toLocaleString('ko-KR') + " 원"
                             }
                         </td>
                     </tr>

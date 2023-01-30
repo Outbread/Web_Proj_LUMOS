@@ -1,4 +1,4 @@
-import ProfileUpdateCSS from './ProfileUpdate.module.css';
+import RGCSS from './Register.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
@@ -94,11 +94,11 @@ function Register() {
         .then((response) => {
         console.log('돌아온 값: ', response.data);
         if(response.data === false){
-            alert('사용 가능한 아이디입니다다다.');
+            alert('사용 가능한 아이디입니다.');
             setUsableId(response);
         }
         else{
-            alert('중복된 아이디입니다. 다시 시도하세요요요요.');
+            alert('중복된 아이디입니다. 다시 시도하세요.');
             setUsableId(response);
             
         }
@@ -109,11 +109,7 @@ function Register() {
 
     /* 회원가입 버튼 클릭시 유효성 검사 후 맞는 양식일 때에만 폼 제출 */
     const onClickRegisterHandler = () => {
-        if(form.memberId === '' || form.memberPassword === '' || form.memberName === '' 
-            || form.memberEmail === '' || form.memberBirth === '' || form.memberGen === '' 
-            || form.memberAdsNum === '' || form.memberAds === '' || form.memberAdsDetail){
-                alert('정보를 모두 입력해주세요.');
-            } else if (!validId) {
+         if (!validId) {
             alert("아이디를 다시 확인 해 주세요."); // 알람창
             setForm({ // 값 비워주기
               ...form,
@@ -162,29 +158,33 @@ function Register() {
                 ...form,
                 pwConfirm: "",
                 });
-          } else {
-            dispatch(callRegisterAPI({
-            form: form
-            }));
-            return alert("˗ˋˏ회원가입 성공!ˎˊ˗");
-          }
+            } else if(form.memberId === '' || form.memberPassword === '' || form.memberName === '' 
+            || form.memberEmail === '' || form.memberBirth === '' || form.memberGen === '' 
+            || form.memberAdsNum === '' || form.memberAds === '' || form.memberAdsDetail === ''){
+                alert('정보를 모두 입력해주세요.');
+            } else {
+                dispatch(callRegisterAPI({
+                form: form
+                }));
+                return alert("˗ˋˏ회원가입 성공!ˎˊ˗");
+            }
         
     }
 
     return (
-        <div className={ ProfileUpdateCSS.RGwrapper}>
-            <div className={ ProfileUpdateCSS.RGcontent}>
-                <h1 className={ ProfileUpdateCSS.PUheader }>| 회원가입</h1>
-                <div className={ ProfileUpdateCSS.field }>
-                    <b className={ ProfileUpdateCSS.PUlabel }>아이디</b>
+        <div className={ RGCSS.RGwrapper}>
+            <div className={ RGCSS.RGcontent}>
+                <h1 className={ RGCSS.RGheader }>| 회원가입</h1>
+                <div className={ RGCSS.field }>
+                    <b className={ RGCSS.RGlabel }>아이디</b>
                     <div>
                         <input 
-                            className={ ProfileUpdateCSS.RGinput }
+                            className={ RGCSS.RGinput }
                             type="text"
                             name="memberId"
                             value={memberId}
                             maxLength='15'
-                            placeholder="최소 5자 이상의 영소문자나 영소문자와 숫자를 적어주세요"
+                            placeholder="최소 5자 이상의 영소문자와 숫자 입력"
                             autoComplete='off'
                             ref={(el) => (inputRef.current[0] = el)} 
                             onChange={ onChangeHandler }
@@ -193,19 +193,19 @@ function Register() {
                     </div>
                     <div>
                         <button 
-                            className={ ProfileUpdateCSS.RGduplicateBTN }
+                            className={ RGCSS.RGduplicateBTN }
                             onClick={duplicationCheck}>중복확인</button>
                     </div>
                 </div>
-                <div className={ ProfileUpdateCSS.field }>
-                    <b className={ ProfileUpdateCSS.PUlabel }>비밀번호</b>
+                <div className={ RGCSS.field }>
+                    <b className={ RGCSS.RGlabel }>비밀번호</b>
                     <div>
                         <input 
-                            className={ ProfileUpdateCSS.RGinput }
+                            className={ RGCSS.RGinput }
                             type="password"
                             name="memberPassword"
                             value={memberPassword}
-                            placeholder="문자, 숫자, 특수 문자를 최소 1개 이상 조합해 8자 이상 적어주세요"
+                            placeholder="최소 8자 이상 문자, 숫자, 특수문자 조합"
                             autoComplete='off'
                             ref={(el) => (inputRef.current[1] = el)}
                             onChange={ onChangeHandler }
@@ -214,7 +214,7 @@ function Register() {
                     </div>
                     <div>
                         <input 
-                            className={ ProfileUpdateCSS.RGinput }
+                            className={ RGCSS.RGinput }
                             type="password"
                             name="pwConfirm"
                             value={pwConfirm}
@@ -227,11 +227,11 @@ function Register() {
                         { (validpwConfirm === true) ? null : validpwConfirm ? <div style={ {color : '#73CEBE', fontSize: '16px', marginBottom: '20px'}  }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize: '16px', marginBottom: '20px'} }>비밀번호가 다릅니다.</div>}
                     </div>
                 </div>
-                <div className={ ProfileUpdateCSS.field }>
-                    <b className={ ProfileUpdateCSS.PUlabel }>이름</b>
+                <div className={ RGCSS.field }>
+                    <b className={ RGCSS.RGlabel }>이름</b>
                     <div>
                         <input 
-                            className={ ProfileUpdateCSS.RGinput }
+                            className={ RGCSS.RGinput }
                             type="text"
                             name="memberName"
                             autoComplete='off'
@@ -240,11 +240,11 @@ function Register() {
                         />{ validName ? <div style={ {color : '#73CEBE', fontSize: '16px', marginBottom: '20px'} }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize: '16px', marginBottom: '20px'} }>이름을 한글로 입력 해 주세요.</div>}
                     </div>
                 </div>
-                <div className={ ProfileUpdateCSS.field }>
-                    <b className={ ProfileUpdateCSS.PUlabel }>생년월일</b>
+                <div className={ RGCSS.field }>
+                    <b className={ RGCSS.RGlabel }>생년월일</b>
                     <div>
                         <input
-                            className={ ProfileUpdateCSS.RGinput } 
+                            className={ RGCSS.RGinput } 
                             type="text" 
                             placeholder="ex : 19990101" 
                             name="memberBirth"
@@ -255,23 +255,23 @@ function Register() {
                         />{ validBirth ? <div style={ {color : '#73CEBE', fontSize: '16px', marginBottom: '20px'} }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize: '16px', marginBottom: '20px'} }>생년월일을 숫자 8자리로 입력해주세요.</div>}
                     </div>
                 </div>
-                <div className={ ProfileUpdateCSS.field }>
-                    <b className={ ProfileUpdateCSS.PUlabel }>성별</b>
-                    <div className={ ProfileUpdateCSS.RGinput }>
-                        <div className={ ProfileUpdateCSS.RGradioWrap }>
-                            <label className={ ProfileUpdateCSS.RGradioLabel }><input type="radio" name="memberGen" onChange={ onChangeHandler } 
-                                        checked={  form.memberGen == "남자" ? true : false }  value={"남자"}/>남자 </label>
-                            <label className={ ProfileUpdateCSS.RGradioLabel }><input type="radio" name="memberGen" onChange={ onChangeHandler }
-                                        checked={ form.memberGen == "여자" ? true : false }  value={"여자"}/>여자 </label>
-                            <label className={ ProfileUpdateCSS.RGradioLabel }><input type="radio" name="memberGen" onChange={ onChangeHandler }
+                <div className={ RGCSS.field }>
+                    <b className={ RGCSS.RGlabel }>성별</b>
+                    <div className={ RGCSS.RGinput }>
+                        <div className={ RGCSS.RGradioWrap }>
+                            <label className={ RGCSS.RGradioLabel }><input className={ RGCSS.RGradio } type="radio" name="memberGen" onChange={ onChangeHandler } 
+                                        checked={  form.memberGen == "남성" ? true : false }  value={"남성"}/>남성 </label>
+                            <label className={ RGCSS.RGradioLabel }><input className={ RGCSS.RGradio } type="radio" name="memberGen" onChange={ onChangeHandler }
+                                        checked={ form.memberGen == "여성" ? true : false }  value={"여성"}/>여성 </label>
+                            <label className={ RGCSS.RGradioLabel }><input className={ RGCSS.RGradio } type="radio" name="memberGen" onChange={ onChangeHandler }
                                         checked={ form.memberGen == "선택안함" ? true : false }  value={"선택안함"}/>선택안함</label>
                         </div>
                     </div>
                 </div>
-                <div className={ ProfileUpdateCSS.field }>
-                    <b className={ ProfileUpdateCSS.PUlabel }>휴대전화</b>
+                <div className={ RGCSS.field }>
+                    <b className={ RGCSS.RGlabel }>휴대전화</b>
                     <div>
-                        <input className={ ProfileUpdateCSS.RGinput }
+                        <input className={ RGCSS.RGinput }
                             type="text" 
                             name="memberPhone"
                             placeholder="ex : 010-1234-1234"
@@ -282,10 +282,10 @@ function Register() {
                         />{ validPhone ? <div style={ {color : '#73CEBE', fontSize: '16px', marginBottom: '20px'} }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize: '16px', marginBottom: '20px'} }>유효하지 않은 전화번호 입니다.</div>}
                     </div>
                 </div>
-                <div className={ ProfileUpdateCSS.field }>
-                    <b className={ ProfileUpdateCSS.PUlabel }>이메일</b>
+                <div className={ RGCSS.field }>
+                    <b className={ RGCSS.RGlabel }>이메일</b>
                     <div>
-                        <input className={ ProfileUpdateCSS.RGinput } 
+                        <input className={ RGCSS.RGinput } 
                            type="text"
                            name="memberEmail"
                            placeholder="ex : email@lumos.com"
@@ -296,11 +296,11 @@ function Register() {
                         { validEmail ? <div style={ {color : '#73CEBE', fontSize: '16px', marginBottom: '20px'} }>-ˋˏ맞게 입력하셨습니다!ˎˊ-</div> : <div style={ {color : '#EF5252', fontSize: '16px', marginBottom: '20px'} }>유효하지 않은 e-mail입니다.</div>}
                     </div>
                 </div>
-                <div className={ ProfileUpdateCSS.adsWrapWrap }>
-                    <div className={ ProfileUpdateCSS.adsWrap }>
-                        <b className={ ProfileUpdateCSS.PUlabel }>우편번호</b>
+                <div className={ RGCSS.adsWrapWrap }>
+                    <div className={ RGCSS.adsWrap }>
+                        <b className={ RGCSS.RGlabel }>우편번호</b>
                         <div>
-                            <input className={ ProfileUpdateCSS.RGAdsNuminput } 
+                            <input className={ RGCSS.RGAdsNuminput } 
                                 type="text" 
                                 name="memberAdsNum"
                                 placeholder="우편번호" 
@@ -309,10 +309,10 @@ function Register() {
                             />
                         </div>
                     </div>
-                    <div className={ ProfileUpdateCSS.adsWrap }>
-                        <b className={ ProfileUpdateCSS.PUlabel }>주소</b>
+                    <div className={ RGCSS.adsWrap }>
+                        <b className={ RGCSS.RGlabel }>주소</b>
                         <div>
-                            <input className={ ProfileUpdateCSS.RGAdsinput } 
+                            <input className={ RGCSS.RGAdsinput } 
                                 type="text" 
                                 name="memberAds"
                                 placeholder="주소입력" 
@@ -322,10 +322,10 @@ function Register() {
                         </div>
                     </div>
                 </div>
-                <div className={ ProfileUpdateCSS.field }>
-                    <b className={ ProfileUpdateCSS.PUlabel }>상세주소</b>
+                <div className={ RGCSS.field }>
+                    <b className={ RGCSS.RGlabel }>상세주소</b>
                     <div>
-                        <input className={ ProfileUpdateCSS.RGinput } 
+                        <input className={ RGCSS.RGinput } 
                             type="text" 
                             name="memberAdsDetail"
                             placeholder="상세주소 입력" 
@@ -336,7 +336,7 @@ function Register() {
                 </div>
                 <div>
                     <button
-                        className={ ProfileUpdateCSS.RGbutton } 
+                        className={ RGCSS.RGbutton } 
                         onClick = { onClickRegisterHandler }
                     >   
                         회원가입
@@ -344,7 +344,7 @@ function Register() {
                 </div>
                 <div>
                     <button
-                        className={ ProfileUpdateCSS.RGBackButton } 
+                        className={ RGCSS.RGBackButton } 
                         onClick = { onClickBackHandler }
                     >
                         돌아가기

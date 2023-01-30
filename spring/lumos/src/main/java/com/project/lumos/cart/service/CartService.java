@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -26,6 +27,8 @@ import com.project.lumos.order.repository.OrderAndOrderProductAndMemberRepositor
 import com.project.lumos.order.repository.OrderProductRepository;
 import com.project.lumos.order.repository.OrderRepository;
 import com.project.lumos.order.service.OrderService;
+import com.project.lumos.product.dto.ImageAndProductDTO;
+import com.project.lumos.product.dto.OptionDTO;
 import com.project.lumos.product.entity.Option;
 import com.project.lumos.product.repository.OptionRepository;
 import com.project.lumos.product.repository.ProductImageRepository;
@@ -165,7 +168,7 @@ public class CartService {
         return (result > 0) ? "신규 장바구니 제품 추가 성공" : "기존 장바구니 제품 추가 성공";
         
 	}
-
+	
 	/* [장바구니 조회] */
 	public Object selectCart(String memberId) {
 		
@@ -205,6 +208,20 @@ public class CartService {
         
 	}
 
+
+	/* [장바구니 상품 수량 수정] */
+	public Object selectOption() {
+		
+		log.info("[CartService] selectOption Start ===================================");
+
+		List<Option> optionList = optionRepository.findAll();
+		
+        log.info("[CartService] selectOption End ===================================");
+        
+        return optionList.stream().map(option -> modelMapper.map(option, OptionDTO.class)).collect(Collectors.toList());
+        
+	}
+	
 	/* [장바구니 상품 수량 수정] */
 	@Transactional
 	public Object updateOrderProductAmount(String memberId, int opCode, int amount) {

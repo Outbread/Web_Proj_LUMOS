@@ -16,14 +16,15 @@ import ProfileUpdate from './pages/member/ProfileUpdate';
 import OrderDashBoard from './pages/order/OrderDashBoard';                  // 주문대시보드
 import OrderManagement from './pages/order/OrderManagement';                // 주문목록
 
-import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세
 import Review from './pages/reviews/Review';                                // 리뷰 조회
-import ReviewDetail from './pages/reviews/ReviewDetail';                    // 리뷰 상세
+import ReviewDetail from './pages/reviews/ReviewDetail'                    // 리뷰 상세
 import ReviewRegist from './pages/reviews/ReviewRegist';                    // 리뷰 등록
 
+import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세                      
 import OrderSearch from './pages/order/OrderDetail';                        // 주문내역검색
 import Cart from './pages/cart/Cart';                                       // 장바구니
-import OrderList from './pages/order/OrderList';                            // 회원주문목록
+
+import OrderList from './pages/mypage/OrderList';                            // 회원주문목록
 import ProductDetail from './pages/products/ProductDetail';
 import ProductManagement from './pages/admin/ProductManagement'
 import ProductRegistration from './pages/admin/ProductRegistration';
@@ -39,6 +40,7 @@ import ProductAll from './pages/products/ProductAll'
 import ShopManagement from './pages/admin/ShopManagement';                  // 상점관리
 
 import {useState, createContext} from 'react';
+import ErrorDodol from './pages/ErrorDodol';
 
 export const OrderContext = createContext(null);
 
@@ -65,7 +67,6 @@ function App() {
             <Route path="product/downlight" element={<Downlight />} />
             <Route path="product/switch" element={<Switch />} />
             <Route path="product/:productCode" element={<ProductDetail />} />
-
             <Route path="mypage" element={ <MyPageLayout/> } >
                 <Route index element={ <ProfileUpdate /> } />
                 <Route path="profileUpdate" element={ <ProfileUpdate /> } />
@@ -84,10 +85,8 @@ function App() {
             <Route path="question-management" element={<AdminQuestionList />} />
             <Route path="questionAnswer/:questionCode" element={<QuestionAnswer />} />
             <Route path="member-management" element={<MemberList />} />
-            <Route path="order-management/search" element={<OrderSearch/>}/>
-            <Route path="order-management/:orderCode" element={<OrderDetail/>}/>
-            <Route path="cart/:memberId" element={<Cart/>}/>
 
+            <Route path="cart/:memberId" element={<Cart/>}/>
             <Route path="shop-management" element={<ShopManagement/>}/>
 
             <Route path="/login" element={ <Login/> } />
@@ -98,7 +97,7 @@ function App() {
             <Route index element={ <ProfileUpdate /> } /> */}
             {/* <Route path="ProfileUpdate" element={ <ProfileUpdate /> } /> */}
         {/* </Route> */}
-        
+        <Route path="*" element={<ErrorDodol/>}/>
       </Routes>
     </BrowserRouter>
     </OrderContext.Provider>

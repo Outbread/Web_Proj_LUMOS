@@ -26,7 +26,7 @@ export default function Delivery({order, orderInfo, setOrderInfo}) {
     const onModifyModeHandler = () => {
         if(order.orderConf == null) {
             alert("발주 확인처리를 먼저 진행해주세요.");
-            navigate(`/order-management/`, { replace: false });
+            navigate(`/order-management`, { replace: false });
         } else {
             alert("수정내역을 반영하시려면 저장버튼을 눌러주세요.")
             setModifyMode(true);
@@ -96,7 +96,7 @@ export default function Delivery({order, orderInfo, setOrderInfo}) {
     const deliveryStartHandler = () => {
         if(order.orderConf == null) {
             alert("발주 확인처리를 먼저 진행해주세요.");
-            navigate(`/order-management/`, { replace: false });
+            navigate(`/order-management`, { replace: false });
         } else {
             const formData = new FormData();
             formData.append("updateKind", "배송출발처리");

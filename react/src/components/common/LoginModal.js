@@ -57,12 +57,14 @@ function LoginModal({setLoginModal}) {
                         onChange={ onChangeHandler }
                     />
                     <button
+                        className={ LoginModalCSS.loginModalLBTN }
                         onClick={ onClickLoginHandler }
                     >
                         로그인
                     </button>
                     <button
-                        style={ { border: 'none', margin: 0, fontSize: '10px', height: '10px' } }
+                        className={ LoginModalCSS.loginModalBACK }
+                         
                         onClick={ () => setLoginModal(false) }
                     >
                         돌아가기

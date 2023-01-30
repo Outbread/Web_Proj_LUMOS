@@ -167,6 +167,12 @@ function ProductDetail() {
     return (
         <div>
             { loginModal ? <LoginModal setLoginModal={ setLoginModal }/> : null}
+            <button
+                className={ ProductDetailCSS.reviewBtn }
+                onClick={ onClickReviewHandler }
+            >
+                리뷰보기
+            </button>
             <div className={ ProductDetailCSS.DetailDiv }>
                 <div className={ProductDetailCSS.imageReview}>
                     <div className={ProductDetailCSS.imageView}>
@@ -185,13 +191,8 @@ function ProductDetail() {
                                 null)
                             }
                         </div>
+                        
                     </div>
-                        <button
-                            className={ ProductDetailCSS.reviewBtn }
-                            onClick={ onClickReviewHandler }
-                        >
-                            리뷰보기
-                        </button>
                 </div>
                 <div className={ ProductDetailCSS.descriptionDiv }>
                     <table className={ ProductDetailCSS.descriptionTable}>

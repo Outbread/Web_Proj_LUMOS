@@ -4,6 +4,7 @@ import {
   , GET_REVIEWS
   , POST_REVIEW
   , PUT_REVIEW
+  , DELETE_REVIEW
 } from '../modules/ReviewModule';
 
 export const callReviewDetailAPI = ({reviewCode}) => {
@@ -47,7 +48,7 @@ export const callReviewWriteAPI = ({form}) => {
             },
             body: form
         })
-        .then();
+        .then(response => response.json());
         console.log('form:', form);
         console.log('[ReviewAPICalls] callReviewWriteAPI RESULT : ', result);
 
@@ -66,21 +67,16 @@ export const callReviewUpdateAPI = ({form}) => {
         const result = await fetch(requestURL, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json",
                 "Accept": "*/*",
-                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken"),
+                // "Access-Control-Allow-Origin": "*" 
             },
-            body: JSON.stringify({
-                reviewCode: form.reviewCode,
-                reviewTitle: form.reviewTitle,
-                pdGrade: form.pdGrade,
-                reviewContent: form.reviewContent
+            body: form
             })
-        })
         .then(response => response.json());
-
+        
         console.log('[ReviewAPICalls] callReviewUpdateAPI RESULT : ', result);
-
+        console.log('[ReviewAPICalls] callReviewUpdateAPI requestURL : ', requestURL);
         dispatch({ type: PUT_REVIEW,  payload: result });
         
     };    
@@ -113,6 +109,33 @@ export const callReviewsAPI = ({pdCode, currentPage}) => {
         if(result.status === 200){
             console.log('[ReviewAPICalls] callReviewsAPI SUCCESS');
             dispatch({ type: GET_REVIEWS,  payload: result.data });
+        }
+
+        
+    };
+}
+
+export const callReviewDeleteAPI = ({reviewCode}) => {
+    console.log('[ReviewAPICalls] callReviewDeleteAPI Call');
+    const requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/lumos/review/delete/${reviewCode}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+                // "Access-Control-Allow-Origin": "*" 
+            }
+        })
+        .then(response => response.json());
+
+        console.log('[ReviewAPICalls] callReviewDeleteAPI RESULT : ', result);
+        if(result.status === 200){
+            console.log('[ReviewAPICalls] callReviewDeleteAPI SUCCESS');
+            dispatch({ type: DELETE_REVIEW,  payload: result });
         }
 
         
