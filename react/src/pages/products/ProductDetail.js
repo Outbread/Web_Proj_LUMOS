@@ -7,7 +7,8 @@ import { decodeJwt } from '../../utils/tokenUtils';
 import {callPostItemAPI} from '../../apis/CartAPICalls';
 
 import {
-    callProductDetailAPI
+    callProductDetailAPI,
+    callProductDeleteAPI
 } from '../../apis/ProductAPICalls';
 import LoginModal from '../../components/common/LoginModal';
 
@@ -23,10 +24,11 @@ function ProductDetail() {
    
     console.log('product : ' , product);
     console.log('params :  ', params);
+    
 
     useEffect(
         () => {
-            dispatch(callProductDetailAPI({	// 상품 상세 정보 조회
+            dispatch(callProductDetailAPI({	
                 productCode: params.productCode
             }));
         }
@@ -35,16 +37,12 @@ function ProductDetail() {
     
     const {pdCode, pdDesc, pdName, pdPrice, productImage, productOption} = product;
     
+    console.log('productImage.imgNum', productImage?.map(r => r.imgNum));
+
     console.log('productImage : ' , typeof(product));     
     
     //////////////////////////////[ ↓ 구도연 ↓ ]//////////////////////////////
-    // dispatch에 담을 state
-    // const mainImgDiv = document.getElementById("mainImg");
-    // const mainImgPath = mainImgDiv?.children[0]?.src;
-    // console.log("옵션 코드 초기값 설정", productOption);
-    // console.log("옵션 코드 초기값 설정", Array.isArray(productOption) ? productOption[0]?.opCode : "default");
-    // console.log("옵션명 초기값 설정", productOption[0]?.optionNm);
-
+    
     const[orderProductDTO, setOrderProductDTO] = useState({
         orderAmount : 1,
         orderNum : 'default' ,
@@ -92,9 +90,7 @@ function ProductDetail() {
         const seletedOp = optionsArr.filter(option => {
             return option.selected == true;
         })
-        // console.log("seletedOp 선택된 옵션은?", seletedOp);
-        // console.log("seletedOp 선택된 옵션의 옵션코드는?", seletedOp[0].id);
-        // console.log("seletedOp 선택된 옵션의 옵션명은?", seletedOp[0].value);
+
         setOrderProductDTO({
             ...orderProductDTO,
             opCode: seletedOp[0].id,
@@ -111,10 +107,24 @@ function ProductDetail() {
         });
     };
 
+    const onClickUpdate = (imgNum) => {
+        navigate(`/product-update/${imgNum}`, { replace: false });
+    }
+
+    const onClickDelete = () => {
+        dispatch(callProductDeleteAPI({
+            imgNum: productImage?.map(r => r.imgNum)
+        }))
+
+        alert('상품을 삭제했습니다.');
+        navigate('/', { replace: true});
+        window.location.reload();
+    }
+
     //////////////////////////////[ ↑ 구도연 ↑ ]//////////////////////////////
 
     const onClickReviewHandler = () => {
-        navigate(`/review/${params.pdCode}`, { replace: false });
+        navigate(`/review/${params.productCode}`, { replace: false });
     };
 
     const onClickPurchaseHandler = () => {
@@ -172,12 +182,29 @@ function ProductDetail() {
                 onClick={ onClickReviewHandler }
             >
                 리뷰보기
-            </button>
+            </button> &nbsp;
+            {
+                decodeJwt(window.localStorage.getItem("accessToken"))?.auth.includes("ROLE_ADMIN") && 
+                <button
+                    className = { ProductDetailCSS.productBuyBtn }
+                    onClick = { () => onClickUpdate(productImage?.map(r => r.imgNum)) }
+                >
+                    수정하기
+                </button>
+            }&nbsp;
+            {
+                decodeJwt(window.localStorage.getItem("accessToken"))?.auth.includes("ROLE_ADMIN") && 
+                <button
+                    className = { ProductDetailCSS.productBuyBtn }
+                    onClick = { onClickDelete }
+                >
+                    삭제하기
+                </button>
+            }
             <div className={ ProductDetailCSS.DetailDiv }>
                 <div className={ProductDetailCSS.imageReview}>
                     <div className={ProductDetailCSS.imageView}>
                         <div className={ ProductDetailCSS.imgDiv } id="mainImg">
-                            {/* <img src={(product.mainImg == 'Y') ? product.pdImgPath : null } alt="테스트" /> */}
                             { 
                                 productImage?.map(pd => (pd.mainImg === 'Y') ? 
                                 <img id={ProductDetailCSS.main} src={pd.pdImgPath} alt='mainImage' key={pd.imgNum}/> : 
@@ -239,7 +266,7 @@ function ProductDetail() {
                             </tr>    
                             <tr>                            
                                 <td colSpan={ 2 }>
-                                    {decodeJwt(window.localStorage.getItem("accessToken")).auth.includes("ROLE_ADMIN") || <button
+                                    {decodeJwt(window.localStorage.getItem("accessToken"))?.auth.includes("ROLE_ADMIN") || <button
                                         className={ ProductDetailCSS.productBuyBtn }
                                         onClick= { onClickPurchaseHandler }
                                     >

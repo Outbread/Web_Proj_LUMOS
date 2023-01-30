@@ -153,7 +153,9 @@ function QuestionAnswer() {
                                 <textarea
                                     name='questionContent'
                                     readOnly={true}
-                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
+                                        style={!modifyMode ?
+                                            { backgroundColor: 'gray', resize: 'none', width: '80%', height: '10em'}
+                                            : { backgroundColor: 'gray', resize: 'none', width: '80%', height: '10em' }}
                                     onChange={ onChangeHandler }
                                     value={ (!modifyMode ? questionDetail.questionDTO?.questionContent : form.questionContent) || ''}
                                 >                                    
@@ -166,7 +168,9 @@ function QuestionAnswer() {
                                 <textarea
                                     name='answerContent'
                                     readOnly={modifyMode ? false : true}
-                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
+                                        style={!modifyMode ?
+                                            { backgroundColor: 'gray', resize: 'none', width: '80%', height: '6.25em' }
+                                            : { resize: 'none', width: '80%', height: '6.25em' } }
                                     onChange={ onChangeHandler }
                                     value={ (!modifyMode ? questionDetail.questionDTO?.answerContent : form.answerContent) || ''}
                                 >                                    

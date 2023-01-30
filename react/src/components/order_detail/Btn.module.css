@@ -47,3 +47,22 @@ body {
     cursor: pointer;
     opacity: 0.5;
 }
+
+.reviewBtn {
+    border: none;
+    margin: 5px;
+    width: 50px;
+    line-height: 25px;
+    border-radius: 15px;
+    background-color: rgba(115, 206, 190, 0.7);
+    color: white;
+    /* background-color: white; */
+    /* color: #646464; */
+    font-weight: bold;
+    float: right;
+}
+
+.reviewBtn:hover {
+    cursor: pointer;
+    opacity: 0.5;
+}

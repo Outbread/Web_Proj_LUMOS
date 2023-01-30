@@ -15,6 +15,7 @@ function Review() {
     const reviewList = reviews.data;
 
     console.log('reviewList', reviewList);
+    console.log('params', params);
 
     const pageInfo = reviews.pageInfo;
 

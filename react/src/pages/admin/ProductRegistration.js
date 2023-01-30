@@ -94,17 +94,11 @@ function ProductRegistration() {
         formData.append("pdDesc", product.pdDesc);
         formData.append("catMain", product.catMain);
         formData.append("catSub", product.catSub);
-
-        // formData.append("product", product);
-
         formData.append("pdImgPath", imgForm.pdImgPath);
         formData.append("mainImg", imgForm.mainImg);
 
         formData.append("optionNm", optionForm.optionNm);
         formData.append("optionStock", optionForm.optionStock);
-
-        // formData.append("option",optionForm);
-        // formData.append("image",imgForm);
 
         if(productImage){
             formData.append("productImage", productImage);

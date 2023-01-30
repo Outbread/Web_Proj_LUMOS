@@ -27,7 +27,6 @@ function ProductUpdate() {
     const {product , option} = productDetail;
 
     console.log('productDetail : ', productDetail);
-    console.log('11111111', products);
     console.log('product ' , product);
     console.log('option ', option);
     console.log('form' , form);
@@ -44,7 +43,6 @@ function ProductUpdate() {
 
     useEffect(() => {
         
-        /* 이미지 업로드시 미리보기 세팅 */
         if(image){
             const fileReader = new FileReader();
             fileReader.onload = (e) => {

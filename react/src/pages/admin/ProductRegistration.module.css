@@ -7,7 +7,6 @@
 .productInfoDiv{
     display: flex;
     width: 350px;
-    height: 100%;
 }
 
 .productInfoInput {    
@@ -25,7 +24,7 @@
 }
 
 .productInfoDiv tr{
-    line-height: 50px;
+    line-height: 30px;
 }
 
 
@@ -64,8 +63,8 @@
 
 .productImage{
     margin-top: 5px;
-    width: 80%;
-    height: 90%;    
+    width: 400px;
+    height: 400px;    
 }
 
 .productImageButton{
