@@ -63,6 +63,8 @@ const questionReducer = handleActions(
             return payload;
         },
         [GET_NEWQUESTIONCODE]: (state, { payload }) => {
+
+            return payload;
         },    
         [GET_CLAIM]: (state, { payload }) => {
 

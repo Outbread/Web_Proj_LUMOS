@@ -8,6 +8,8 @@ import {
     callNewQuestionCodeAPI
 } from '../../apis/QuestionAPICalls';
 
+
+
 function QuestionRegistration() {
 
 
@@ -19,7 +21,7 @@ function QuestionRegistration() {
     const navigate = useNavigate();
     const token = decodeJwt(window.localStorage.getItem("accessToken"));   
     const newQuestion = useSelector(state => state.questionReducer); 
-    const questionCode = newQuestion.data;
+    // const questionCode = newQuestion.data;
     const [form, setForm] = useState({
         questionTitle : '',
         questionCategory : '',
@@ -30,6 +32,11 @@ function QuestionRegistration() {
     });
 
     useEffect(() => {
+        console.log('useEffect 동작');
+    //     // store의 questionReducer리듀서용 state 값 수정으로 rerendering
+    //     dispatch(callNewQuestionCodeAPI({	// 새로 생성된 questionCode 조회
+    //         memberId: token.sub
+    //    })); 
 
         /* 이미지 업로드시 미리보기 세팅 */
         if(image){
@@ -43,7 +50,7 @@ function QuestionRegistration() {
             fileReader.readAsDataURL(image);
         }
     },
-    [image]);
+    [image, newQuestion]);
 
     const onChangeImageUpload = (e) => {
 
@@ -79,19 +86,24 @@ function QuestionRegistration() {
             formData.append("questionImage", image);
         }
 
+
         dispatch(callQuestionRegistAPI({	// 문의 등록 
-            form: formData
-        }));    
-        
-        dispatch(callNewQuestionCodeAPI({	// 새로 생성된 questionCode 조회
-             memberId: token.sub
-        })); 
+            form: formData,
+            memberId: token.sub
+        }));   
+       
     }
-    
+
+    // rerendering 이후 store의 state 확인 후 navigate
+    // console.log('test', newQuestion);
     if ((newQuestion + 0) > 0) {
         console.log(newQuestion);
         navigate(`/mypage/question/detail/${newQuestion}`, { replace: true });
-        window.location.reload();
+        setTimeout(() => {
+            console.log("Delayed for 1 second.");
+            window.location.reload();                             // 파일업로드 물리적 시간 강제 딜레이 
+        }, "3000")
+        // window.location.reload();
     }
 
     return (

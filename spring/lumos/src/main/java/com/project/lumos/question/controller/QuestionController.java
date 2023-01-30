@@ -43,30 +43,21 @@ public class QuestionController {
 		
 	}
 	
-	/* 성공 */
 	@Operation(summary = "문의 등록 요청", description = "1대1 문의 등록이 진행됩니다.", tags = {"QuestionController"})
 	@PostMapping(value="/question")
 	public ResponseEntity<ResponseDTO> insertQuestion(@ModelAttribute MultipartFile questionImage, String memberId, QuestionDTO questionDTO, QuestionImgDTO questionImgDTO){
-//		log.info("[QuestionController] questionAndImgDTO :" + questionAndImgDTO);
-		log.info("[QuestionController] questionDTO :" + questionDTO);
-		log.info("[QuestionController] memberId :" + memberId);
+		
 		int memberCode = questionService.findMemberCode(memberId);
 
-	    log.info("[QuestionController] memberCode : " + memberCode);
-	        
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공", questionService.insertQuestion(memberCode, questionDTO, questionImage, questionImgDTO)));
 	}
 	
-	/* 성공 */
 	@Operation(summary = "회원별 문의 리스트 조회 요청", description = "해당 고객이 작성한 문의 리스트 조회가 진행됩니다.", tags = { "QuestionController" })
     @GetMapping("/question/{memberId}")
     public ResponseEntity<ResponseDTO> selectQuestionListWithPaging(@PathVariable String memberId,  @RequestParam(name="offset", defaultValue="1") String offset) {
-        log.info("[QuestionController] selectQuestionListWithPaging : " + offset);
-        log.info("[QuestionController] memberId : " + memberId);
-        int memberCode = questionService.findMemberCode(memberId);
+        
+		int memberCode = questionService.findMemberCode(memberId);
 
-        log.info("[QuestionController] memberCode : " + memberCode);
-  
         Criteria cri = new Criteria(Integer.valueOf(offset), 10);
         cri.setSearchValue(String.valueOf(memberCode));	             // 해당 회원의 문의만을 검색하기 위한 검색 조건
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
@@ -75,15 +66,13 @@ public class QuestionController {
         
         pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
         pagingResponseDTO.setData(questionService.selectQuestionListWithPaging(cri));
-        log.info("[QuestionController] pagingResponseDTO : " + pagingResponseDTO);
+
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
     }
 	
-	/* 성공 */
 	@Operation(summary = "관리자 전체 문의 리스트 조회 요청", description = "모든 고객이 작성한 문의 리스트 조회가 진행됩니다.", tags = { "QuestionController" })
     @GetMapping("/question/list")
     public ResponseEntity<ResponseDTO> questionListWithPaging(@RequestParam(name="offset", defaultValue="1") String offset) {
-        log.info("[QuestionController] selectQuestionListWithPaging : " + offset);
         
         Criteria cri = new Criteria(Integer.valueOf(offset), 10);
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
@@ -94,22 +83,16 @@ public class QuestionController {
         pagingResponseDTO.setData(questionService.questionListWithPaging(cri));
         pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
         
-        log.info("[QuestionController] pagingResponseDTO : " + pagingResponseDTO);
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
     }
 	
-	/* 성공 */
-	@Operation(summary = "문의 수정 요청", description = "문의 작성자의 문의 수정이 진행됩니다.", tags = { "QuestionController" })
+	@Operation(summary = "문의 답변 수정 요청", description = "문의 작성자의 문의 수정이 진행됩니다.", tags = { "QuestionController" })
     @PutMapping("/question/detail/{questionCode}")
     public ResponseEntity<ResponseDTO> updateQuestion(@ModelAttribute MultipartFile questionImage, QuestionDTO questionDTO, QuestionImgDTO questionImgDTO) {
-		log.info("[QuestionController] updateQuestion: " + questionDTO);
-		log.info("[QuestionController] updateQuestion: " + questionImgDTO);
-		log.info("[QuestionController] updateQuestion: " + questionImage);
-		
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "문의 수정 성공",  questionService.updateQuestion(questionImage, questionDTO, questionImgDTO)));
+
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "문의 수정 성공",  questionService.updateQuestion(questionImage, questionDTO, questionImgDTO)));
     }
 	
-	/* 성공 */
 	@Operation(summary = "문의 삭제 요청", description = "문의 작성자의 문의 삭제가 진행됩니다.", tags = { "QuestionController" })
     @DeleteMapping("/question/delete/{questionCode}")
 	public ResponseEntity<ResponseDTO> deleteQuestion(@PathVariable String questionCode) {
@@ -117,38 +100,32 @@ public class QuestionController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "문의 수정 성공",  questionService.deleteQuestion(Integer.valueOf(questionCode))));
     }
 	
-	/* 문의 상세 조회 */
 	@Operation(summary = "문의 상세 페이지 조회 요청", description = "해당 문의의 상세 페이지 조회가 진행됩니다.", tags = { "QuestionController" })
     @GetMapping("/question/detail/{questionCode}")
     public ResponseEntity<ResponseDTO> selectQuestionDetail(@PathVariable String questionCode) {
-		log.info("[QuestionController] selectQuestionDetail: " + questionCode);
 		
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",  questionService.selectQuestionDetail(Integer.valueOf(questionCode))));
     }
 	
-	/* 관리자용 문의 상세 조회 */
 	@Operation(summary = "관리자 문의 상세 페이지 조회 요청", description = "해당 문의의 상세 페이지가 관리자용 페이지로 조회됩니다.", tags = { "QuestionController" })
     @GetMapping("/question/detail/admin/{questionCode}")
     public ResponseEntity<ResponseDTO> selectQuestionDetailAdmin(@PathVariable String questionCode) {
-		log.info("[QuestionController] QuestionDetailAdmin questionCode: " + questionCode);
 		
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", questionService.selectQuestionDetailAdmin(Integer.valueOf(questionCode))));
     }
 	
-	/* 성공 */
 	@Operation(summary = "문의 수정 요청", description = "문의 작성자의 문의 수정이 진행됩니다.", tags = { "QuestionController" })
     @PutMapping("/questionAnswer/{questionCode}")
     public ResponseEntity<ResponseDTO> updateAnswer(@RequestBody QuestionDTO questionDTO) {
-		log.info("[QuestionController] updateQuestion: " + questionDTO);
 		
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "문의 수정 성공",  questionService.updateAnswer(questionDTO)));
     }
 	
-	/* 회원이 쓴 게시물중에 가장 큰 postCode추출해서 던져주기 */
+	/* 회원이 쓴 게시물중에 가장 큰 questionCode를 찾아서 반환 -> 인서트 이후 디테일페이지에 전달 */
 	@Operation
 	@GetMapping("/newQuestionCode/{memberId}")
 	public ResponseEntity<ResponseDTO> selectNewQuestionCode(@PathVariable String memberId){
-		log.info("[QuestionController] selectNewQuestionCode: " + memberId);
+
 		int memberCode = questionService.findMemberCode(memberId);
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록된 문의사항 조회 성공",  questionService.selectNewQuestionCode(memberCode)));
