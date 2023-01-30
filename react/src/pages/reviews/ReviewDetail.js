@@ -17,7 +17,7 @@ function ReviewDetail() {
     const dispatch = useDispatch();
     const params = useParams();
     const review  = useSelector(state => state.reviewReducer);  
-    const reviewDetail = review.data
+    const reviewDetail = review.data;
     const token = decodeJwt(window.localStorage.getItem("accessToken"));   
     const [modifyMode, setModifyMode] = useState(false); 
     const [form, setForm] = useState({});

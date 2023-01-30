@@ -53,9 +53,9 @@ public class ReviewService {
 	private final MemberRepository memberRepository;
 	private final ReviewImageMemberRepository reviewImageMemberRepository;
 	
-	@Value("${image.image-dir}")
+	@Value("${image.image-dir-review}")
 	private String IMAGE_DIR;
-	@Value("${image.image-url}")
+	@Value("${image.image-url-review}")
 	private String IMAGE_URL;
 	
 	@Autowired
@@ -140,6 +140,7 @@ public class ReviewService {
 		return result;
 	}
 	
+	/* 상품 리뷰 리스트 */
 	public Object selectReviewListWithPaging(Criteria cri) {
 		log.info("[ReviewService] selectReviewListWithPaging Start ====================");
 		
@@ -149,7 +150,7 @@ public class ReviewService {
 		
 		Page<ReviewAndMember> result = reviewAndMemberRepository.findByPdCode(Integer.valueOf(cri.getSearchValue()), paging);
 		List<ReviewAndMember> reviewList = (List<ReviewAndMember>)result.getContent();
-		Member member = (result.getContent()).get(1).getMember();
+		Member member = (result.getContent()).get(0).getMember();
 		
 		for ( ReviewAndMember test : reviewList) {
 			log.info("test: {}", test.getMember());
@@ -161,6 +162,30 @@ public class ReviewService {
 		log.info("[ReviewService] selectReviewListWithPaging End ======================");
 		
 		return reviewList.stream().map(review -> modelMapper.map(review, ReviewAndMemberDTO.class)).collect(Collectors.toList());
+	}
+	
+	/* 내 리뷰 리스트 */
+	public Object selecMytReviewListWithPaging(Criteria cri) {
+		log.info("[ReviewService] selecMytReviewListWithPaging Start ====================");
+		
+		int index = cri.getPageNum() -1;
+		int count = cri.getAmount();
+		Pageable paging = PageRequest.of(index, count, Sort.by("reviewCode"));
+		
+		Page<Review> result = reviewRepository.findByMemberCode(Integer.valueOf(cri.getSearchValue()), paging);
+		List<Review> reviewList = (List<Review>)result.getContent();
+//		Member member = (result.getContent()).get(1).getMember();
+		
+//		for ( ReviewAndMember test : reviewList) {
+//			log.info("test: {}", test.getMember());
+//			
+//		}
+		
+//		log.info("member: {}", member);
+		log.info("[ReviewService] reviewList: " + reviewList);
+		log.info("[ReviewService] selectReviewListWithPaging End ======================");
+		
+		return reviewList.stream().map(review -> modelMapper.map(review, ReviewDTO.class)).collect(Collectors.toList());
 	}
 	
 	public Object selectReviewDetail(int reviewCode) {
@@ -338,5 +363,25 @@ public class ReviewService {
 		
 		return (result > 0) ? "리뷰 삭제 성공" : "리뷰 삭제 실패";
 	}
+
+	public long selectMyReviewTotal(int memberCode) {
+		log.info("[ReviewService] selectReviewTotal Start =====================");
+		
+		long result = reviewRepository.countByPdCode(memberCode);
+		log.info("[ReviewService] result: {} ", result);
+		
+		log.info("[ReviewService] selectReviewTotal End=========================");
+		
+		return result;
+	}
+
+//	public ReviewDTO findByPdCode(int pdCode) {
+//		
+//		return null;
+//	}
+
+	
+
+	
 	
 }

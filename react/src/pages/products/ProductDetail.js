@@ -124,7 +124,7 @@ function ProductDetail() {
     //////////////////////////////[ ↑ 구도연 ↑ ]//////////////////////////////
 
     const onClickReviewHandler = () => {
-        navigate(`/review/${params.pdCode}`, { replace: false });
+        navigate(`/review/${params.productCode}`, { replace: false });
     };
 
     const onClickPurchaseHandler = () => {

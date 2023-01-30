@@ -41,12 +41,16 @@ springdoc:
 image:
 
 ## WebConfig에 세팅
-  add-resource-locations: classpath:/static/productimgs/
-  add-resource-handler: /productimgs/**
+  add-resource-locations: classpath:/static/
+  add-resource-handler: /**
   
 ## ProductService에 세팅
   image-dir: src/main/resources/static/productimgs
   image-url: http://localhost:8080/productimgs/
+  image-dir-question: src/main/resources/static/questionimgs
+  image-url-question: http://localhost:8080/questionimgs/
+  image-dir-review: src/main/resources/static/reviewimgs
+  image-url-review: http://localhost:8080/reviewimgs/
   
 # Logging Level
 logging: 

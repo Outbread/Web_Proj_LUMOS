@@ -52,6 +52,7 @@ image:
   image-dir-review: src/main/resources/static/reviewimgs
   image-url-review: http://localhost:8080/reviewimgs/
   
+  
 # Logging Level
 logging: 
   level:

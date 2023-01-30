@@ -59,6 +59,7 @@ public class SecurityConfig {
 		    	.antMatchers("/api/v1/order-management/**").hasRole("ADMIN")
 		    	.antMatchers("/api/v1/order-dashboard/**").hasRole("ADMIN")
 		    	.antMatchers("/api/v1/cart/**").hasAnyRole("USER","ADMIN")
+		    	.antMatchers("/api/v1/mypage-order/**").hasAnyRole("USER","ADMIN")
 		    	.antMatchers("/api/v1/profileUpdate/**").permitAll() 
 		    	.antMatchers("/api/**").hasAnyRole("USER","ADMIN")
 		    .and()

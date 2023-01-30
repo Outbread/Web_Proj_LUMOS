@@ -48,3 +48,8 @@
     background-color: white;
     font-weight: bold;
 }
+
+.radioCss {
+    height: 30px;
+    width: 100px;
+}

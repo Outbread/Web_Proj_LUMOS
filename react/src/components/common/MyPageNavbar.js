@@ -16,9 +16,9 @@ function MyPageNavbar() {
             <ul className={ MyPageNavbarCSS.MyPageNavbarUl }>
                 <li><NavLink to="/mypage/profileUpdate"
                              className={ MyPageNavbarCSS.link }>회원정보</NavLink></li>
-                <li><NavLink to="/mypage/myOrderList"
+                <li><NavLink to="/mypage/order"
                              className={ MyPageNavbarCSS.link }>주문내역</NavLink></li>
-                <li><NavLink to="/mypage"
+                <li><NavLink to="/mypage/myReviewList"
                              className={ MyPageNavbarCSS.link }>내 리뷰</NavLink></li>
                 <li><NavLink to="/mypage/questionregistration"
                              className={ MyPageNavbarCSS.link }>문의하기</NavLink></li>
