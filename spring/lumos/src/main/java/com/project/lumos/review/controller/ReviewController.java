@@ -58,7 +58,7 @@ public class ReviewController {
 //	public ResponseEntity<ResponseDTO> selectPdCode(@PathVariable int pdCode) {
 //		log.info("[ReviewController] selectPdcode: " + pdCode);
 //		
-//		int pdCode = productRepository.findByPdCode(pdCode).getPdCode();
+//		int pdCode = reviewService.findByPdCode(pdCode).getPdCode();
 //	}
 	
 	@Operation(summary = "상품 리뷰 리스트 조회 요청", description = "해당 상품 리뷰 조회가 진행됩니다", tags = {"ReviewController"})
@@ -75,6 +75,27 @@ public class ReviewController {
 		
 		pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
 		pagingResponseDTO.setData(reviewService.selectReviewListWithPaging(cri));
+		
+		log.info("pagingResponseDTO" + pagingResponseDTO);
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
+	}
+	
+	@Operation(summary = "내 상품 리뷰 리스트 조회 요청", description = "내가 쓴 리뷰 조회가 진행됩니다", tags = {"ReviewController"})
+	@GetMapping("/reviews/myList/{memberId}")
+	public ResponseEntity<ResponseDTO> selectMyReviewListWithPaging(@PathVariable String memberId, @RequestParam(name = "offset", defaultValue="1") String offset) {
+		log.info("[ReviewController] selectReviewListWithPaging : " + offset);
+		log.info("[ReviewController] memberId : " + memberId);
+		int memberCode = reviewService.findMemberCode(memberId);
+		
+		Criteria cri = new Criteria(Integer.valueOf(offset), 10);
+		cri.setSearchValue(String.valueOf(memberCode));
+		PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
+		
+		int total = (int)reviewService.selectMyReviewTotal(Integer.valueOf(cri.getSearchValue()));
+		
+		pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
+		pagingResponseDTO.setData(reviewService.selecMytReviewListWithPaging(cri));
 		
 		log.info("pagingResponseDTO" + pagingResponseDTO);
 		

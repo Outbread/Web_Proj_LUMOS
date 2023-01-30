@@ -10,4 +10,8 @@ public interface ReviewAndMemberRepository extends JpaRepository<ReviewAndMember
 
 	Page<ReviewAndMember> findByPdCode(int searchValue, Pageable paging);
 
+	Page<ReviewAndMember> findByMemberCode(Integer valueOf, Pageable paging);
+
+	long countByMemberCode(int memberCode);
+
 }

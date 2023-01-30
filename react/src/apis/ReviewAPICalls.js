@@ -5,6 +5,7 @@ import {
   , POST_REVIEW
   , PUT_REVIEW
   , DELETE_REVIEW
+  , GET_MYREVIEWS
 } from '../modules/ReviewModule';
 
 export const callReviewDetailAPI = ({reviewCode}) => {
@@ -109,6 +110,39 @@ export const callReviewsAPI = ({pdCode, currentPage}) => {
         if(result.status === 200){
             console.log('[ReviewAPICalls] callReviewsAPI SUCCESS');
             dispatch({ type: GET_REVIEWS,  payload: result.data });
+        }
+
+        
+    };
+}
+
+export const callMyReviewsAPI = ({memberId, currentPage}) => {
+    let requestURL;
+    
+    if(currentPage !== undefined || currentPage !== null){
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/lumos/reviews/myList/${memberId}?offset=${currentPage}`;
+    }
+    else {
+        requestURL = `http://${process.env.REACT_APP_LUMOS_IP}:8080/lumos/reviews/myList/${memberId}`;
+    }
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken"),
+                "Access-Control-Allow-Origin": "*" 
+            }
+        })
+        .then(response => response.json());
+
+        console.log('[ReviewAPICalls] callMyReviewsAPI RESULT : ', result);
+        if(result.status === 200){
+            console.log('[ReviewAPICalls] callMyReviewsAPI SUCCESS');
+            dispatch({ type: GET_MYREVIEWS,  payload: result.data });
         }
 
         

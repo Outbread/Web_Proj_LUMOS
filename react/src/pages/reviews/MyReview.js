@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { decodeJwt } from '../../utils/tokenUtils';
 
 import{
-    callReviewsAPI
-} from '../../apis/ReviewAPICalls'
+    callMyReviewsAPI
+} from '../../apis/ReviewAPICalls';
 
-function Review() {
+function MyReview() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const params = useParams();
     const reviews = useSelector(state => state.reviewReducer);
     const reviewList = reviews.data;
+    const token = decodeJwt(window.localStorage.getItem("accessToken"));   
 
+    console.log(token.sub);
     console.log('reviewList', reviewList);
-    console.log('params', params);
 
     const pageInfo = reviews.pageInfo;
 
@@ -31,8 +33,8 @@ function Review() {
 
     useEffect(
         () => {
-            dispatch(callReviewsAPI({
-                pdCode: params.pdCode,
+            dispatch(callMyReviewsAPI({
+                memberId: token.sub,
                 currentPage: currentPage
             }));
         }
@@ -44,6 +46,9 @@ function Review() {
     }
 
     return (
+        // { token &&
+        //     (token.sub === MyReview.member?.memberId) 
+        //     ? 
         <>
             <div>
                 <table>
@@ -65,7 +70,7 @@ function Review() {
                                     <td>{(currentPage - 1) * 10 + (index + 1)}</td>
                                     <td>{review.reviewTitle}</td>
                                     <td>{review.uploadDate}</td>
-                                    <td>{review.member.memberId}</td>
+                                    <td>{review.memberId}</td>
                                 </tr>
                             )
                         )}
@@ -105,4 +110,4 @@ function Review() {
     )
 }
 
-export default Review;
+export default MyReview;

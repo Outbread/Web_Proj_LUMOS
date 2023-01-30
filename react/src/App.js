@@ -17,14 +17,14 @@ import OrderDashBoard from './pages/order/OrderDashBoard';                  // �
 import OrderManagement from './pages/order/OrderManagement';                // 주문목록
 
 import Review from './pages/reviews/Review';                                // 리뷰 조회
-import ReviewDetail from './pages/reviews/ReviewDetail'                    // 리뷰 상세
+import ReviewDetail from './pages/reviews/ReviewDetail'                     // 리뷰 상세
 import ReviewRegist from './pages/reviews/ReviewRegist';                    // 리뷰 등록
+import MyReview from './pages/reviews/MyReview';                            // 내 리뷰
 
 import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세                      
 import OrderSearch from './pages/order/OrderDetail';                        // 주문내역검색
 import Cart from './pages/cart/Cart';                                       // 장바구니
 
-import Cart from './pages/cart/Cart';                                       // 장바구니
 import OrderList from './pages/mypage/OrderList';                            // 회원주문목록
 import ProductDetail from './pages/products/ProductDetail';
 import ProductManagement from './pages/admin/ProductManagement'
@@ -54,10 +54,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={ <Layout/> }>
-            <Route index element={ <Main/> }/> 
-            <Route path="review/:pdCode" element={ <Review/> } /> 
-            <Route path='reviewDetail/:reviewCode' element={ <ReviewDetail/> } />
-            <Route path='/reviewRegist' element={ <ReviewRegist/> } />  
 
             <Route index element={ <Main/> }/>   
             <Route path="productall" element={ <ProductAll /> }/>
@@ -68,6 +64,10 @@ function App() {
             <Route path="product/downlight" element={<Downlight />} />
             <Route path="product/switch" element={<Switch />} />
             <Route path="product/:productCode" element={<ProductDetail />} />
+            <Route path='reviewDetail/:reviewCode' element={ <ReviewDetail/> } />
+            <Route path="review/:pdCode" element={ <Review/> } /> 
+            <Route path='/reviewRegist' element={ <ReviewRegist/> } />  
+
             <Route path="mypage" element={ <MyPageLayout/> } >
                 <Route index element={ <ProfileUpdate /> } />
                 <Route path="profileUpdate" element={ <ProfileUpdate /> } />
@@ -75,6 +75,7 @@ function App() {
                 <Route path="question" element={<QuestionList />} />
                 <Route path="question/detail/:questionCode" element={<QuestionDetail />} />
                 <Route path="myOrderList" element={<OrderList/>}/>
+                <Route path="myReviewList" element={<MyReview/>}/>
             </Route>
             <Route path="product-management" element={ <ProductManagement/> } />
             <Route path="product-registration" element={ <ProductRegistration/> } />
