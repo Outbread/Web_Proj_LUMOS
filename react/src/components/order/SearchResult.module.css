@@ -5,6 +5,11 @@
     font-style: normal;
 }
 
+/* 글씨체 전역 설정 */
+body {
+    font-family: 'Pretendard-Regular';
+}
+
 .list table {
     font-family: 'Pretendard-Regular';
     border-left: none;
@@ -44,7 +49,6 @@
     width: 30px;
 }
 
-/* {listStyleType: "none", display: "flex"} */
 .paging {
     display: flex;
     justify-content: center;

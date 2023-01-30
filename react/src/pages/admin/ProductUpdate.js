@@ -152,7 +152,7 @@ function ProductUpdate() {
                     <button       
                         onClick={ onClickProductUpdateHandler }             
                     >
-                        상품 수정 저장하기
+                        상품 수정 저장
                     </button>
                 }
                 <button       
@@ -165,16 +165,7 @@ function ProductUpdate() {
 
             <div className={ ProductRegistrationCSS.productSection }>
                 <div className={ ProductRegistrationCSS.productInfoDiv }>
-                    <div className={ ProductRegistrationCSS.productImageDiv }>
-                        {/* {
-                            productImage?.map(res => (res.mainImg === 'Y') ? 
-                            <img 
-                                className={ ProductRegistrationCSS.productImage } 
-                                src={res.pdImgPath} 
-                                alt='preview'/> : 
-                            <img src = { imageUrl }/>)
-                        } */}
-                        
+                    <div className={ ProductRegistrationCSS.productImageDiv }>                        
                         { productDetail && <img 
                             className={ ProductRegistrationCSS.productImage } 
                             src={ (imageUrl == null) ? productDetail.pdImgPath : imageUrl } 
@@ -289,7 +280,7 @@ function ProductUpdate() {
                             </tr>
                             <tr>
                                 <td><label>상품 옵션</label></td>
-                                <select 
+                                <td><select 
                                     onChange={ onChangeHandler }  
                                     name = 'optionNm'            
                                 >
@@ -303,6 +294,7 @@ function ProductUpdate() {
                                         {option?.optionNm}
                                     </option>
                                 </select>
+                                </td>
                             </tr>
                             <tr>
                                 <td><label>상품 재고</label></td>

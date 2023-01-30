@@ -1,16 +1,20 @@
 .DetailDiv{
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     margin-top: 50px;
+    height: 100%;
 }
 
 .DetailDiv div{
-    width: 500px;
-    height: 350px;
+    width: 100%;
+    height: 100%;
 }
 
 .imageView {
     display: flex;
+    width: 50%;
+    height: 100%;
 }
 
 .imgDiv{
@@ -43,9 +47,13 @@
     transform: scale(3);
 }
 
-/* .thumbnail:hover {
-    transform: scale(1.4);
-} */
+.thumbnail img:nth-child(5):hover {
+    transform: scale(3);
+}
+
+.thumbnail img:nth-child(6):hover {
+    transform: scale(3);
+}
 
 .imgDiv img {
     margin: 5px;
@@ -71,24 +79,33 @@
 .descriptionTable{ 
     width: 80%;
     height: 80%;
+    margin: 10px;
+}
+
+.descriptionTable th {
+    padding: 10px;
 }
 
 .reviewBtn{
     margin-top: 5px;
     margin-bottom: 5px;
     height: 30px;
-    width: 100%;
+    width: 100px;
     border-radius: 25px;
-    background-color: white;
-    font-weight: bold;
+    background-color: #73CEBE;
+    font-weight: bold;        
+    border: white;
+    color: white;
 }
 
 .productBuyBtn{
     margin-top: 5px;
     margin-bottom: 5px;
     height: 30px;
-    width: 100%;
+    width: 100px;
     border-radius: 25px;
-    background-color: white;
-    font-weight: bold;
+    background-color: #73CEBE;
+    font-weight: bold;        
+    border: white;
+    color: white;
 }

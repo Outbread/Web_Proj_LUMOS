@@ -64,7 +64,7 @@ function Review() {
                                     <td>{(currentPage - 1) * 10 + (index + 1)}</td>
                                     <td>{review.reviewTitle}</td>
                                     <td>{review.uploadDate}</td>
-                                    <td>{review.member.memberName}</td>
+                                    <td>{review.member.memberId}</td>
                                 </tr>
                             )
                         )}

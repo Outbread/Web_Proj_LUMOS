@@ -11,7 +11,7 @@ public class QuestionMemberAndImgDTO {
 	private String answerContent;
 	private String questionStatus;
 	private int memberCode;
-	private String QuestionCreateDate;
+	private String questionCreateDate;
 	private Member member;
 	private QuestionImg questionImg;
 	
@@ -25,7 +25,7 @@ public class QuestionMemberAndImgDTO {
 		this.questionContent = questionContent;
 		this.answerContent = answerContent;
 		this.questionStatus = questionStatus;
-		QuestionCreateDate = questionCreateDate;
+		this.questionCreateDate = questionCreateDate;
 		this.memberCode = memberCode;
 		this.member = member;
 		this.questionImg = questionImg;
@@ -70,10 +70,10 @@ public class QuestionMemberAndImgDTO {
 		this.questionStatus = questionStatus;
 	}
 	public String getQuestionCreateDate() {
-		return QuestionCreateDate;
+		return questionCreateDate;
 	}
 	public void setQuestionCreateDate(String questionCreateDate) {
-		QuestionCreateDate = questionCreateDate;
+		this.questionCreateDate = questionCreateDate;
 	}
 	public int getMemberCode() {
 		return memberCode;
@@ -97,7 +97,7 @@ public class QuestionMemberAndImgDTO {
 	public String toString() {
 		return "QuestionMemberAndImgDTO [questionCode=" + questionCode + ", questionTitle=" + questionTitle
 				+ ", questionCategory=" + questionCategory + ", questionContent=" + questionContent + ", answerContent="
-				+ answerContent + ", questionStatus=" + questionStatus + ", QuestionCreateDate=" + QuestionCreateDate
+				+ answerContent + ", questionStatus=" + questionStatus + ", questionCreateDate=" + questionCreateDate
 				+ ", memberCode=" + memberCode + ", member=" + member + ", questionImg=" + questionImg + "]";
 	}
 	

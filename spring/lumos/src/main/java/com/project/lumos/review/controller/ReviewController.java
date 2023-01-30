@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,13 +41,25 @@ public class ReviewController {
 	
 	@Operation(summary = "상품 리뷰 등록 요청", description = "해당 상품 리뷰 등록이 진행됩니다.", tags = {"ReviewController"})
 	@PostMapping("/reviews")
-	public ResponseEntity<ResponseDTO> insertProductReview(@ModelAttribute ReviewDTO reviewDTO, ImageDTO imageDTO, MultipartFile reviewImage) {
+	public ResponseEntity<ResponseDTO> insertProductReview(@ModelAttribute ReviewDTO reviewDTO, ImageDTO imageDTO, MultipartFile reviewImage, String memberId) {
 //	public ResponseEntity<ResponseDTO> insertProductReview(@ModelAttribute ReviewDTO reviewDTO) {
 //		log.info("[ReviewController] reviewAndImageDTO: " + imageDTO);
 		log.info("[ReviewController] reviewDTO: " + reviewDTO);
 		log.info("[ReviewController] imageDTO: " + imageDTO);
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "리뷰 입력 성공", reviewService.insertProductReview(reviewDTO, imageDTO, reviewImage)));
+		int memberCode = reviewService.findMemberCode(memberId);
+		
+		log.info("[ReviewController] memberCode: " + memberCode);
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "리뷰 입력 성공", reviewService.insertProductReview(memberCode, reviewDTO, imageDTO, reviewImage)));
 	}
+	
+//	@Operation(summary = "상품 코드 조회", description = "상품 코드 가져오기", tags = {"ReviewController"})
+//	@GetMapping("/regist/{pdCode}")
+//	public ResponseEntity<ResponseDTO> selectPdCode(@PathVariable int pdCode) {
+//		log.info("[ReviewController] selectPdcode: " + pdCode);
+//		
+//		int pdCode = productRepository.findByPdCode(pdCode).getPdCode();
+//	}
 	
 	@Operation(summary = "상품 리뷰 리스트 조회 요청", description = "해당 상품 리뷰 조회가 진행됩니다", tags = {"ReviewController"})
 	@GetMapping("/reviews/{pdCode}")
@@ -72,14 +85,25 @@ public class ReviewController {
 	@GetMapping("/reviews/product/{reviewCode}")
 	public ResponseEntity<ResponseDTO> selectReviewDetail(@PathVariable String reviewCode) {
 		
+		log.info("[ReviewContoller] reviewCode:" + reviewCode);
+		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", reviewService.selectReviewDetail(Integer.valueOf(reviewCode))));
 	}
 	
 	@Operation(summary = "리뷰 수정 요청", description = "리뷰 수정이 진행됩니다.", tags = { "ReviewController" })
 	@PutMapping("/reviews")
-	public ResponseEntity<ResponseDTO> updateProductReview(@RequestBody ReviewDTO reviewDTO) {
-		
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "리뷰 수정 성공", reviewService.updateProductReview(reviewDTO)));
+	public ResponseEntity<ResponseDTO> updateProductReview(@ModelAttribute ReviewDTO reviewDTO, MultipartFile reviewImage, ImageDTO imageDTO) {
+		log.info("[ReviewController] updateProductReview:  " + reviewDTO);
+		log.info("[ReviewController] updateProductReview:  " + reviewImage);
+		log.info("[ReviewController] updateProductReview:  " + imageDTO);
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "리뷰 수정 성공", reviewService.updateProductReview(reviewDTO, reviewImage, imageDTO)));
+	}
+	
+	@Operation(summary = "리뷰 삭제 요청", description = "리뷰 삭제 진행", tags = { "ReviewController" })
+	@DeleteMapping("/review/delete/{reviewCode}")
+	public ResponseEntity<ResponseDTO> deleteReview(@PathVariable int reviewCode) {
+		log.info("[ReviewController] deleteProductReview:  " + reviewCode);
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "리뷰 삭제 성공", reviewService.deleteReview(reviewCode)));
 	}
 	
 

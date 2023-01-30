@@ -101,7 +101,7 @@ public class TokenProvider {
 		
 		log.info("[TokenProvider] getAuthentication Start=================================");
 		
-		/* 토큰에서 claim들 추출(토큰 복호화) */
+		/*아래 5번에서 만든 메소드를 통해 토큰에서 claim들 추출(토큰 복호화) */
 		Claims claims = parseClaims(token);	
 		
 		if (claims.get(AUTHORITIES_KEY) == null) {
@@ -110,16 +110,16 @@ public class TokenProvider {
 		
 		/* 클레임에서 권한 정보 가져오기 */
 		Collection<? extends GrantedAuthority> authorities =
-				Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))	
-				      .map(role -> new SimpleGrantedAuthority(role))   				
-				      .collect(Collectors.toList());								
+				Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(",")) //AUTHORITIES_KEY가 위에서 “auth”라고 했으므로 페이로드의 auth클레임에 담긴 값이 나온다.
+				      .map(role -> new SimpleGrantedAuthority(role))   			 //문자열 배열에 들어있는 권한 문자열 마다 SimpleGrantedAuthority객체로 만든다.			
+				      .collect(Collectors.toList());							 //List<SimpleGrantedAuthority>로 만든다.			
 		
 		log.info("[TokenProvider] authorities {}", authorities);
 		
 		UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserId(token));
 				
 		log.info("[TokenProvider] getAuthentication End=================================");
-		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());		
+		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());	//아이디, 패스워드, 권한	(로그인이 아니라서 패스워드가 필요없다. 인증만 하면 된다)
 	}
 	
 	/* 4. 토큰 유효성 검사 */
@@ -144,11 +144,11 @@ public class TokenProvider {
 	}
 	
 	/* 5. AccessToken에서 클레임 추출하는 메소드 */
-	private Claims parseClaims(String token) {
+	private Claims parseClaims(String token) { 														//토큰이 넘어오면
 		try {
-			return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+			return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody(); // 페이로드 안의 클레임들이 나오게 된다.
 		} catch (ExpiredJwtException e) {
-			return e.getClaims(); 
+			return e.getClaims(); // 토큰 만료로 예외 발생 시에도 클레임값을 뽑을 수 있게 만들었다.
 		}
 	}
 }

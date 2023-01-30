@@ -1,5 +1,5 @@
 import Product from "../../components/products/Product";
-import MainCSS from '../Main.module.css';
+import MainCSS from './Product.module.css';
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -31,7 +31,7 @@ function Pendant() {
 
 
     return (
-        <>
+        <div className={MainCSS.product}>
             <label>
                 표시할 게시물 수:&nbsp;
                 <select
@@ -52,7 +52,7 @@ function Pendant() {
                     pendant.length > 0 && pendant.slice(offset, offset + limit).map((res) => (<Product key={ res.imgNum } product={ res } />))
                 }
             </div>        
-        </>
+        </div>
     );
 }
 

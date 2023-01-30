@@ -18,8 +18,6 @@ function Navbar() {
 
     const [search, setSearch] = useState('');
 
-    const [loginModal, setLoginModal] = useState(false);
-
     const onSearchChangeHandler = (e) => {
         setSearch(e.target.value);
     }
@@ -33,10 +31,16 @@ function Navbar() {
             window.location.reload();
         }
     }
+
+    const onClickSearch = e => {
+        navigate(`/search?value=${search}`, { replace: false });
+        window.location.reload()
+    }
+
     
 
     return (
-        <div className={NavbarCSS.Boxing}>
+        <div className={NavbarCSS.boxing}>
              <ul>
                     <li onClick={() => {window.location.reload()}}><NavLink to="/productall">전체 상품</NavLink></li>
                     <li onClick={() => {window.location.reload()}}><NavLink to="/product/LED">가정용 LED</NavLink></li>
@@ -45,13 +49,19 @@ function Navbar() {
                     <li onClick={() => {window.location.reload()}}><NavLink to="/product/downlight">매입등</NavLink></li>
                     <li onClick={() => {window.location.reload()}}><NavLink to="/product/switch">스위치/콘센트</NavLink></li>
                     <input 
-                        className={ NavbarCSS.InputStyle }
+                        className={ NavbarCSS.searchBar }
                         type="text" 
-                        placeholder="검색" 
+                        placeholder="제품명을 입력해 주세요" 
                         value={ search }
                         onKeyUp={ onEnterkeyHandler }
                         onChange={ onSearchChangeHandler }
                     />
+                    <button 
+                        className={NavbarCSS.searchBtn}
+                        onClick={onClickSearch}
+                    >
+                        검색
+                    </button>
                 </ul>
         </div>
     )

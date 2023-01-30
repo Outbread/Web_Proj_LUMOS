@@ -37,7 +37,4 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	/* 구매시 기존 장바구니 정보 조회 */
 	Order findByOrderCodeLike(String orderCode);
 
-	/* 회원별 주문 내역 조회 */
-	long countByMemberCode(int memberCode);
-
 }

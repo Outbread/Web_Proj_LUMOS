@@ -1,8 +1,13 @@
+/* 글씨체 전역 설정 */
 @font-face {
     font-family: 'Pretendard-Regular';
     src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
     font-weight: 400;
     font-style: normal;
+}
+
+body {
+    font-family: 'Pretendard-Regular';
 }
 
 .list table {
@@ -54,6 +59,7 @@
 }
 
 .pageBtn {
+    font-family: 'Pretendard-Regular';
     border: none;
     margin: 5px;
     width: 40px;
@@ -72,6 +78,7 @@
 }
 
 .pageNum {
+    font-family: 'Pretendard-Regular';
     border: none;
     margin: 5px;
     width: 40px;
@@ -117,6 +124,7 @@
 }
 
 .bottom button {
+    font-family: 'Pretendard-Regular';
     border: none;
     margin: 5px;
     line-height: 35px;
@@ -125,7 +133,6 @@
     color: white;
     /* background-color: white; */
     /* color: #646464; */
-    font-weight: bold;
     min-width: 65px;
 
 }
@@ -138,6 +145,7 @@
 /* //////////////// */
 
 .searchHead table {
+    font-family: 'Pretendard-Regular';
     border-collapse: collapse;
     width: 1200px;
     margin-top: 25px;
@@ -147,10 +155,12 @@
 }
 
 .searchHead tbody {
+    font-family: 'Pretendard-Regular';
     background-color: rgba(115, 206, 190, 0.5);
 }
 
 .searchHead table th {
+    font-family: 'Pretendard-Regular';
     font-size: 1.5em;
     line-height: 60px;
     text-align: left;
@@ -158,6 +168,7 @@
 }
 
 .searchHead table td {
+    font-family: 'Pretendard-Regular';
     font-size: 1.2em;
     line-height: 60px;
     text-align: center;
@@ -174,13 +185,13 @@
 }
 
 .searchHead button {
+    font-family: 'Pretendard-Regular';
     border: none;
     margin: 5px;
     width: 80px;
     line-height: 30px;
     border-radius: 25px;
     background-color: white;
-    font-weight: bold;
 
 }
 
@@ -190,5 +201,10 @@
 }
 
 .searchHead input {
+    font-family: 'Pretendard-Regular';
     width: 430px;
+}
+
+.searchHead select {
+    font-family: 'Pretendard-Regular';
 }

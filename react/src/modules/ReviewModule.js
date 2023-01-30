@@ -7,12 +7,14 @@ export const GET_REVIEW     = 'review/GET_REVIEW';
 export const GET_REVIEWS    = 'review/GET_REVIEWS';
 export const POST_REVIEW    = 'review/POST_REVIEW';
 export const PUT_REVIEW     = 'review/PUT_REVIEW';
+export const DELETE_REVIEW  = 'review/DELETE_REVIEW';
 
 const actions = createActions({
     [GET_REVIEW]: () => {},
     [GET_REVIEWS]: () => {},
     [POST_REVIEW]: () => {},
-    [PUT_REVIEW]: () => {}
+    [PUT_REVIEW]: () => {},
+    [DELETE_REVIEW]: () => {}
 });
 
 const reviewReducer = handleActions(
@@ -27,6 +29,9 @@ const reviewReducer = handleActions(
             return payload;
         },
         [PUT_REVIEW]: (state, { payload }) => {
+            return payload;
+        },
+        [DELETE_REVIEW]: (state, { payload }) => {
             return payload;
         }
     },

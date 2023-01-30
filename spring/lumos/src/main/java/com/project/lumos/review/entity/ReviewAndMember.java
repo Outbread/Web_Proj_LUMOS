@@ -35,8 +35,11 @@ public class ReviewAndMember {
 	@Column(name = "REVIEW_TITLE")
 	private String reviewTitle;
 	
+	@Column(name = "MEMBER_CODE")
+	private int memberCode;
+	
 	@ManyToOne
-	@JoinColumn(name = "MEMBER_CODE")
+	@JoinColumn(name = "MEMBER_CODE", referencedColumnName = "MEMBER_CODE", insertable = false, updatable = false)
 	private Member member;
 
 	public ReviewAndMember() {
@@ -44,8 +47,7 @@ public class ReviewAndMember {
 	}
 
 	public ReviewAndMember(int reviewCode, int pdCode, int pdGrade, String reviewContent, String uploadDate,
-			String reviewComment, String reviewTitle, Member member) {
-		super();
+			String reviewComment, String reviewTitle, int memberCode, Member member) {
 		this.reviewCode = reviewCode;
 		this.pdCode = pdCode;
 		this.pdGrade = pdGrade;
@@ -53,6 +55,7 @@ public class ReviewAndMember {
 		this.uploadDate = uploadDate;
 		this.reviewComment = reviewComment;
 		this.reviewTitle = reviewTitle;
+		this.memberCode = memberCode;
 		this.member = member;
 	}
 
@@ -112,6 +115,14 @@ public class ReviewAndMember {
 		this.reviewTitle = reviewTitle;
 	}
 
+	public int getMemberCode() {
+		return memberCode;
+	}
+
+	public void setMemberCode(int memberCode) {
+		this.memberCode = memberCode;
+	}
+
 	public Member getMember() {
 		return member;
 	}
@@ -124,8 +135,10 @@ public class ReviewAndMember {
 	public String toString() {
 		return "ReviewAndMember [reviewCode=" + reviewCode + ", pdCode=" + pdCode + ", pdGrade=" + pdGrade
 				+ ", reviewContent=" + reviewContent + ", uploadDate=" + uploadDate + ", reviewComment=" + reviewComment
-				+ ", reviewTitle=" + reviewTitle + ", member=" + member + "]";
+				+ ", reviewTitle=" + reviewTitle + ", memberCode=" + memberCode + ", member=" + member + "]";
 	}
+
+	
 	
 	
 }

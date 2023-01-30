@@ -69,7 +69,7 @@ public class OrderController {
 	}
 	
 	/* [주문내역 리스트 검색] 주문 상태 여부 확인 */
-	@Operation(summary = "[관리자] 주문 내역 검색", description = "검색어에 해당하는 주문내역 조회", tags = {"OrderController"})
+	@Operation(summary = "[관리자] 주문 내역 검색", description = "검색어에 해당하는 주문내역 조회 (페이징 처리 X)", tags = {"OrderController"})
 	@GetMapping("/order-management/search")
 	public ResponseEntity<ResponseDTO> searchOrderList(@RequestParam(name="s1") String searchDate, @RequestParam(name="s2") String searchTitle, @RequestParam(name="s3") String searchValue) {
 		
@@ -108,25 +108,4 @@ public class OrderController {
 		
 	}
 	
-	/* [주문내역 리스트 조회] 주문 상태 여부 확인 */
-	@Operation(summary = "[회원] 주문 내역 조회", description = "회원 주문내역 조회 및 페이징 처리", tags = {"OrderController"})
-	@GetMapping("/order-management/{memberid}")
-	public ResponseEntity<ResponseDTO> orderListWithPaging(@PathVariable String memberId, @RequestParam(name = "offset", defaultValue = "1") String offset) {
-		log.info("[OrderController] orderListWithPaging : " + offset);
-		log.info("[OrderController] memberId : " + memberId);
-		int memberCode = orderService.findMemberCode(memberId);
-		
-		log.info("[QuestionController] memberCode : " + memberCode);
-		
-		Criteria cri = new Criteria(Integer.valueOf(offset), 10);
-		cri.setSearchValue(String.valueOf(memberCode));	
-		PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
-		
-		int total = (int)orderService.orderListTotal(Integer.valueOf(cri.getSearchValue()));
-		pagingResponseDTO.setData(orderService.selectOrderListWithPaging(cri));
-		pagingResponseDTO.setPageInfo(new PageDTO(cri, total));
-		
-		log.info("[QuestionController] pagingResponseDTO : " + pagingResponseDTO);
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", pagingResponseDTO));
-	}
 }

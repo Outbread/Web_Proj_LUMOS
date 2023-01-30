@@ -33,25 +33,21 @@ public class MemberController {
 		this.memberService = memberService;
 	}
 	
-	//==================================마이페이지 프로필[전진이]================================================//
-//	@Operation(summary = "프로필 조회 요청", description = "회원 한명이 조회됩니다.", tags = { "MemberController" })
-//	@GetMapping("/profileUpdate/{memberCode}")
-//	public ResponseEntity<ResponseDTO> selectMyMemberInfo(@PathVariable int memberCode) {
-//		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", memberService.selectProfile(memberCode)));
-//	}
-	
+	//==================================마이페이지 프로필 조회[전진이]================================================//
 	@Operation(summary = "프로필 조회 요청", description = "회원 한명이 조회됩니다.", tags = { "MemberController" })
 	@GetMapping("/profileUpdate/{memberId}")
 	public ResponseEntity<ResponseDTO> selectMyMemberInfo(@PathVariable String memberId) {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", memberService.selectMyInfo(memberId)));
 	}
 	
+	//==================================마이페이지 프로필 수정[전진이]================================================//
 	@Operation(summary = "프로필 수정 요청", description = "프로필 수정이 진행됩니다.", tags = { "MemberController" })
     @PutMapping(value = "/profileUpdate")
-    public ResponseEntity<ResponseDTO> updateProduct(@ModelAttribute MemberDTO memberDTO) {
+    public ResponseEntity<ResponseDTO> updateProfile(@ModelAttribute MemberDTO memberDTO) {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "상품 수정 성공",  memberService.updateProfile(memberDTO)));
     }
+	
 	
 	@Operation(summary = "관리자 전체 회원 리스트 조회 요청", description = "모든 회원 리스트 조회가 진행됩니다.", tags = { "MemberController" })
     @GetMapping("/memberList")

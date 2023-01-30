@@ -4,7 +4,6 @@ import {useNavigate, useLocation} from 'react-router-dom';
 import {dateFomatter} from '../../modules/Fommater';
 
 import {callOrderListAPI} from '../../apis/OrderAPICalls';
-import {callOrderSearchAPI} from '../../apis/OrderAPICalls';
 
 import SearchResultCSS from './SearchResult.module.css';
 
@@ -74,6 +73,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 )
                 if(alertMsg.length == 0) {
                     alert("발주확인 처리할 주문건이 없습니다.");
+                    window.location.reload();
                 } else {
                     setIsAbled(!isAbled);
                     alert("발주확인 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
@@ -96,6 +96,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 )
                 if(alertMsg.length == 0) {
                     alert("배송출발 처리할 주문건이 없습니다.");
+                    window.location.reload();
                 } else {
                     setIsAbled(!isAbled);
                     alert("배송출발 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
@@ -115,6 +116,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 )
                 if(alertMsg.length == 0) {
                     alert("배송완료 처리할 주문건이 없습니다.");
+                    window.location.reload();
                 } else {
                     setIsAbled(!isAbled);
                     alert("배송완료 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
@@ -135,6 +137,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 )
                 if(alertMsg.length == 0) {
                     alert("주문취소 처리할 주문건이 없습니다.");
+                    window.location.reload();
                 } else {
                     setIsAbled(!isAbled);
                     alert("주문취소 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
@@ -154,6 +157,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 )
                 if(alertMsg.length == 0) {
                     alert("반품접수 처리할 주문건이 없습니다.");
+                    window.location.reload();
                 } else {
                     setIsAbled(!isAbled);
                     alert("반품접수 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
@@ -173,6 +177,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                 )
                 if(alertMsg.length == 0) {
                     alert("반품완료 처리할 주문건이 없습니다.");
+                    window.location.reload();
                 } else {
                     setIsAbled(!isAbled);
                     alert("반품완료 처리할 주문건을 선택하신 후 확인 버튼을 눌러주세요.");
@@ -241,7 +246,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                         <tr>
                             {
                                 // pathname == "/order-dashboard" 
-                                pathname == "/order-management/" 
+                                pathname == "/order-management" 
                                 ? <th><input type={'checkbox'} id="parentCheck" disabled></input></th>
                                 // ▶ 전체 주문 출력 시 활성화할 태그
                                 // : <th><input type={'checkbox'} onClick={selectAllHandler} id="parentCheck"></input></th>
@@ -266,7 +271,7 @@ export default function SearchResult({updateKind, isAbled, setIsAbled, searchOrd
                             <tr key={order.orderNum}>
                                 {
                                     // pathname == "/order-dashboard"
-                                    pathname == "/order-management/" 
+                                    pathname == "/order-management" 
                                     ? <td><input type={'checkbox'} id="childCheck" disabled></input></td>
                                     // ▶ 전체 주문 출력 시 활성화할 태그
                                     // : <td><input type={'checkbox'} onClick={selectHandler} id="childCheck"></input></td>

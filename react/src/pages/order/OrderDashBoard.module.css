@@ -1,8 +1,13 @@
+/* 글씨체 전역 설정 */
 @font-face {
     font-family: 'Pretendard-Regular';
     src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
     font-weight: 400;
     font-style: normal;
+}
+
+body {
+    font-family: 'Pretendard-Regular';
 }
 
 .boxing table {
@@ -21,19 +26,14 @@
 }
 
 .boxing table th {
-    /* background-color: rgba(115, 206, 190, 0.5);; */
     font-size: 1.5em;
-    /* line-height: 35px; */
     line-height: 60px;
     text-align: left;
-    /* padding-left: 10px; */
-    /* border-top: 2px solid black; */
     border-bottom: 2px solid black;
 }
 
 .boxing table td {
     font-size: 1.2em;
-    /* line-height: 35px; */
     line-height: 40px;
 }
 
@@ -89,8 +89,6 @@
     border-radius: 25px;
     background-color: rgba(115, 206, 190, 0.7);
     color: white;
-    /* background-color: white; */
-    /* color: #646464; */
     font-weight: bold;
 
 }

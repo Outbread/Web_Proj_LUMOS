@@ -1,10 +1,15 @@
 .bodyDiv{
     display: flex;
-    flex-direction: column;
-    margin-top: 15px;
-    height: 100%;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin: 15px;
+    height: 100%;    
+    width: 100%;
 }
-
+table {
+    border-collapse: collapse;
+  border-spacing: 0;
+}
 .buttonDiv{
     display: flex;
     flex-direction: row;
@@ -17,13 +22,21 @@
     margin-right: 25px;
     height: 30px;
     border-radius: 25px;
-    background-color: white;
+    border: white;
+    background-color: #73CEBE;
     font-weight: bold;
+    color: white;
 }
 
 .productTable{
-    width: 900px;
     text-align:center;
+    font-size: 14px;
+    width: 80%;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+.productTable thead {
+    background: #73CEBE;
 }
 
 .productTable tr:hover { 
@@ -32,16 +45,33 @@
 
 .productTable tr {
     cursor: pointer;
+    padding: 100px;
 }
 
-.pagingBtn{
-    margin: 5px;
-    border-radius: 25px;
-    background-color: white;
-    font-weight: bold;
+.productTable th {
+    padding: 14px 0;
 }
 
-.pagingBtn:hover{
-    cursor: pointer;
-    background-color: burlywood;
+.productTable td {
+    padding: 14px 0;
+}
+
+.productTable tbody td {
+    border-top: 1px solid #e7e7e7;
+    text-align: center; 
+}
+
+.productTable tbody th {
+  padding-left: 28px;
+  padding-right: 14px;
+  border-top: 1px solid #e7e7e7;
+  text-align: left;
+}
+
+.productTable tbody th p {
+    display: none;
+}
+
+.productInfoDiv {
+    margin: 30px;
 }

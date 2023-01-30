@@ -12,6 +12,7 @@
     border-bottom: 3px solid #73CEBE;
     margin-top: 25px;
     padding-bottom: 20px;
+    align-items: center;
 }
 
 
@@ -50,15 +51,15 @@
     font-size: 22px;
     border-radius: 50px;
 }
+
 .headerbutton:hover {
     font-weight: bolder;
     color: #73CEBE;
     background-color: #FCFF6A;
-    
 }
 
 li {
+    font-family: 'Pretendard-Regular';
     list-style: none;
     float: left;
-    border: 1px solid #73CEBE;
 }
