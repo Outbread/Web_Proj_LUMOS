@@ -33,7 +33,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-/* 토큰 생성, 인증(Authentication 객체 반환), 유효성 검사 */
+/* 토큰 생성, 토큰 인증(Authentication 객체 반환), 토큰 유효성 검사 */
 @Component
 public class TokenProvider {
 	
@@ -54,19 +54,18 @@ public class TokenProvider {
 	}
 	
 	/* 1. 토큰 생성 메소드 */
-	public TokenDTO generateTokenDTO(Member member) {
-		
+	public TokenDTO generateTokenDTO(Member member) { // DB에서 해당 아이디에 맞는 멤버의 정보가 넘어옴
 		log.info("[TokenProvider] generateTokenDTO Start=================================");
-		List<String> roles = new ArrayList<>();
-		for(MemberRole memberRole : member.getMemberRole()) {
-			roles.add(memberRole.getAuthority().getAuthorityName());
+		
+		List<String> roles = new ArrayList<>();		  				 // 멤버의 정보를 쌓음
+		for(MemberRole memberRole : member.getMemberRole()) {		 // 멤버가 가진 멤버 권한,
+			roles.add(memberRole.getAuthority().getAuthorityName()); // 권한 이름까지 넣는다. 
 		}
 		
 		log.info("[TokenProvider] {}", roles); 
 		
 		/* 1. 회원 아이디를 "sub"이라는 클레임으로 토큰에 추가 */
 		Claims claims = Jwts.claims().setSubject(member.getMemberId());
-		
 		/* 2. 회원의 권한들을 "auth"라는 클레임으로 토큰에 추가 */
 		claims.put(AUTHORITIES_KEY, roles);
 		
@@ -75,11 +74,9 @@ public class TokenProvider {
 		Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
 		String accessToken = Jwts.builder()
 								 .setClaims(claims)
-								 
-								 /* 3. 토큰의 만료 기간을 DATE형으로 토큰에 추가("exp"라는 클레임으로 long 형으로 토큰에 추가) */
-								 .setExpiration(accessTokenExpiresIn)
-								 .signWith(key, SignatureAlgorithm.HS512)
-								 .compact();
+								 .setExpiration(accessTokenExpiresIn) /* 3. 토큰의 만료 기간을 DATE형으로 토큰에 추가("exp"라는 클레임으로 long 형으로 토큰에 추가) */
+								 .signWith(key, SignatureAlgorithm.HS512) 	//HS512 방식으로 암호화, 비밀키 key는 base64를 통해 생성
+								 .compact(); 								//토큰 발행
 
 		log.info("[TokenProvider] generateTokenDTO End=================================");
 		
