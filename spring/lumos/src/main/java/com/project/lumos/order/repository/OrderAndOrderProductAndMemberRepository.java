@@ -46,6 +46,6 @@ public interface OrderAndOrderProductAndMemberRepository extends JpaRepository<O
 			Timestamp sqlTimeStamp, String searchValue, String string, Sort descending);
 
 	/* 개인 주문내역 조회 */
-	List<OrderAndOrderProductAndMember> findByStOrderAndMemberCodeLike(String string, Member memberCode);
+	List<OrderAndOrderProductAndMember> findByStOrderAndMemberCodeLike(String string, Member memberCode, Sort sort);
 
 }

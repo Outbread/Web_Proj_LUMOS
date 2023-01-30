@@ -325,7 +325,7 @@ public class OrderService {
 		
 		Member memberCode = memberRepository.findMemberByMemberId(memberId);
 		
-		List<OrderAndOrderProductAndMember> orderList = orderAndOrderProductAndMemberRepository.findByStOrderAndMemberCodeLike("Y", memberCode);
+		List<OrderAndOrderProductAndMember> orderList = orderAndOrderProductAndMemberRepository.findByStOrderAndMemberCodeLike("Y", memberCode, Sort.by("orderCode").descending());
         
         log.info("[OrderService] selectMyOrder End ===================================");
         
