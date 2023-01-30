@@ -58,7 +58,6 @@ public class ProductService {
 	private final OptionRepository optionRepository;
 	private final ModelMapper modelMapper;
 
-	/* 이미지 저장 할 위치 및 응답 할 이미지 주소(WebConfig 설정파일 추가하기) */
     @Value("${image.image-dir}")
     private String IMAGE_DIR;
     
@@ -80,7 +79,6 @@ public class ProductService {
 	public int selectProductTotal() {
         log.info("[ProductService] selectProductTotal Start ===================================");
         
-        /* 페이징 처리 결과를 Page 타입으로 반환받음 */
         List<ImageAndProduct> productList = imageAndProductRepository.findByMainImg("Y");
         
         log.info("[ProductService] selectProductTotal End ===================================");
@@ -225,12 +223,7 @@ public class ProductService {
 
 	public Object selectProductListWithPagingForAdmin() {
 		log.info("[ProductService] selectProductListWithPagingForAdmin Start ===================================");
-//		int index = cri.getPageNum() - 1;
-//        int count = cri.getAmount(); 
-//        Pageable paging = PageRequest.of(index, count, Sort.by("pdCode").descending());
-
-//        Page<ImageAndProduct> result = imageAndProductRepository.findAll(paging);
-//        List<ImageAndProduct> productList = (List<ImageAndProduct>)result.getContent();
+		
 		List<ImageAndProduct> productList = imageAndProductRepository.findAll(Sort.by("pdCode").descending());		
 		
     	log.info("productList" + productList);
@@ -248,15 +241,7 @@ public class ProductService {
 		log.info("[ProductService] selectProductForAdmin Start ===================================");
 		
 		ImageAndProductAndOption productList = imageAndProductAndOptionRepository.findById(imgNum).get();
-		
-//		List<ProductImage> imageList = productImageRepository.findByPdCode(pdCode);
-//		
-//		
-//		for(ProductImage image : imageList) {
-//			image.setPdImgPath(IMAGE_URL + image.getPdImgPath());
-//			modelMapper.map(imageList, ProductImageDTO.class);
-//		}
-		
+				
 		productList.setPdImgPath(IMAGE_URL + productList.getPdImgPath());
 		
 		log.info("selectProduct " + productList);
@@ -289,8 +274,6 @@ public class ProductService {
 
         try {
         	
-        	/* update 할 엔티티 조회 */
-        	
         	ProductInsert product = productInsertRepository.findById(productInsertDTO.getPdCode()).get();
         	
         	List<ProductImage> imageList = productImageRepository.findByPdCode(productInsertDTO.getPdCode());    		
@@ -300,8 +283,6 @@ public class ProductService {
     		}
         	
             log.info("[updateProduct] oriImage : " + oriImage);
-            
-            /* update를 위한 엔티티 값 수정 */
             
             for(ProductImage upimage : product.getProductImage()) {
             	upimage.setPdImgPath(productInsertDTO.getPdImgPath());
@@ -317,7 +298,6 @@ public class ProductService {
                     log.info("[update] isDelete : " + isDelete);
                 } else {
                 	
-                    /* 이미지 변경 없을 시 */
                 	upimage.setPdImgPath(oriImage);
                 }
             }
@@ -346,7 +326,8 @@ public class ProductService {
 	}
 	
 	public Object selectProductListAboutLed() {
-        List<ImageAndProduct> productList = imageAndProductRepository.findByMainImg("Y");
+		
+        List<ImageAndProduct> productList = imageAndProductRepository.findByMainImg("Y");;
         
         for(int i = 0 ; i < productList.size() ; i++) {
             if(productList.get(i).getProduct().getCatMain().equals("가정용 LED")) {
@@ -395,7 +376,7 @@ public class ProductService {
 	
 	public Object selectProductListAboutSwitch() {
 		List<ImageAndProduct> productList = imageAndProductRepository.findByMainImg("Y");
-              
+		
         for(int i = 0 ; i < productList.size() ; i++) {
             if(productList.get(i).getProduct().getCatMain().equals("스위치/콘센트")) {
             	productList.get(i).setPdImgPath(IMAGE_URL + productList.get(i).getPdImgPath());
