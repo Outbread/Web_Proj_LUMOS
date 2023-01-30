@@ -1,7 +1,10 @@
 package com.project.lumos.order.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,9 +95,9 @@ public class OrderService {
 		
 		log.info("[OrderService] selectQuestionList Start ===================================");
 		
-        List<Question> questionList = questionRepository.findByQuestionCategoryAndQuestionStatusLikeOrQuestionCategoryAndQuestionStatusLike("주문취소", "미해결", "환불", "미해결");
+        List<Question> questionList = questionRepository.findByQuestionCategoryAndQuestionStatusLikeOrQuestionCategoryAndQuestionStatusLike("주문취소", "미해결", "반품요청", "미해결");
         
-        log.info("[OrderService] No paging questionList ▶ {}", questionList);
+//        log.info("[OrderService] No paging questionList ▶ {}", questionList);
         
         log.info("[OrderService] selectQuestionList End ===================================");
         
@@ -109,7 +112,7 @@ public class OrderService {
         
         List<OrderAndOrderProductAndMember> orderList = orderAndOrderProductAndMemberRepository.findByStOrder("Y");
         
-        log.info("[OrderService] orderList.size() ▶ {}", orderList.size());
+//        log.info("[OrderService] orderList.size() ▶ {}", orderList.size());
         
         log.info("[OrderService] selectOrderListTotal End ===================================");
         
@@ -124,7 +127,7 @@ public class OrderService {
 		
 		int index = cri.getPageNum() - 1;
         int count = cri.getAmount(); 
-        Pageable paging = PageRequest.of(index, count, Sort.by("orderNum").descending());
+        Pageable paging = PageRequest.of(index, count, Sort.by("orderCode").descending());
 	        
         Page<OrderAndOrderProductAndMember> result = orderAndOrderProductAndMemberRepository.findByStOrder("Y", paging);
         List<OrderAndOrderProductAndMember> orderList = (List<OrderAndOrderProductAndMember>)result.getContent();
@@ -169,35 +172,38 @@ public class OrderService {
 		
 		List<OrderAndOrderProductAndMember> searchList = new ArrayList<>();
 		
-		java.sql.Timestamp sqlTimeStamp = java.sql.Timestamp.valueOf(searchDate + " 00:00:00");
+		// 2023-01-29T20:54:38.770798900+09:00 형태로 변환
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+		OffsetDateTime offsetSearchDate = OffsetDateTime.parse(searchDate + "T00:00:00+09:00", formatter).plusDays(1);
+		java.sql.Timestamp sqlTimeStamp = java.sql.Timestamp.valueOf(offsetSearchDate.toLocalDateTime());
 		
 		if(searchTitle.equals("non") && searchValue.equals("non")) {
-			searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndStOrderLike(sqlTimeStamp, "Y");
+			searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndStOrderLike(sqlTimeStamp, "Y", Sort.by("orderCode").descending());
 		} else {
 			switch(searchTitle) {
 			case "주문번호" :
-				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndOrderCodeContainingAndStOrderLike(sqlTimeStamp, searchValue, "Y");
+				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndOrderCodeContainingAndStOrderLike(sqlTimeStamp, searchValue, "Y", Sort.by("orderCode").descending());
 				break;
 			case "구매자명" :
 				List<Member> memberList1 = memberRepository.findByMemberNameContaining(searchValue);
 				for(Member member : memberList1) {
-					searchList = orderAndOrderProductAndMemberRepository.findByOrderDateGreaterThanEqualAndMemberCodeLikeAndStOrderLike(sqlTimeStamp, member, "Y");
+					searchList = orderAndOrderProductAndMemberRepository.findByOrderDateGreaterThanEqualAndMemberCodeLikeAndStOrderLike(sqlTimeStamp, member, "Y", Sort.by("orderCode").descending());
 				}
 				break;
 			case "구매자ID" :
 				List<Member> memberList2 = memberRepository.findByMemberIdContaining(searchValue);
 				for(Member member : memberList2) {
-					searchList = orderAndOrderProductAndMemberRepository.findByOrderDateGreaterThanEqualAndMemberCodeLikeAndStOrderLike(sqlTimeStamp, member, "Y");
+					searchList = orderAndOrderProductAndMemberRepository.findByOrderDateGreaterThanEqualAndMemberCodeLikeAndStOrderLike(sqlTimeStamp, member, "Y", Sort.by("orderCode").descending());
 				}
 				break;
 			case "수취인명" :
-				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndCgNmContainingAndStOrderLike(sqlTimeStamp, searchValue, "Y");
+				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndCgNmContainingAndStOrderLike(sqlTimeStamp, searchValue, "Y", Sort.by("orderCode").descending());
 				break;
 			case "결제방법" :
-				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndPaymentMtContainingAndStOrderLike(sqlTimeStamp, searchValue, "Y");
+				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndPaymentMtContainingAndStOrderLike(sqlTimeStamp, searchValue, "Y", Sort.by("orderCode").descending());
 				break;
 			case "배송방법" :
-				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndDeliveryMtContainingAndStOrderLike(sqlTimeStamp, searchValue, "Y");
+				searchList = orderAndOrderProductAndMemberRepository.findAllByOrderDateGreaterThanEqualAndDeliveryMtContainingAndStOrderLike(sqlTimeStamp, searchValue, "Y", Sort.by("orderCode").descending());
 				break;
 			}
 		}

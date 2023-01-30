@@ -1,17 +1,13 @@
 import Product from "../../components/products/Product";
-import MainCSS from '../Main.module.css';
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState, useRef } from "react";
+import MainCSS from './ProductAll.module.css';
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
     callProductListAPI
 } from '../../apis/ProductAPICalls'
-import { GET_PRODUCTS } from '../../modules/ProductModule';
 
 function Main() {
-
-    const navigate = useNavigate();
 
     const dispatch = useDispatch();
     const products = useSelector(state => state.productReducer); 
@@ -40,7 +36,7 @@ function Main() {
     );
 
     return (
-        <>
+        <div className={MainCSS.product}>
             <div className={ MainCSS.productDiv }>
             { 
                 Array.isArray(productList) && productList.map((product) => (<Product key={ product.pdCode } product={ product } />))
@@ -59,7 +55,7 @@ function Main() {
                 {pageNumber.map((num) => (
                 <li key={num} onClick={() => setCurrentPage(num)}>
                     <button
-                        style={ currentPage === num ? {backgroundColor : 'orange' } : null}
+                        style={ currentPage === num ? {backgroundColor : '#21C593' } : null}
                         className={ MainCSS.pagingBtn }
                     >
                         {num}
@@ -76,7 +72,7 @@ function Main() {
                 </button>
                 }
             </div>
-        </>
+        </div>
     );
 }
 

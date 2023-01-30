@@ -15,13 +15,17 @@ import Register from './pages/member/Register';                             // �
 import ProfileUpdate from './pages/member/ProfileUpdate';
 import OrderDashBoard from './pages/order/OrderDashBoard';                  // 주문대시보드
 import OrderManagement from './pages/order/OrderManagement';                // 주문목록
+
 import Review from './pages/reviews/Review';                                // 리뷰 조회
 import ReviewDetail from './pages/reviews/ReviewDetail'                    // 리뷰 상세
 import ReviewRegist from './pages/reviews/ReviewRegist';                    // 리뷰 등록
+
 import OrderDetail from './pages/order/OrderDetail';                        // 주문내역상세                      
 import OrderSearch from './pages/order/OrderDetail';                        // 주문내역검색
 import Cart from './pages/cart/Cart';                                       // 장바구니
 
+import Cart from './pages/cart/Cart';                                       // 장바구니
+import OrderList from './pages/mypage/OrderList';                            // 회원주문목록
 import ProductDetail from './pages/products/ProductDetail';
 import ProductManagement from './pages/admin/ProductManagement'
 import ProductRegistration from './pages/admin/ProductRegistration';
@@ -37,6 +41,7 @@ import ProductAll from './pages/products/ProductAll'
 import ShopManagement from './pages/admin/ShopManagement';                  // 상점관리
 
 import {useState, createContext} from 'react';
+import ErrorDodol from './pages/ErrorDodol';
 
 export const OrderContext = createContext(null);
 
@@ -51,8 +56,10 @@ function App() {
         <Route path="/" element={ <Layout/> }>
             <Route index element={ <Main/> }/> 
             <Route path="review/:pdCode" element={ <Review/> } /> 
-            <Route path="reviewDetail/:reviewCode" element={ <ReviewDetail/> } />
-            <Route path="reviewRegist" element={ <ReviewRegist/> } />  
+            <Route path='reviewDetail/:reviewCode' element={ <ReviewDetail/> } />
+            <Route path='/reviewRegist' element={ <ReviewRegist/> } />  
+
+            <Route index element={ <Main/> }/>   
             <Route path="productall" element={ <ProductAll /> }/>
             <Route path="search" element={ <Search /> }/>
             <Route path="product/led" element={<Led />} />
@@ -67,6 +74,7 @@ function App() {
                 <Route path="questionregistration" element={ <QuestionRegistration /> } />
                 <Route path="question" element={<QuestionList />} />
                 <Route path="question/detail/:questionCode" element={<QuestionDetail />} />
+                <Route path="myOrderList" element={<OrderList/>}/>
             </Route>
             <Route path="product-management" element={ <ProductManagement/> } />
             <Route path="product-registration" element={ <ProductRegistration/> } />
@@ -79,10 +87,7 @@ function App() {
             <Route path="questionAnswer/:questionCode" element={<QuestionAnswer />} />
             <Route path="member-management" element={<MemberList />} />
 
-            <Route path="order-management/search" element={<OrderSearch/>}/>
-            <Route path="order-management/:orderCode" element={<OrderDetail/>}/>
             <Route path="cart/:memberId" element={<Cart/>}/>
-
             <Route path="shop-management" element={<ShopManagement/>}/>
 
             <Route path="/login" element={ <Login/> } />
@@ -93,7 +98,7 @@ function App() {
             <Route index element={ <ProfileUpdate /> } /> */}
             {/* <Route path="ProfileUpdate" element={ <ProfileUpdate /> } /> */}
         {/* </Route> */}
-        
+        <Route path="*" element={<ErrorDodol/>}/>
       </Routes>
     </BrowserRouter>
     </OrderContext.Provider>

@@ -69,7 +69,7 @@ public class OrderController {
 	}
 	
 	/* [주문내역 리스트 검색] 주문 상태 여부 확인 */
-	@Operation(summary = "[관리자] 주문 내역 검색", description = "검색어에 해당하는 주문내역 조회", tags = {"OrderController"})
+	@Operation(summary = "[관리자] 주문 내역 검색", description = "검색어에 해당하는 주문내역 조회 (페이징 처리 X)", tags = {"OrderController"})
 	@GetMapping("/order-management/search")
 	public ResponseEntity<ResponseDTO> searchOrderList(@RequestParam(name="s1") String searchDate, @RequestParam(name="s2") String searchTitle, @RequestParam(name="s3") String searchValue) {
 		

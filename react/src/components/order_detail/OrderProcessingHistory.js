@@ -2,7 +2,6 @@ import {dateFomatter} from '../../modules/Fommater';
 
 export default function OrderProcessingHistory({order}) {
 
-    console.log("9시간 차이나니..?", order.deliveryEnd);
     return (
         <>
             <table>

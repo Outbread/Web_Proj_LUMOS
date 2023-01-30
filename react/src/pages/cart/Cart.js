@@ -1,6 +1,6 @@
 import {useNavigate, useLocation} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import {useState, useContext, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import Delivery from '../../components/order_detail/Delivery';
 import Consignee from '../../components/order_detail/Consignee';
 import OrderProduct from '../../components/order_detail/OrderProduct';
@@ -14,6 +14,7 @@ import {callCartDetailAPI} from '../../apis/CartAPICalls';
 
 import LoginModal from '../../components/common/LoginModal';
 import {decodeJwt} from '../../utils/tokenUtils';
+import ErrorMindol from '../ErrorMindol';
 
 export default function Cart() {
 
@@ -22,7 +23,11 @@ export default function Cart() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const order = useSelector(state => state.cartReducer);
-    console.log("order", order);
+
+    const roleAdmin = token.auth.filter(role => {return role == "ROLE_ADMIN"}).length;
+    // const isAdmin = decodeJwt(window.localStorage.getItem("accessToken")).auth.includes("ROLE_ADMIN");
+    // console.log("관리자 권한 확인 (roleAdmin)", roleAdmin); // 1
+    // console.log("관리자 권한 확인 (isAdmin)", isAdmin);     // true
 
     const [isOrdered, setIsOrdered] = useState(false);
     
@@ -38,7 +43,7 @@ export default function Cart() {
 
             dispatch(callCartDetailAPI({	
                 memberId: token.sub
-            }));            
+            }));  
         }
         ,[]
     );
@@ -248,7 +253,16 @@ export default function Cart() {
                 </div>
             </div>
             : 
-            <h1 style={{textAlign: "center"}}>장바구니에 상품이 없습니다.</h1>
+            (
+                roleAdmin == 1
+                ?
+                <ErrorMindol/>
+                :
+                <div style={{textAlign: "center"}}>
+                    <img src="https://lightin9.speedgabia.com/90_koodoyeon/team_project_lumos/emptycart.png" border="0" width={"800px"}></img>
+                </div>
+                // <h1 style={{textAlign: "center"}}>장바구니에 상품이 없습니다.</h1>
+            )
             }
         </>
     )
