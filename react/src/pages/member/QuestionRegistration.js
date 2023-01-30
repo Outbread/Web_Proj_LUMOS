@@ -128,7 +128,7 @@ function QuestionRegistration() {
                             alt="preview"
                         />}
                         <input                
-                            style={ { display: 'none' }}
+                            style={{ display: 'none'}}
                             type="file"
                             name='productImage' 
                             accept='image/jpg,image/png,image/jpeg,image/gif'
