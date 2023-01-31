@@ -172,8 +172,8 @@ export default function Cart() {
                     orderCode: order.orderCode,
                     form: formData
                 }))
-                alert("결제에 성공하였습니다.\n메인화면으로 이동합니다.");
-                navigate('/');
+                alert("결제에 성공하였습니다.\n주문 내역으로 이동합니다.");
+                navigate('/mypage/order');
             }
         },
         [isEffectWork]

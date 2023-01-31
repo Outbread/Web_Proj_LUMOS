@@ -53,3 +53,17 @@
     height: 30px;
     width: 100px;
 }
+
+.reviewDetailImage{
+    margin-top: 5px;
+    width: 400px;
+    height: 400px;
+}
+
+.reviewImageDiv{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}

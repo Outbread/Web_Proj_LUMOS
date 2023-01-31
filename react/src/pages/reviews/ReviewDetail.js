@@ -88,9 +88,9 @@ function ReviewDetail() {
     const onClickReviewDeleteHandler = (reviewDetail) => {
         dispatch(callReviewDeleteAPI({reviewCode: reviewDetail.reviewImageMemberDTO.reviewCode}))
 
-        // navigate(`/review/${reviewDetail.reviewImageMemberDTO.pdCode}`, {replace: true});
-        // window.location.reload();
-        // navigate(`내 리뷰 리스트`, { replace: true });
+        alert('리뷰 삭제 완료!');
+        navigate(`/mypage/myReviewList`, {replace: false});
+        window.location.reload();
     }
 
     const onClickReviewUpdateHandler = () => {    
@@ -128,19 +128,24 @@ function ReviewDetail() {
                     <col width="20%" />
                     <col width="80%" />
                 </colgroup> */}
-
+                    <div className={ ReviewDetailCSS.reviewImageDiv }>
                     { reviewDetail && !modifyMode &&<img
+                        className={ ReviewDetailCSS.reviewDetailImage}
                         src={ (reviewDetail.imageDTO == null) ? '' : reviewDetail.imageDTO.newNm }
                         // src={ `${reviewDetail.imageDTO.newNm}` }
                         alt={ (imageUrl == null) ? '' : 'preview' }
                         // alt="preview"
                     />}
+                    </div>
+                    <div className={ ReviewDetailCSS.reviewImageDiv }>    
                     { reviewDetail && modifyMode &&<img
+                        className={ ReviewDetailCSS.reviewDetailImage}
                         src={ imageUrl }
                         // src={ `${reviewDetail.imageDTO.newNm}` }
                         alt={ (imageUrl == null) ? '' : 'preview' }
                         // alt="preview"
                     />}
+                    </div>
                     {/* { reviewDetail && modifyMode && imageUrl!==null &&<img
                         src={ (imageUrl == null) ? '' : imageUrl }
                         // src={ `${reviewDetail.imageDTO.newNm}` }

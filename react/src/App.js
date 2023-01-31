@@ -65,7 +65,7 @@ function App() {
             <Route path="product/:productCode" element={<ProductDetail />} />
             <Route path='reviewDetail/:reviewCode' element={ <ReviewDetail/> } />
             <Route path="review/:pdCode" element={ <Review/> } /> 
-            <Route path='/reviewRegist' element={ <ReviewRegist/> } />  
+            <Route path='reviewRegist' element={ <ReviewRegist/> } />  
 
             <Route path="mypage" element={ <MyPageLayout/> } >
                 <Route index element={ <ProfileUpdate /> } />

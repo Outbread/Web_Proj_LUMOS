@@ -181,40 +181,6 @@ public class QuestionService {
 	@Transactional
 	public Object updateQuestion(MultipartFile questionImage, QuestionDTO questionDTO, QuestionImgDTO questionImgDTO) {
 		
-//		String replaceFileName = null;
-//	    int result = 0;
-//		
-//		try {
-//			Question question = questionRepository.findById(questionDTO.getQuestionCode()).get();
-//			int questionCode = question.getQuestionCode();
-//			
-//			QuestionImg questionImg = questionImgRepository.findByQuestionCode(questionCode);
-//			String oriImage = questionImg.getNewName();
-//			
-//			question.setQuestionTitle(questionDTO.getQuestionTitle());
-//			question.setQuestionContent(questionDTO.getQuestionContent());
-//			question.setAnswerContent(questionDTO.getAnswerContent());
-//			question.setQuestionCategory(questionDTO.getQuestionCategory());
-//			
-//			questionImg.setNewName(questionImgDTO.getNewName());
-//
-//			if(questionImage != null){
-//                String imageName = UUID.randomUUID().toString().replace("-", "");
-//                replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, questionImage);
-//                questionImg.setNewName(replaceFileName);	
-//                boolean isDelete = FileUploadUtils.deleteFile(IMAGE_DIR, oriImage);
-//            } else {
-//                /* 이미지 변경 없을 시 기존 이름 다시 update */
-//            	questionImg.setNewName(oriImage);
-//            }
-//			result = 1;
-//		} catch (Exception e) {
-//			log.info("[question update] Exception!!");
-//			FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
-//            throw new RuntimeException(e);
-//		}
-//		return (result > 0) ? "문의 수정 성공" : "문의 수정 실패" ;
-//	}
 	log.info("questionDTO" + questionDTO);
 	String replaceFileName = null;
     int result = 0;
@@ -281,6 +247,7 @@ public class QuestionService {
 				String replaceFileName = questionImgRepository.findByQuestionCode(questionCode).getNewName();
 				FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
 				questionImgRepository.deleteById(questionImgRepository.findByQuestionCode(questionCode).getQuestionImgCode());
+				questionRepository.deleteById(questionCode);
 			}else {
 			questionRepository.deleteById(questionCode);
 			}

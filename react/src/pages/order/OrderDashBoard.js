@@ -39,7 +39,7 @@ export default function OrderDashBoard() {
     );
 
     const waitPayment = orderList.filter(order => (order.paymentMt == "무통장입금" && order.orderDate?.length > 0 && order.orderConf == null)).length;
-    const newOrder = orderList.filter(order => (order.paymentMt == "카카오페이" && order.orderDate?.length > 0 && order.deliveryStart == null)).length;
+    const newOrder = orderList.filter(order => (order.paymentMt == "카카오페이" && order.orderDate?.length > 0 && order.orderConf == null)).length;
     const preDelivery = orderList.filter(order => ((order.paymentMt == "무통장입금" || "카카오페이") && order.orderConf?.length > 0 && order.deliveryStart == null)).length;
     const proDelivery = orderList.filter(order => ((order.paymentMt == "무통장입금" || "카카오페이") && order.deliveryStart?.length > 0 && order.deliveryEnd == null)).length;
     const comDelivery = orderList.filter(order => ((order.paymentMt == "무통장입금" || "카카오페이") && order.deliveryEnd?.length > 0 && order.purchaseConf == null)).length;

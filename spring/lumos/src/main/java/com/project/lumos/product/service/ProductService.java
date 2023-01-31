@@ -255,7 +255,10 @@ public class ProductService {
 		log.info("[ProductService] deleteProduct Start ===================================");
 		ImageAndProductAndOption productList = imageAndProductAndOptionRepository.findById(imgNum).get();
 		
-		imageAndProductAndOptionRepository.deleteById(imgNum);	
+		productRepository.deleteById(productList.getPdCode());
+		optionRepository.deleteByPdCode(productList.getPdCode());
+		imageAndProductAndOptionRepository.deleteByPdCode(productList.getPdCode());
+
 		FileUploadUtils.deleteFile(IMAGE_DIR, productList.getPdImgPath());
 		
 		

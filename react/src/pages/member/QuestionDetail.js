@@ -99,7 +99,7 @@ function QuestionDetail() {
         formData.append("questionCategory", form.questionCategory);
         formData.append("questionCreateDate", form.questionCreateDate);
         formData.append("questionStatus", questionDetail.questionDTO.questionStatus)
-        
+        formData.append("answerContent", questionDetail.questionDTO.answerContent)
         if (image) {
             formData.append("questionImage", image);
         }
@@ -209,7 +209,9 @@ function QuestionDetail() {
                                 <textarea
                                     name='questionContent'
                                     readOnly={modifyMode ? false : true}
-                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
+                                    style={!modifyMode ?
+                                        { backgroundColor: 'gray', resize: 'none', width: '80%', height: '10em'}
+                                        : { backgroundColor: 'gray', resize: 'none', width: '80%', height: '10em' }}
                                     onChange={ onChangeHandler }
                                     value={ (!modifyMode ? questionDetail.questionDTO?.questionContent : form.questionContent) || ''}
                                 >                                    
@@ -223,7 +225,9 @@ function QuestionDetail() {
                                         <textarea
                                             name='answerContent'
                                             readOnly={true}
-                                            style={{ backgroundColor: 'gray' }}
+                                            style={!modifyMode ?
+                                                { backgroundColor: 'gray', resize: 'none', width: '80%', height: '10em'}
+                                                : { backgroundColor: 'gray', resize: 'none', width: '80%', height: '10em' }}
                                             onChange={onChangeHandler}
                                             value={(questionDetail.questionDTO?.answerContent) || ''}
                                         >

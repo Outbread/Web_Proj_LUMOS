@@ -27,7 +27,7 @@ export default function MyOrder({orderList}) {
 
     /* 리뷰 작성 버튼 */
     const reviewHandler = () => {
-
+        navigate(`/reviewRegist`, { replace: false });
     }
 
     return (

@@ -1,3 +1,4 @@
+import QRCSS from './QuestionRegistration.module.css';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -34,7 +35,7 @@ function QuestionRegistration() {
     useEffect(() => {
         console.log('useEffect 동작');
     //     // store의 questionReducer리듀서용 state 값 수정으로 rerendering
-    //     dispatch(callNewQuestionCodeAPI({	// 새로 생성된 questionCode 조회
+    //     dispatch(callNewQuestionCodeAPI({   // 새로 생성된 questionCode 조회
     //         memberId: token.sub
     //    })); 
 
@@ -87,7 +88,7 @@ function QuestionRegistration() {
         }
 
 
-        dispatch(callQuestionRegistAPI({	// 문의 등록 
+        dispatch(callQuestionRegistAPI({   // 문의 등록 
             form: formData,
             memberId: token.sub
         }));   
@@ -108,34 +109,24 @@ function QuestionRegistration() {
 
     return (
         <div>
-            <div>
-                <button        
-                    onClick={ () => navigate(-1) }            
-                >
-                    돌아가기
-                </button>
-                <button       
-                    onClick={ onClickQuestionRegistrationHandler }             
-                >
-                    문의등록
-                </button>
-            </div>        
             <div >
                 <div>
                     <div>
-                        { imageUrl && <img 
+                        { imageUrl && <img className={ QRCSS.QRIMGINPUT } 
                             src={ imageUrl } 
                             alt="preview"
                         />}
-                        <input                
-                            style={{ display: 'none'}}
+                        <div>
+                        <input        
+                            style={ { display: 'none' }}
                             type="file"
                             name='productImage' 
                             accept='image/jpg,image/png,image/jpeg,image/gif'
                             onChange={ onChangeImageUpload }
                             ref={ imageInput }
-                        />
+                        /></div>
                         <button 
+                            className={ QRCSS.IMGbutton }    
                             onClick={ onClickImageUpload } 
                         >
                             이미지 업로드
@@ -146,41 +137,55 @@ function QuestionRegistration() {
                     <table>
                         <tbody>
                             <tr>
-                                <td><label>문의 제목</label></td>
-                                <td>
-                                    <input 
+                                <div className={ QRCSS.QRdivLabel }><label>문의 제목</label></div>
+                                <div >
+                                    
+                                    <input className={ QRCSS.QRinput }
                                         name='questionTitle'
                                         placeholder='문의 제목'
                                         onChange={ onChangeHandler }
                                     />
-                                </td>
+                
+                                </div>
                             </tr>    
                             <tr>
-                                <td><label>문의 내용</label></td>
-                                <td>
-                                    <input 
+                                <div className={ QRCSS.QRdivLabel }><label>문의 종류</label></div>
+                                <div className={ QRCSS.QRRadioDiv }>
+                                    {/* categoryCode = 1:배송, 2:교환, 3:상품, 4: 환불 5: 기타 */}
+                                    <label className={ QRCSS.RGradioLabel }><input className={ QRCSS.RGradio } type="radio" name="questionCategory" onChange={ onChangeHandler } value="배송"/>배송</label> &nbsp;
+                                    <label className={ QRCSS.RGradioLabel }><input className={ QRCSS.RGradio } type="radio" name="questionCategory" onChange={ onChangeHandler } value="주문취소"/>주문취소</label> &nbsp;
+                                    <label className={ QRCSS.RGradioLabel }><input className={ QRCSS.RGradio } type="radio" name="questionCategory" onChange={ onChangeHandler } value="교환"/>교환</label> &nbsp;
+                                    <label className={ QRCSS.RGradioLabel }><input className={ QRCSS.RGradio } type="radio" name="questionCategory" onChange={onChangeHandler} value="상품" />상품</label> &nbsp;
+                                    <label className={ QRCSS.RGradioLabel }><input className={ QRCSS.RGradio } type="radio" name="questionCategory" onChange={onChangeHandler} value="환불" />환불</label>
+                                    <label className={ QRCSS.RGradioLabel }><input className={ QRCSS.RGradio } type="radio" name="questionCategory" onChange={onChangeHandler} value="기타" />기타</label>
+                                </div>
+                            </tr> 
+                            <tr>
+                                <div className={ QRCSS.QRdivLabel }><label>문의 내용</label></div>
+                                <div>
+                                    <input className={ QRCSS.QRinputContents }
                                         name='questionContent'
                                         placeholder='문의 내용을 입력해주세요'
                                         onChange={ onChangeHandler }
                                     />
-                                </td>
+                                </div>
                             </tr>    
-                            <tr>
-                                <td><label>문의 종류</label></td>
-                                <td>
-                                    {/* categoryCode = 1:배송, 2:교환, 3:상품, 4: 환불 5: 기타 */}
-                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="배송"/>배송</label> &nbsp;
-                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="주문취소"/>주문취소</label> &nbsp;
-                                    <label><input type="radio" name="questionCategory" onChange={ onChangeHandler } value="교환"/>교환</label> &nbsp;
-                                    <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="상품" />상품</label> &nbsp;
-                                    <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="환불" />환불</label>
-                                    <label><input type="radio" name="questionCategory" onChange={onChangeHandler} value="기타" />기타</label>
-                                </td>
-                            </tr> 
                         </tbody>                        
                     </table>
                 </div>
             </div>
+            <button     
+                    className={ QRCSS.RGbutton }    
+                    onClick={ onClickQuestionRegistrationHandler }             
+                >
+                    문의등록
+                </button>
+                <button       
+                    className={ QRCSS.RGBackButton } 
+                    onClick={ () => navigate(-1) }            
+                >
+                    돌아가기
+                </button>
         </div>
     );
 }

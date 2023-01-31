@@ -131,7 +131,7 @@ export const callQuestionUpdateAPI = ({ form }) => {
                 "Accept": "*/*",
                 "Authorization": "Bearer " + window.localStorage.getItem("accessToken"),
                 "Access-Control-Allow-Origin": "*" 
-            },
+            },  
             body: form
             })
         .then();

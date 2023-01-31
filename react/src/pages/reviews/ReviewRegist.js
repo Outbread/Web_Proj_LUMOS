@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
+import ReviewRegistCSS from "./ReviewRegist.module.css";
 
 import {
     callReviewWriteAPI
@@ -92,12 +93,10 @@ function ReviewRegist() {
         console.log("formData:", form.pdCode);
 
 
-        // setProductReviewModal(false);
-
         alert('리뷰 등록이 완료되었습니다.');
 
-        // navigate(`/review/${pdCode}`, {replace: true});
-        // window.location.reload();
+        navigate(`/review/${form.pdCode}`, {replace: true});
+        window.location.reload();
 
 
         console.log('[reviewRegist] onClickProductReviewHandler End!');
@@ -107,8 +106,9 @@ function ReviewRegist() {
  <>
     <div>
         <h1>리뷰</h1>
-            <div> 
+                <div className={ReviewRegistCSS.reviewImageDiv}> 
                 { imageUrl && <img
+                    className={ReviewRegistCSS.reviewDetailImage}
                     src={imageUrl}
                     alt="preview"
                 />}
@@ -121,7 +121,7 @@ function ReviewRegist() {
                     ref={ imageInput }
                 />
                 <button
-                    onClick={ onClickImageUpload }
+                        onClick={onClickImageUpload}
                 >
                 이미지 업로드
                 </button>

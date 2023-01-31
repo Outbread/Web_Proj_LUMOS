@@ -70,7 +70,7 @@ function MyReview() {
                                     <td>{(currentPage - 1) * 10 + (index + 1)}</td>
                                     <td>{review.reviewTitle}</td>
                                     <td>{review.uploadDate}</td>
-                                    <td>{review.memberId}</td>
+                                    <td>{token.sub}</td>
                                 </tr>
                             )
                         )}

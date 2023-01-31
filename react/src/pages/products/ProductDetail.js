@@ -187,7 +187,7 @@ function ProductDetail() {
                 decodeJwt(window.localStorage.getItem("accessToken"))?.auth.includes("ROLE_ADMIN") && 
                 <button
                     className = { ProductDetailCSS.productBuyBtn }
-                    onClick = { () => onClickUpdate(productImage?.map(r => r.imgNum)) }
+                    onClick = { () => onClickUpdate(productImage?.map(r => (r.mainImg === 'Y')?r.imgNum:null)[0]) }
                 >
                     수정하기
                 </button>
