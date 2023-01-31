@@ -10,4 +10,6 @@ public interface ImageAndProductAndOptionRepository extends JpaRepository<ImageA
 
 	List<ImageAndProductAndOption> findByPdCode(int pdCode);
 
+	void deleteByPdCode(int pdCode);
+
 }

@@ -253,11 +253,15 @@ public class ProductService {
 	@Transactional
 	public Object deleteProduct(int imgNum) {
 		log.info("[ProductService] deleteProduct Start ===================================");
-		ImageAndProductAndOption productList = imageAndProductAndOptionRepository.findById(imgNum).get();
+		ImageAndProductAndOption productList = imageAndProductAndOptionRepository.findById(imgNum).get();		
 		
-		imageAndProductAndOptionRepository.deleteById(imgNum);	
+		productRepository.deleteById(productList.getPdCode());
+		optionRepository.deleteByPdCode(productList.getPdCode());
+		imageAndProductAndOptionRepository.deleteByPdCode(productList.getPdCode());	
 		FileUploadUtils.deleteFile(IMAGE_DIR, productList.getPdImgPath());
 		
+		
+		log.info("123" + productList.getPdImgPath());
 		
 		log.info("[ProductService] deleteProduct End ===================================");
 		return modelMapper.map(productList, ImageAndProductAndOptionDTO.class);
