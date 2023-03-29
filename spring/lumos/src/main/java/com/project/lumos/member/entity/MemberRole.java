@@ -24,6 +24,7 @@ public class MemberRole {
    @Column(name = "AUTHORITY_CODE")
    private int authorityCode;
    
+   /* Authority 타입 속성은 조회할 때 Join용으로만 쓰므로 insert나 update시엔 무시하라고 설정 */
    @ManyToOne
    @JoinColumn(name = "AUTHORITY_CODE", insertable = false, updatable = false)
    private Authority authority;

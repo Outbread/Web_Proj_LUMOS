@@ -148,7 +148,7 @@ public class MemberDTO implements UserDetails{
             + "]";
    }
    
-   /* MemberDTO는 UserDetails로써 속성을 추가로 가지므로 UserDetails로부터 물려받는 추상메소드들을 오버라이딩한다. */
+   /* MemberDTO는 UserDetails로써 속성을 추가로 가지며, UserDetails로부터 물려받는 추상메소드들을 오버라이딩한다. */
    private Collection<GrantedAuthority> authorities; 
    
    /* setter 추가*/

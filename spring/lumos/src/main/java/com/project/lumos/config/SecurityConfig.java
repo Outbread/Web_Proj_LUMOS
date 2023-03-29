@@ -15,16 +15,24 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.project.lumos.jwt.JwtAccessDeniedHandler;
+import com.project.lumos.jwt.JwtAuthenticationEntryPoint;
 import com.project.lumos.jwt.TokenProvider;
 
 @EnableWebSecurity
 public class SecurityConfig {
    
    private final TokenProvider tokenProvider;
+   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+   private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
    
    @Autowired
-   public SecurityConfig(TokenProvider tokenProvider) {
+   public SecurityConfig(TokenProvider tokenProvider, 
+		   				 JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+		   				 JwtAccessDeniedHandler jwtAccessDeniedHandler) {
       this.tokenProvider = tokenProvider;
+      this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+      this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
    }
    
    /* 1. 암호화 처리를 위한 PasswordEncoder*/
@@ -42,9 +50,10 @@ public class SecurityConfig {
    /* 3. HTTP요청에 대한 권한별 설정 */
    @Bean
    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-      
       http.csrf().disable()
          .exceptionHandling()
+         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+         .accessDeniedHandler(jwtAccessDeniedHandler)
           .and()
           .authorizeRequests()
              .antMatchers("/").authenticated()
@@ -52,22 +61,21 @@ public class SecurityConfig {
              .antMatchers("/auth/**").permitAll()
              .antMatchers("/api/v1/products/**").permitAll() 
              .antMatchers("/api/v1/revies/**").permitAll()
-             /* [구도연] */
-             .antMatchers("/api/v1/company-management/**").permitAll()
-             .antMatchers("/api/v1/shop-management/**").permitAll()
+             .antMatchers("/api/v1/company-management/**").hasRole("ADMIN")
+             .antMatchers("/api/v1/shop-management/**").hasRole("ADMIN")
              .antMatchers("/api/v1/question-management/**").hasRole("ADMIN")
              .antMatchers("/api/v1/order-management/**").hasRole("ADMIN")
              .antMatchers("/api/v1/order-dashboard/**").hasRole("ADMIN")
-             .antMatchers("/api/v1/cart/**").hasAnyRole("USER","ADMIN")
-             .antMatchers("/api/v1/mypage-order/**").hasAnyRole("USER","ADMIN")
+             .antMatchers("/api/v1/cart/**").hasRole("USER")
+             .antMatchers("/api/v1/mypage-order/**").hasRole("USER")
              .antMatchers("/api/v1/profileUpdate/**").permitAll() 
-             .antMatchers("/api/**").hasAnyRole("USER","ADMIN")
           .and()
              .sessionManagement()
              .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
           .and()
              .cors()
           .and()
+          
              /* jwt 토큰 방식을 쓰겠다는 설정 */
              .apply(new JwtSecurityConfig(tokenProvider));
       

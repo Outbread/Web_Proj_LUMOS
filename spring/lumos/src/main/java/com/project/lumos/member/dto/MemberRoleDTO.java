@@ -3,8 +3,9 @@ package com.project.lumos.member.dto;
 public class MemberRoleDTO {
    private int memberNo;
    private int authorityCode;   
-   //복합키를 쓰기 때문에 int로도 authorityCode를 가지고 있고, 객체로도 하나를 더 만든다
-   private AuthorityDTO authority; //다 대 일 관계기 때문에 List가 아닌 DTO : AuthorityDTO에 담긴 정보가 들어온 이 DTO 가 MeberDTO에 모두 담겨서 하나가 된다.
+   
+   private AuthorityDTO authority; //복합키를 쓰기 때문에 int로도 authorityCode를 가지고 있고, 객체로도 하나를 더 만들었다.
+   //다 대 일 관계기 때문에 List가 아닌 DTO : AuthorityDTO에 담긴 정보가 들어온 이 DTO 가 MeberDTO에 모두 담겨서 하나가 된다.
 
    public MemberRoleDTO() {
    }

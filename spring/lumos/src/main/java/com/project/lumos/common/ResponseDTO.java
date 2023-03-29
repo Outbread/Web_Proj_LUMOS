@@ -7,11 +7,12 @@ import org.springframework.http.HttpStatus;
 public class ResponseDTO {
 
    private int status;      //상태코드값
-   private String message; //응답 메세지
-   private Object data;   //응답 데이터
+   private String message;  //응답 메세지
+   private Object data;     //응답 데이터
    
    public ResponseDTO() {
    }
+   
    //이 때 매개변수 생성자에서 status는 HttpStatus.OK를 받을 때 int 가 아니라, HttpStatus로 받아야 함
    public ResponseDTO(HttpStatus status, String message, Object data) { 
       this.status = status.value(); // HttpStatus enum 타입에서 value라는 int형 상태 코드 값만 추출

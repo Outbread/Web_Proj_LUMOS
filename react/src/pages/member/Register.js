@@ -100,7 +100,6 @@ function Register() {
         else{
             alert('중복된 아이디입니다. 다시 시도하세요.');
             setUsableId(response);
-            
         }
         console.log('중복체크');
         console.log(memberId);
@@ -111,11 +110,11 @@ function Register() {
     const onClickRegisterHandler = () => {
          if (!validId) {
             alert("아이디를 다시 확인 해 주세요."); // 알람창
-            setForm({ // 값 비워주기
+            setForm({                        // 값 비워주기
               ...form,
-              memberId: "", // 바뀐 값 빼고 나머지는 그대로 스프레드 연산자
+              memberId: "",                  // 바뀐 값 빼고 나머지는 그대로 스프레드 연산자
             });
-            inputRef.current[0].focus(); // 자동 포커스
+            inputRef.current[0].focus();     // 자동 포커스
             } else if (!validPassword) {
                 alert("비밀번호를 다시 확인 해 주세요.");
                 inputRef.current[1].focus();

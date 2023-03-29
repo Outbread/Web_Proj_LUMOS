@@ -54,14 +54,13 @@ public class TokenProvider {
    }
    
    /* 1. 토큰 생성 메소드 */
-   public TokenDTO generateTokenDTO(Member member) { // DB에서 해당 아이디에 맞는 멤버의 정보가 넘어옴
+   public TokenDTO generateTokenDTO(Member member) { 			  // DB에서 해당 아이디에 맞는 멤버의 정보가 넘어옴
       log.info("[TokenProvider] generateTokenDTO Start=================================");
       
       List<String> roles = new ArrayList<>();                     // 멤버의 정보를 쌓음
       for(MemberRole memberRole : member.getMemberRole()) {       // 멤버가 가진 멤버 권한,
          roles.add(memberRole.getAuthority().getAuthorityName()); // 권한 이름까지 넣는다. 
       }
-      
       log.info("[TokenProvider] {}", roles); 
       
       /* 1. 회원 아이디를 "sub"이라는 클레임으로 토큰에 추가 */
@@ -70,16 +69,15 @@ public class TokenProvider {
       claims.put(AUTHORITIES_KEY, roles);
       
       long now = System.currentTimeMillis();
-      
       Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
       String accessToken = Jwts.builder()
-                         .setClaims(claims)                     // 위에서 뽑은 권한 roles, 아이디 sub이 담긴 클레임
-                         .setExpiration(accessTokenExpiresIn)       /* 3. 토큰의 만료 기간을 DATE형으로 토큰에 추가("exp"라는 클레임으로 long 형으로 토큰에 추가) */
-                         .signWith(key, SignatureAlgorithm.HS512)    //HS512 방식으로 암호화, 비밀키 key는 base64를 통해 생성
-                         .compact();                         //토큰 발행 -> accessToken이 된다.
+                         .setClaims(claims)                        // 위에서 뽑은 권한 roles, 아이디 sub이 담긴 클레임
+                         /* 3. 토큰의 만료 기간을 DATE형으로 토큰에 추가("exp"라는 클레임으로 long 형으로 토큰에 추가) */
+                         .setExpiration(accessTokenExpiresIn)       
+                         .signWith(key, SignatureAlgorithm.HS512)  //HS512 방식으로 암호화, 비밀키 key는 base64를 통해 생성
+                         .compact();                         	   //토큰 발행 -> accessToken이 된다.
 
       log.info("[TokenProvider] generateTokenDTO End=================================");
-      
       return new TokenDTO(BEARER_TYPE, member.getMemberName(), accessToken,
                      accessTokenExpiresIn.getTime());
    }
@@ -89,16 +87,15 @@ public class TokenProvider {
       return Jwts.parserBuilder()
                .setSigningKey(key).build()
                .parseClaimsJws(token)
-               .getBody()               // payload의 Claims 추출 
-               .getSubject();            // Claim중에 등록 클레임에 해당하는 sub값 추출(회원 아이디)
+               .getBody()              // payload의 Claims 추출 
+               .getSubject();          // Claim중에 등록 클레임에 해당하는 sub값 추출(회원 아이디)
    }
    
    /* 3. AccessToken으로 인증 객체 추출 */
    public Authentication getAuthentication(String token) {
-      
       log.info("[TokenProvider] getAuthentication Start=================================");
       
-      /*아래 5번에서 만든 메소드를 통해 토큰에서 claim들 추출(토큰 복호화) */
+      /* 아래 5번에서 만든 메소드를 통해 토큰에서 claim들 추출(토큰 복호화) */
       Claims claims = parseClaims(token);   
       
       if (claims.get(AUTHORITIES_KEY) == null) {
@@ -109,14 +106,13 @@ public class TokenProvider {
       Collection<? extends GrantedAuthority> authorities =
             Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(",")) //AUTHORITIES_KEY가 위에서 “auth”라고 했으므로 페이로드의 auth클레임에 담긴 값이 나온다.
                   .map(role -> new SimpleGrantedAuthority(role))             //문자열 배열에 들어있는 권한 문자열 마다 SimpleGrantedAuthority객체로 만든다.         
-                  .collect(Collectors.toList());                      //List<SimpleGrantedAuthority>로 만든다.         
-      
-      log.info("[TokenProvider] authorities {}", authorities);
-      
+                  .collect(Collectors.toList());                      		 //List<SimpleGrantedAuthority>로 만든다.         
+
       UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserId(token));
             
       log.info("[TokenProvider] getAuthentication End=================================");
-      return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());   //아이디, 패스워드, 권한   (로그인이 아니라서 패스워드가 필요없다. 인증만 하면 된다)
+      return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());   
+      //아이디, 패스워드, 권한 (로그인이 아니라서 패스워드가 필요없다. 인증만 하면 된다)
    }
    
    /* 4. 토큰 유효성 검사 */
@@ -138,15 +134,14 @@ public class TokenProvider {
          log.info("[TokenProvider] JWT 토큰이 잘못되었습니다.");
          throw new TokenException("JWT 토큰이 잘못되었습니다.");
       }
-      
    }
    
    /* 5. AccessToken에서 클레임 추출하는 메소드 */
-   private Claims parseClaims(String token) {                                           //토큰이 넘어오면
+   private Claims parseClaims(String token) {                                           		 //토큰이 넘어오면
       try {
          return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody(); // 페이로드 안의 클레임들이 나오게 된다.
       } catch (ExpiredJwtException e) {
-         return e.getClaims(); // 토큰 만료로 예외 발생 시에도 클레임값을 뽑을 수 있게 만들었다.
+         return e.getClaims(); 																	 // 토큰 만료로 예외 발생 시에도 클레임값을 뽑을 수 있게 만들었다.
       }
    }
 }

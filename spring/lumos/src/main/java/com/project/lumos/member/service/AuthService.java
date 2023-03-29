@@ -75,9 +75,8 @@ public class AuthService {
    
 
    //====================================회원가입[전진이]======================================//
-   
-   @Transactional //DML 작업은 Transactional 어노테이션 추가
-   public MemberDTO signup(MemberDTO memberDTO) { //이것이 AuthController에서
+   @Transactional //DML 작업이라 Transactional 어노테이션 추가
+   public MemberDTO signup(MemberDTO memberDTO) { 		 //이것이 AuthController에서
       log.info("[AuthService] Signup Start ==================================");
       log.info("[AuthService] memberDTO {}", memberDTO); //회원가입때 받은 정보가 나오는지 확인
       
@@ -109,11 +108,9 @@ public class AuthService {
       Member member = memberRepository.findMemberByMemberId(memberId);
       /* id 중복 유효성 검사*/
       if(memberRepository.findByMemberId(memberId) != null) {
-         log.info("[AuthService] Id가 중복됩니다.");
-                  
+         log.info("[AuthService] Id가 중복됩니다.");  
          return true;
       }
-      
       return false;
    }
 }

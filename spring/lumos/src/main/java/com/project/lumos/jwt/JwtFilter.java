@@ -23,8 +23,8 @@ public class JwtFilter extends OncePerRequestFilter{
    
    private static final Logger log = LoggerFactory.getLogger(JwtFilter.class);
    
-   public static final String AUTHORIZATION_HEADER = "Authorization";   //사용자가 request header에 Authorization속성으로 token을 넘긴 것. 
-   public static final String BEARER_PREFIX = "Bearer";            //사용자가 던지는 token만 파싱하기 위한 접두사 저장용 변수(접두사는 Bearer 라는 표준으로 정의 됨)
+   public static final String AUTHORIZATION_HEADER = "Authorization";   		//사용자가 request header에 Authorization속성으로 token을 넘긴 것. 
+   public static final String BEARER_PREFIX = "Bearer";                 		//사용자가 던지는 token만 파싱하기 위한 접두사 저장용 변수(접두사는 Bearer 라는 표준으로 정의 됨)
    
    private final TokenProvider tokenProvider;
    
@@ -37,12 +37,12 @@ public class JwtFilter extends OncePerRequestFilter{
    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
          throws ServletException, IOException {
       
-      String jwt = resolveToken(request);         //요청에서 토큰값을 추출한다.
+      String jwt = resolveToken(request);         							   //요청에서 토큰값을 추출한다.
       
       //추출한 토큰이 유효한지 살펴본다. 유효하다면 SecurityContextHolder에 담는다.
-      if(StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) { 
-         Authentication authentication = tokenProvider.getAuthentication(jwt); //tokenProvider에서 4.토큰유효성검사
-         SecurityContextHolder.getContext().setAuthentication(authentication); //tokenProvider에서 3.AccessToken으로 인증객체 추출
+      if(StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {       //tokenProvider에서 4.토큰유효성검사
+         Authentication authentication = tokenProvider.getAuthentication(jwt); //tokenProvider에서 3.AccessToken으로 인증객체 추출
+         SecurityContextHolder.getContext().setAuthentication(authentication); 
       }
       filterChain.doFilter(request, response);
    }
@@ -51,7 +51,7 @@ public class JwtFilter extends OncePerRequestFilter{
    private String resolveToken(HttpServletRequest request) {
       String bearerToken = request.getHeader(AUTHORIZATION_HEADER);   
       if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) { 
-         return bearerToken.substring(7);   //Bearer를 제외하고 7번째부터 자르면 토큰값이 된다.               
+         return bearerToken.substring(7);   								   //Bearer를 제외하고 7번째부터 자르면 토큰값이 된다.               
       }
       return null;
    }

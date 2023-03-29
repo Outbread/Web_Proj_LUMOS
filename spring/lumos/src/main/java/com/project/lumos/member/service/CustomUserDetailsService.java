@@ -30,14 +30,15 @@ public class CustomUserDetailsService implements UserDetailsService{
       this.modelMapper = modelMapper;
    }
 
-   //=============================회원가입[전진이]================================//
    @Transactional
    @Override
    public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
       Member member = memberRepository.findByMemberId(memberId);
       
+      /* MemberDTO는 엔티티를 옮겨 담는 DTO이자 UserDetails이다. */
       MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
       
+      /* 엔티티로는 MemberDTO에 추가한 Collection<GrantedAuthority> authorities 속성이 옮겨담아지지 않는다. */
       List<GrantedAuthority> authorities = new ArrayList<>();
       for(MemberRole memberRole : member.getMemberRole()) {
          String authorityName = memberRole.getAuthority().getAuthorityName();
